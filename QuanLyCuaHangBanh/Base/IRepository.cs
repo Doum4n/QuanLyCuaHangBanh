@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyCuaHangBanh.Data;
 
 namespace QuanLyCuaHangBanh.Base
 {
-    public interface IRepository<T, D>
+    public interface IRepository<TEntity>
     {
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        List<T> getAll();
-        List<D> getAllDto();
+        void Add(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
 
-        T getByValue(object value);
+        IList<TEntity> GetAll();
+        TEntity GetByValue(object value);
+
+        IList<TDto> GetAllAsDto<TDto>(Func<TEntity, TDto> converter);
     }
 }

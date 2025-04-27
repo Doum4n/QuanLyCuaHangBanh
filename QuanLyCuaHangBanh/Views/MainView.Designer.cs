@@ -81,12 +81,14 @@
             tsmi_Catogories.Name = "tsmi_Catogories";
             tsmi_Catogories.Size = new Size(224, 26);
             tsmi_Catogories.Text = "&Loại sản phầm";
+            tsmi_Catogories.Click += tsmi_Catogories_Click;
             // 
             // tsmi_Producers
             // 
             tsmi_Producers.Name = "tsmi_Producers";
             tsmi_Producers.Size = new Size(224, 26);
             tsmi_Producers.Text = "&Hãng sản xuất";
+            tsmi_Producers.Click += tsmi_Producers_Click;
             // 
             // toolStripSeparator1
             // 
@@ -98,6 +100,7 @@
             tsmi_Customers.Name = "tsmi_Customers";
             tsmi_Customers.Size = new Size(224, 26);
             tsmi_Customers.Text = "&Khách hàng";
+            tsmi_Customers.Click += tsmi_Customers_Click;
             // 
             // tsmi_Employees
             // 

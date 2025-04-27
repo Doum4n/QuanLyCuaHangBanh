@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Data
 {
-    class QLCHB_DBContext : DbContext
+    public class QLCHB_DBContext : DbContext
     {
-        public DbSet<Custumer> Custumers { get; set; }
+        public DbSet<Customer> Custumers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Category> Categories { get; set; }

@@ -14,5 +14,17 @@ namespace QuanLyCuaHangBanh.Models
         public string Address { get; set; } // Address of the producer
         public string Email { get; set; } // Email of the producer
         public string Description { get; set; } // Description of the producer
+
+        public static Producer Copy(Producer producer)
+        {
+            return new Producer
+            {
+                Name = producer.Name,
+                PhoneNumber = producer.PhoneNumber,
+                Address = producer.Address,
+                Email = producer.Email,
+                Description = producer.Description
+            };
+        }
     }
 }

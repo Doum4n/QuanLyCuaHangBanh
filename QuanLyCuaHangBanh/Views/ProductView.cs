@@ -3,6 +3,7 @@ using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
 using System.Data;
 using System.Windows.Forms;
+using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Views
 {
@@ -11,14 +12,45 @@ namespace QuanLyCuaHangBanh.Views
 
         private string searchValue;
         private string message;
+        private ProductDTO selecProduct;
         string IView.SearchValue { get => searchValue; set => searchValue = value; }
-        string IView.Message { get => message; set => message = value; }
+
+        string IView.Message
+        {
+            get => message;
+            set
+            {
+                message = value;
+                MessageBox.Show(message);
+            }
+        }
+
+        object IView.SelectedItem
+        {
+            get => selecProduct;
+            set
+            {
+                selecProduct = (ProductDTO)value;
+                MessageBox.Show(selecProduct.Description);
+            }
+        }
 
         private bool isFirstBinding = true;
 
         public ProductView()
         {
             InitializeComponent();
+
+            dgv_ProductList.SelectionChanged += Dgv_ProductList_SelectionChanged;
+        }
+
+        private void Dgv_ProductList_SelectionChanged(object? sender, EventArgs e)
+        {
+            if (dgv_ProductList.SelectedRows.Count > 0)
+            {
+                selecProduct = (ProductDTO)dgv_ProductList.SelectedRows[0].DataBoundItem;
+                RowSelected?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public event EventHandler SearchEvent;
@@ -26,20 +58,21 @@ namespace QuanLyCuaHangBanh.Views
         public event EventHandler AddNewEvent;
         public event EventHandler EditEvent;
         public event EventHandler SelectedUnitChanged;
+        public event EventHandler RowSelected;
 
         private void btn_Add_Click(object sender, EventArgs e)
         {
-
+            AddNewEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void btn_Edit_Click(object sender, EventArgs e)
         {
-
+            EditEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private void btn_Delete_Click(object sender, EventArgs e)
         {
-
+            DeleteEvent?.Invoke(this, EventArgs.Empty);
         }
         public void SetBindingSource(BindingSource bindingSource)
         {
@@ -49,12 +82,14 @@ namespace QuanLyCuaHangBanh.Views
 
             dgv_ProductList.DataBindingComplete += (s, e) =>
             {
+
                 foreach (DataGridViewRow row in dgv_ProductList.Rows)
                 {
                     if (row.IsNewRow) continue;
 
                     if (row.DataBoundItem is ProductDTO product)
                     {
+                        #region Thêm dữ liệu cho comboBox cho cột "Unit"
                         var comboCell = new DataGridViewComboBoxCell
                         {
                             DataSource = product.Unit.ToList(),
@@ -77,6 +112,17 @@ namespace QuanLyCuaHangBanh.Views
                         }
 
                         row.Cells["Unit"] = comboCell;
+                        row.Cells["Unit"].ReadOnly = false;
+                        #endregion
+
+                        #region Thêm dữ liệu cho cột "Image"
+                        var imageCell = new DataGridViewImageCell
+                        {
+                            ImageLayout = DataGridViewImageCellLayout.Zoom,
+                            Value = product.Image,
+                        };
+                        row.Cells["Image"] = imageCell;
+                        #endregion
                     }
                 }
 
@@ -96,6 +142,8 @@ namespace QuanLyCuaHangBanh.Views
         {
             dgv_ProductList.AutoGenerateColumns = false;
             dgv_ProductList.DataError += HandleDataError;
+
+            dgv_ProductList.Columns["SelectedUnitId"].Visible = false;
         }
 
         private void dgv_ProductList_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -125,6 +173,16 @@ namespace QuanLyCuaHangBanh.Views
                     // Gán product cho ComboBox.Tag để khi chọn đọc ra
                     comboBox.Tag = product;
                 }
+            }
+        }
+
+        private void dgv_ProductList_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
+        {
+            int maxHeight = 50; // Chiều cao tối đa bạn muốn
+
+            if (e.Row.Height > maxHeight)
+            {
+                e.Row.Height = maxHeight;
             }
         }
     }

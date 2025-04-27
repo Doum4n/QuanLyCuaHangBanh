@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Models
 {
-    public class Custumer
+    public class Customer
     {
         public int ID { get; set; }
         public string Name { get; set; }

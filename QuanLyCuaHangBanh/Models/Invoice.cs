@@ -15,6 +15,6 @@ namespace QuanLyCuaHangBanh.Models
 
         public virtual ICollection<Invoice_Detail> InvoiceDetails { get; } = new List<Invoice_Detail>();
         public virtual Employee Employee { get; set; } // Navigation property to the Employee
-        public virtual Custumer Customer { get; set; } // Navigation property to the Customer
+        public virtual Customer Customer { get; set; } // Navigation property to the Customer
     }
 }
