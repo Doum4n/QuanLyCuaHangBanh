@@ -10,13 +10,7 @@ using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Repositories
 {
-    class CategoryRepo : RepositoryBase<Category>
+    class CategoryRepo(QLCHB_DBContext context) : RepositoryBase<Category>(context)
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
-
-        public CategoryRepo(QLCHB_DBContext context) : base(context)
-        {
-
-        }
     }
 }

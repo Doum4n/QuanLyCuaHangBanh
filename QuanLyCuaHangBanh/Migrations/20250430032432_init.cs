@@ -126,7 +126,10 @@ namespace QuanLyCuaHangBanh.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     CategoryID = table.Column<int>(type: "integer", nullable: false),
                     ProducerID = table.Column<int>(type: "integer", nullable: false),
+                    ProductionDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ExpirationDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: false),
                     BaseUnitID = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -153,7 +156,7 @@ namespace QuanLyCuaHangBanh.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Inventory",
+                name: "Inventories",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
@@ -166,15 +169,15 @@ namespace QuanLyCuaHangBanh.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Inventory", x => x.ID);
+                    table.PrimaryKey("PK_Inventories", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Inventory_Products_ProductID",
+                        name: "FK_Inventories_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Inventory_Units_UnitID",
+                        name: "FK_Inventories_Units_UnitID",
                         column: x => x.UnitID,
                         principalTable: "Units",
                         principalColumn: "ID",
@@ -217,12 +220,19 @@ namespace QuanLyCuaHangBanh.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProductID = table.Column<int>(type: "integer", nullable: false),
                     UnitID = table.Column<int>(type: "integer", nullable: false),
+                    InventoryID = table.Column<int>(type: "integer", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     ConversionRate = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductUnits", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProductUnits_Inventories_InventoryID",
+                        column: x => x.InventoryID,
+                        principalTable: "Inventories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductUnits_Products_ProductID",
                         column: x => x.ProductID,
@@ -238,13 +248,13 @@ namespace QuanLyCuaHangBanh.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inventory_ProductID",
-                table: "Inventory",
+                name: "IX_Inventories_ProductID",
+                table: "Inventories",
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inventory_UnitID",
-                table: "Inventory",
+                name: "IX_Inventories_UnitID",
+                table: "Inventories",
                 column: "UnitID");
 
             migrationBuilder.CreateIndex(
@@ -283,6 +293,11 @@ namespace QuanLyCuaHangBanh.Migrations
                 column: "ProducerID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductUnits_InventoryID",
+                table: "ProductUnits",
+                column: "InventoryID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductUnits_ProductID",
                 table: "ProductUnits",
                 column: "ProductID");
@@ -297,9 +312,6 @@ namespace QuanLyCuaHangBanh.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Inventory");
-
-            migrationBuilder.DropTable(
                 name: "InvoiceDetails");
 
             migrationBuilder.DropTable(
@@ -309,13 +321,16 @@ namespace QuanLyCuaHangBanh.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Inventories");
 
             migrationBuilder.DropTable(
                 name: "Custumers");
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Categories");

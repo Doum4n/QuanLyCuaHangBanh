@@ -12,8 +12,8 @@ using QuanLyCuaHangBanh.Data;
 namespace QuanLyCuaHangBanh.Migrations
 {
     [DbContext(typeof(QLCHB_DBContext))]
-    [Migration("20250427113839_init4")]
-    partial class init4
+    [Migration("20250430032432_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -286,6 +286,9 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Property<decimal>("ConversionRate")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("InventoryID")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ProductID")
                         .HasColumnType("integer");
 
@@ -296,6 +299,8 @@ namespace QuanLyCuaHangBanh.Migrations
                         .HasColumnType("numeric");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("InventoryID");
 
                     b.HasIndex("ProductID");
 
@@ -411,6 +416,12 @@ namespace QuanLyCuaHangBanh.Migrations
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product_Unit", b =>
                 {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QuanLyCuaHangBanh.Models.Product", "Product")
                         .WithMany("ProductUnits")
                         .HasForeignKey("ProductID")
@@ -422,6 +433,8 @@ namespace QuanLyCuaHangBanh.Migrations
                         .HasForeignKey("UnitID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Inventory");
 
                     b.Navigation("Product");
 

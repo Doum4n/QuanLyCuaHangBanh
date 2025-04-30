@@ -76,10 +76,12 @@
             // 
             dgv_ProductList.AllowUserToAddRows = false;
             dgv_ProductList.AllowUserToDeleteRows = false;
+            dgv_ProductList.AllowUserToOrderColumns = true;
             dgv_ProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProductList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, ProducerName, Unit, Price, Quantity, Description, Image });
+            dgv_ProductList.Cursor = Cursors.Hand;
             dgv_ProductList.Dock = DockStyle.Fill;
             dgv_ProductList.Location = new Point(3, 50);
             dgv_ProductList.MultiSelect = false;
@@ -96,7 +98,7 @@
             // 
             // ID
             // 
-            ID.DataPropertyName = "ID";
+            ID.DataPropertyName = "ProductId";
             ID.FillWeight = 14.771512F;
             ID.HeaderText = "ID";
             ID.MinimumWidth = 6;

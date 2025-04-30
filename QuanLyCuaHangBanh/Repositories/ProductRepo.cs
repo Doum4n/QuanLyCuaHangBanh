@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace QuanLyCuaHangBanh.Repositories
 {
-    class ProductRepo : RepositoryBase<Product>
+    public class ProductRepo(QLCHB_DBContext context) : RepositoryBase<Product>(context)
     {
-        public ProductRepo(QLCHB_DBContext context) : base(context) { }
-
         public override IList<TDto> GetAllAsDto<TDto>(Func<Product, TDto> converter)
         {
             return context.Products.
@@ -27,6 +27,38 @@ namespace QuanLyCuaHangBanh.Repositories
                 .ToList();
         }
 
+        public override void Add(Product entity)
+        {
+            if (entity.Image != "")
+            {
+                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(entity.Image)
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                entity.Image = uploadResult.SecureUri.ToString();
+            }
+
+            base.Add(entity);
+        }
+
+        public override void Update(Product entity)
+        {
+            if(entity.Image != "" && !entity.Image.Contains("https://res.cloudinary.com"))
+            {
+                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(entity.Image)
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                entity.Image = uploadResult.SecureUri.ToString();
+            }
+
+            base.Update(entity);
+        }
+
         public void DeleteById(int ID)
         {
             context.Products.Remove(context.Products.Find(ID)!);
@@ -34,21 +66,5 @@ namespace QuanLyCuaHangBanh.Repositories
             context.SaveChanges();
         }
 
-        public void AddProductUnit(Product_Unit productUnit)
-        {
-            context.ProductUnits.Add(productUnit);
-            context.SaveChanges();
-        }
-
-        public int? GetProductUnitID(int productId, int unitId)
-        {
-            return context.ProductUnits.Where(pu => pu.ProductID == productId && pu.UnitID == unitId).Select(pu => pu.ID).FirstOrDefault();
-        }
-
-        public void UpdateProductUnit(Product_Unit productUnit)
-        {
-            context.ProductUnits.Update(productUnit);
-            context.SaveChanges();
-        }
     }
 }

@@ -1,3 +1,4 @@
+﻿using Microsoft.Extensions.DependencyInjection;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.Presenters;
 using QuanLyCuaHangBanh.Repositories;
@@ -12,9 +13,17 @@ namespace QuanLyCuaHangBanh
         private ProducerView? producerView;
         private CustomerView? customerView;
 
-        public MainView()
+        private ProductPresenter? _productPresenter;
+        private CustomerPresenter? _customerPresenter;
+        private CategoryPresenter? _categoryPresenter;
+        private ProducerPresenter? _producerPresenter;
+
+        private readonly IServiceProvider _serviceProvider;
+
+        public MainView(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
         }
 
         private void MainView_Load(object sender, EventArgs e)
@@ -22,14 +31,16 @@ namespace QuanLyCuaHangBanh
 
         }
 
+
         private void tsmi_Products_Click(object sender, EventArgs e)
         {
             if (productView == null || productView.IsDisposed)
             {
-                productView = new ProductView();
-                QLCHB_DBContext ctx = new QLCHB_DBContext();
-                new ProductPresenter(productView, new ProductRepo(ctx));
+                productView = _serviceProvider.GetRequiredService<IProductView>() as ProductView;
+                _serviceProvider.GetRequiredService<ProductPresenter>();
+
                 productView.MdiParent = this;
+                productView.FormClosed += (_, __) => productView = null;
                 productView.Show();
             }
             else
@@ -72,9 +83,8 @@ namespace QuanLyCuaHangBanh
         {
             if (customerView == null || customerView.IsDisposed)
             {
-                QLCHB_DBContext ctx = new QLCHB_DBContext();
-                customerView = new CustomerView();
-                new CustomerPresenter(customerView, new CustomerRepo(ctx));
+                customerView = _serviceProvider.GetRequiredService<ICustomerView>() as CustomerView;
+                _customerPresenter =  _serviceProvider.GetRequiredService<CustomerPresenter>();
                 customerView.MdiParent = this;
                 customerView.Show();
             }

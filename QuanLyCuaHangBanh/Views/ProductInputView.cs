@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.EntityFrameworkCore;
-using Npgsql.Replication;
+﻿using Microsoft.EntityFrameworkCore;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
-using QuanLyCuaHangBanh.Helpers;
 using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Views
@@ -21,6 +10,8 @@ namespace QuanLyCuaHangBanh.Views
         private QLCHB_DBContext context = new QLCHB_DBContext();
 
         private ProductDTO? _productDto;
+
+        private string? _imagePath;
 
         public EventHandler ShowUnitInput;
         public EventHandler ShowCategoryInput;
@@ -49,13 +40,35 @@ namespace QuanLyCuaHangBanh.Views
 
             if (_productDto != null)
             {
+                foreach (var unit in _productDto.Unit)
+                {
+                    if (unit.IsSelected)
+                    {
+                        cbb_Units.SelectedValue = unit.ID;
+                        break;
+                    }
+                }
+
                 tb_ProductName.Text = _productDto.ProductName;
                 mttb_Description.Text = _productDto.Description;
                 cbb_Categories.SelectedText = _productDto.CategoryName;
-                cbb_Producers.SelectedText = _productDto.ProductName;
-                //cbb_Units.SelectedText = _productDto.Unit;
+                cbb_Producers.SelectedValue = _productDto.ProducerId;
                 nmr_BaseUnitPrice.Value = _productDto.Price;
-                pictureBox.Image = _productDto.Image;
+
+                pictureBox.ImageLocation = _productDto.ImagePath;
+                //_imagePath = _productDto.Image;
+
+                nmr_Quantity.Value = _productDto.Quantity;
+
+                dgv_ProductUnitList.DataSource = context.ProductUnits  
+                    .Where(o => o.ProductID == _productDto.ProductId)
+                    .Select(o => new Product_UnitDTO(
+                        o.ID,
+                        o.Unit.Name,
+                        o.ConversionRate,
+                        o.UnitPrice,
+                        o.Inventory.Quantity
+                    )).ToList();
             }
         }
 
@@ -77,7 +90,36 @@ namespace QuanLyCuaHangBanh.Views
                 UnitPrice = nmr_BaseUnitPrice.Value,
             };
 
-            this.Tag = (product, productUnit);
+            Inventory inventory = new Inventory
+            {
+                ProductID = product.ID,
+                Quantity = (int)nmr_Quantity.Value,
+                Note = "Khởi tạo sản phẩm",
+                UnitID = (int)cbb_Units.SelectedValue,
+            };
+
+            if (_productDto != null)
+            {
+                //product.Image = _imagePath;
+                // Gán ID cho Product_Unit và Inventory
+                foreach (var unit in _productDto.Unit)
+                {
+                    if (unit.IsSelected)
+                    {
+                        productUnit.ID = unit.ProductUnitId;
+                        break;
+                    }
+                }
+                inventory.ID = _productDto?.InventoryId ?? 0;
+                inventory.Note = "";
+
+                // Cập ProductId cho Product_Unit và Inventory
+                productUnit.ProductID = _productDto.ProductId;
+                productUnit.InventoryID = inventory.ID;
+                inventory.ProductID = _productDto.ProductId;
+            }
+
+            this.Tag = (product, productUnit, inventory);
 
             this.DialogResult = DialogResult.OK;
         }
@@ -95,11 +137,6 @@ namespace QuanLyCuaHangBanh.Views
         private void llb_AddProducer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ShowProducerInput?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void mttb_Description_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void pictureBox_Click(object sender, EventArgs e)

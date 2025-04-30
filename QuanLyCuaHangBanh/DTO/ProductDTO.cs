@@ -1,37 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using Microsoft.EntityFrameworkCore.Query;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyCuaHangBanh.DTO;
 
-public class ProductDTO
+public record ProductDTO(
+    int ProductId,
+    string ProductName,
+    int CategoryId,
+    string CategoryName,
+    int ProducerId,
+    string ProducerName,
+    List<UnitDTO> Unit,
+    decimal Price,
+    int InventoryId,
+    int Quantity,
+    string Description,
+    String ImagePath
+)
 {
-    //public ProductDTO()
-    //{
-    //    Unit = new List<UnitDTO>();
-    //}
+    [Browsable(false)]
+    public List<UnitDTO> Unit { get; set; } = Unit;
+    [Browsable(false)]
+    public int CategoryId { get; set; } = CategoryId;
+    [Browsable(false)]
+    public int ProducerId { get; set; } = ProducerId;
+    [Browsable(false)]
+    public int InventoryId { get; set; } = InventoryId;
+    [Browsable(false)]
+    public string ImagePath { get; set; } = ImagePath;
 
-    public ProductDTO(int id, string productName, string categoryName, string producerName, List<UnitDTO> unit,
-        decimal price, int quantity, string description, Image image)
-    {
-        ID = id;
-        ProductName = productName;
-        CategoryName = categoryName;
-        ProducerName = producerName;
-        Unit = unit;
-        Price = price;
-        Quantity = quantity;
-        Description = description;
-        Image = image;
-    }
-
-    public int ID { get; set; }
-    public string ProductName { get; set; }
-    public string CategoryName { get; set; }
-    public string ProducerName { get; set; }
-    public List<UnitDTO> Unit { get; set; }
-    public decimal Price { get; set; }
-    public int Quantity { get; set; }
-    public string Description { get; set; }
-    public Image Image { get; set; }
-
-    [NotMapped] public int? SelectedUnitId { get; set; } // ID của đơn vị được chọn trong ComboBox
+    public decimal Price { get; set; } = Price;
+    public int Quantity { get; set; } = Quantity;
 }

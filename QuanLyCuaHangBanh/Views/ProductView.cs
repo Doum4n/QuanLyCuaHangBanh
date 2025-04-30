@@ -4,6 +4,7 @@ using QuanLyCuaHangBanh.DTO;
 using System.Data;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Helpers;
 
 namespace QuanLyCuaHangBanh.Views
 {
@@ -103,12 +104,18 @@ namespace QuanLyCuaHangBanh.Views
                             comboCell.Value = row.Cells["Unit"].Value;
                         }
 
-                        if (product.SelectedUnitId.HasValue)
-                            comboCell.Value = product.SelectedUnitId.Value;
+                        // Nếu có đơn vị nào được chọn thì gán giá trị cho comboCell
+                        // Nếu không có đơn vị nào được chọn thì gán giá trị cho đơn vị đầu tiên
+                        var selectedUnit = product.Unit.FirstOrDefault(o => o.IsSelected == true);
+                        if (selectedUnit != null)
+                            comboCell.Value = selectedUnit.ID;
                         else
                         {
                             if (product.Unit.Any())
+                            {
                                 comboCell.Value = product.Unit.First().ID;
+                                product.Unit.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
+                            }
                         }
 
                         row.Cells["Unit"] = comboCell;
@@ -119,7 +126,7 @@ namespace QuanLyCuaHangBanh.Views
                         var imageCell = new DataGridViewImageCell
                         {
                             ImageLayout = DataGridViewImageCellLayout.Zoom,
-                            Value = product.Image,
+                            Value = ImageHelper.LoadImageFromUrl(product.ImagePath),
                         };
                         row.Cells["Image"] = imageCell;
                         #endregion
@@ -142,8 +149,8 @@ namespace QuanLyCuaHangBanh.Views
         {
             dgv_ProductList.AutoGenerateColumns = false;
             dgv_ProductList.DataError += HandleDataError;
-
-            dgv_ProductList.Columns["SelectedUnitId"].Visible = false;
+            
+            //dgv_ProductList.Columns["SelectedUnitId"].Visible = false;
         }
 
         private void dgv_ProductList_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -165,14 +172,32 @@ namespace QuanLyCuaHangBanh.Views
                 // Gán thêm dữ liệu dòng hiện tại
                 if (dgv_ProductList.CurrentRow?.DataBoundItem is ProductDTO product)
                 {
+                    // Gán DataSource cho ComboBox
                     comboBox.DataSource = product.Unit.ToList(); // Đảm bảo DataSource đúng
                     comboBox.DisplayMember = "UnitName";
                     comboBox.ValueMember = "ID";
-                    comboBox.SelectedValue = product.SelectedUnitId ?? product.Unit.FirstOrDefault()?.ID;
+                    assignComboboxSelectedValue(product, comboBox);
+
+                    // Gán giá trị hiện tại cho ComboBox
+                    product.Unit.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
 
                     // Gán product cho ComboBox.Tag để khi chọn đọc ra
                     comboBox.Tag = product;
                 }
+            }
+        }
+
+        private void assignComboboxSelectedValue(ProductDTO product, ComboBox comboBox)
+        {
+            // Nếu có đơn vị nào được chọn thì gán giá trị cho comboCell
+            // Nếu không có đơn vị nào được chọn thì gán giá trị cho đơn vị đầu tiên
+            var selectedUnit = product.Unit.FirstOrDefault(o => o.IsSelected == true);
+            if (selectedUnit != null)
+                comboBox.SelectedValue = selectedUnit.ID;
+            else
+            {
+                if (product.Unit.Any())
+                    comboBox.SelectedValue = product.Unit.First().ID;
             }
         }
 

@@ -18,35 +18,48 @@ namespace QuanLyCuaHangBanh.Presenters
 {
     public class ProductPresenter : PresenterBase<Product>
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
+        private QLCHB_DBContext context;
 
-        public ProductPresenter(IProductView view, IRepository<Product> repository) : base(view, repository)
+        public ProductPresenter(IProductView view, IRepositoryProvider repository, QLCHB_DBContext context) : base(view, repository)
         {
             ((IProductView)View).SelectedUnitChanged += OnSelectedUnitChanged;
+
+            this.context = context;
         }
 
+        // Sự kiện khi thay đổi đơn vị trong ComboBox
         private void OnSelectedUnitChanged(object? sender, EventArgs e)
         {
             if (sender is ComboBox comboBox && comboBox.Tag is ProductDTO product)
             {
                 if (comboBox.SelectedValue is int selectedUnitId)
                 {
-                    product.SelectedUnitId = selectedUnitId;
+                    var units = product.Unit.ToList();
+
+                    foreach (var _unit in units)
+                    {
+                        // Gán true cho đơn vị được chọn, false cho đơn vị khác
+                        _unit.IsSelected = _unit.ID == selectedUnitId;
+                    }
 
                     // Tìm giá mới theo đơn vị
                     var unit = context.ProductUnits
                         .AsNoTracking()
-                        .FirstOrDefault(pu => pu.ProductID == product.ID && pu.UnitID == selectedUnitId);
+                        .FirstOrDefault(pu => pu.ProductID == product.ProductId && pu.UnitID == selectedUnitId);
 
                     var inventory = context.Inventories
                         .AsNoTracking()
-                        .FirstOrDefault(inv => inv.ProductID == product.ID && inv.UnitID == selectedUnitId);
+                        .FirstOrDefault(inv => inv.ProductID == product.ProductId && inv.UnitID == selectedUnitId);
 
+                    // Cập nhật giá và số lượng sản phẩm
                     if (unit != null)
                         product.Price = unit.UnitPrice;
 
                     if (inventory != null)
+                    {
+                        product.InventoryId = inventory.ID;
                         product.Quantity = inventory.Quantity;
+                    }
 
                     BindingSource?.ResetBindings(false); // Cập nhật lại tất cả dữ liệu trong DataGridView
                 }
@@ -55,22 +68,23 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void LoadData()
         {
-            BindingSource.DataSource = Repository.GetAllAsDto(o => new ProductDTO(
+            BindingSource.DataSource = null;
+            BindingSource.DataSource = Provider.GetRepository<Product>().GetAllAsDto(o => new ProductDTO(
                     o.ID,
                     o.Name,
+                    o.Category.ID,
                     o.Category?.Name ?? "",
+                    o.Producer.ID,
                     o.Producer?.Name ?? "",
-                    o.ProductUnits.Select(pu => new UnitDTO(pu.Unit.ID, pu.Unit.Name)).ToList(),
+                    o.ProductUnits.Select(pu => new UnitDTO(pu.Unit.ID, pu.Unit.Name, pu.ID, false)).ToList(),
                     o.ProductUnits.Select(pu => pu.UnitPrice).FirstOrDefault(),
-                    o.Inventories.Select(i => i.Quantity).FirstOrDefault(),
+                    o.Inventories.Where(i => i.UnitID == o.BaseUnitID && i.ProductID == o.ID).Select(i => i.ID).FirstOrDefault(),
+                    o.Inventories.Where(i => i.UnitID == o.BaseUnitID && i.ProductID == o.ID).Select(i => i.Quantity).FirstOrDefault(),
                     o.Description,
-                    ImageHelper.LoadImageFromUrl(o.Image)
+                    o.Image
                 )
             );
         }
-
-
-
 
         public override void OnEdit(object? sender, EventArgs e)
         {
@@ -78,26 +92,17 @@ namespace QuanLyCuaHangBanh.Presenters
             productInputView.SelectImage += SelectImage;
             if (productInputView.ShowDialog() == DialogResult.OK)
             {
-                if (productInputView.Tag is (Product product, Product_Unit productUnit))
+                if (productInputView.Tag is (Product product, Product_Unit productUnit, Inventory inventory))
                 {
-                    var cloudinary = CloudinaryConfig.GetCloudinaryClient();
-                    var uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(product.Image)  // Đường dẫn tới hình ảnh bạn muốn tải lên
-                    };
-                    var uploadResult = cloudinary.Upload(uploadParams);
+                    product.ID = ((ProductDTO)this.View.SelectedItem).ProductId;
 
-                    product.ID = ((ProductDTO)this.View.SelectedItem).ID;
-                    product.Image = uploadResult.SecureUri.ToString();
+                    Provider.GetRepository<Product>().Update(product);
+                    Provider.GetRepository<Product_Unit>().Update(productUnit);
+                    Provider.GetRepository<Inventory>().Update(inventory);
 
-                    Repository.Update(product);
-
-                    productUnit.ProductID = product.ID;
-                    //productUnit.ID = (int)((ProductRepo)Repository).GetProductUnitID(productUnit.ProductID, product.BaseUnitID);
-
-                    ((ProductRepo)Repository).UpdateProductUnit(productUnit);
-                    this.View.Message = "Thêm sản phẩm thành công";
+                    this.View.Message = "Cập nhật sản phẩm thành công!";
                     LoadData();
+                    BindingSource?.ResetBindings(false);
                 }
             }
         }
@@ -108,22 +113,22 @@ namespace QuanLyCuaHangBanh.Presenters
             productInputView.SelectImage += SelectImage;
             if (productInputView.ShowDialog() == DialogResult.OK)
             {
-                if (productInputView.Tag is (Product producer, Product_Unit productUnit))
+                if (productInputView.Tag is (Product product, Product_Unit productUnit, Inventory inventory))
                 {
-                    var cloudinary = CloudinaryConfig.GetCloudinaryClient();
-                    var uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(producer.Image)  // Đường dẫn tới hình ảnh bạn muốn tải lên
-                    };
-                    var uploadResult = cloudinary.Upload(uploadParams);
+                    // Thêm sản phẩm vào bảng Product
+                    Provider.GetRepository<Product>().Add(product);
 
-                    producer.Image = uploadResult.SecureUri.ToString();
+                    // Thêm thông tin vào bảng Inventory
+                    inventory.ProductID = product.ID;
+                    inventory.UnitID = product.BaseUnitID;
+                    Provider.GetRepository<Inventory>().Add(inventory);
 
-                    Repository.Add(producer);
+                    // Lấy ID của sản phẩm vừa thêm
+                    productUnit.ProductID = product.ID;
+                    productUnit.UnitID = product.BaseUnitID;
+                    productUnit.InventoryID = inventory.ID;
+                    Provider.GetRepository<Product_Unit>().Add(productUnit);
 
-                    productUnit.ProductID = producer.ID;
-
-                    ((ProductRepo)Repository).AddProductUnit(productUnit);
                     this.View.Message = "Thêm sản phẩm thành công";
                     LoadData();
                 }
@@ -150,7 +155,10 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             if (this.View.SelectedItem is ProductDTO selectedProduct)
             {
-                ((ProductRepo)Repository).DeleteById(selectedProduct.ID);
+                ((ProductRepo)Provider.GetRepository<Product>()).DeleteById(selectedProduct.ProductId);
+                ((ProductUnitRepo)Provider.GetRepository<Product_Unit>()).DeleteById(selectedProduct.ProductId);
+                ((InventoryRepo)Provider.GetRepository<Inventory>()).DeleteById(selectedProduct.InventoryId);
+                this.View.Message = "Xóa sản phẩm thành công!";
                 LoadData();
             }
         }

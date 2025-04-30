@@ -24,7 +24,7 @@ namespace QuanLyCuaHangBanh.Helpers
             catch (Exception ex)
             {
                 // Xử lý lỗi nếu không tải được hình ảnh
-                MessageBox.Show($"Error loading image: {ex.Message}");
+                // MessageBox.Show($"Error loading image: {ex.Message}");
                 return null;
             }
         }

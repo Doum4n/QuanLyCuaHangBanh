@@ -11,7 +11,7 @@ using QuanLyCuaHangBanh.Views;
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    class CustomerPresenter(IView view, IRepository<Customer> repository) : PresenterBase<Customer>(view, repository)
+    class CustomerPresenter(ICustomerView view, IRepositoryProvider repository) : PresenterBase<Customer>(view, repository)
     {
         public override void OnEdit(object? sender, EventArgs e)
         {
@@ -24,7 +24,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         this.View.Message = "Thêm khách hàng thành công";
                         updatedCustomer.ID = ((Customer)this.View.SelectedItem).ID;
-                        Repository.Update(updatedCustomer);
+                        Provider.GetRepository<Customer>().Update(updatedCustomer);
                         LoadData();
                     }
                     catch (Exception ex)
@@ -45,7 +45,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     try
                     {
-                        Repository.Add(customer);
+                        Provider.GetRepository<Customer>().Add(customer);
                         this.View.Message = "Thêm khách hàng thành công";
                         LoadData();
                     }
@@ -60,7 +60,7 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnDelete(object? sender, EventArgs e)
         {
-            Repository.Delete((Customer)this.View.SelectedItem);
+            Provider.GetRepository<Customer>().Delete((Customer)this.View.SelectedItem);
             this.View.Message = "Xóa khách hàng thành công";
             LoadData();
         }

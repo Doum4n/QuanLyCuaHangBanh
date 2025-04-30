@@ -9,19 +9,19 @@ namespace QuanLyCuaHangBanh.Base
 {
     public abstract class PresenterBase<T> : IPresenter<T> where T : class
     {
-        public IRepository<T> Repository { get; set; }
+        public IRepositoryProvider Provider { get; set; }
         public IView View { get; set; }
         public BindingSource BindingSource { get; set; }
 
         public virtual void LoadData()
         {
-            BindingSource.DataSource = Repository.GetAll();
+            BindingSource.DataSource = Provider.GetRepository<T>().GetAll();
         }
 
-        protected PresenterBase(IView view, IRepository<T> repository)
+        protected PresenterBase(IView view, IRepositoryProvider provider)
         {
             View = view;
-            Repository = repository;
+            Provider = provider;
             BindingSource = new BindingSource();
 
             View.SearchEvent += OnSearch;
