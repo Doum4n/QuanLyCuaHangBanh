@@ -1,8 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.Presenters;
+using QuanLyCuaHangBanh.Reports;
 using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Uitls;
 using QuanLyCuaHangBanh.Views;
+using QuanLyCuaHangBanh.Views.Category;
+using QuanLyCuaHangBanh.Views.Customer;
+using QuanLyCuaHangBanh.Views.Employee;
+using QuanLyCuaHangBanh.Views.Invoice;
+using QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice;
+using QuanLyCuaHangBanh.Views.Invoice.SalesInvoice;
+using QuanLyCuaHangBanh.Views.Order;
+using QuanLyCuaHangBanh.Views.Product;
+using QuanLyCuaHangBanh.Views.ReceiptNote;
+using QuanLyCuaHangBanh.Views.ReleaseNote;
+using QuanLyCuaHangBanh.Views.Unit;
 
 namespace QuanLyCuaHangBanh
 {
@@ -10,13 +23,27 @@ namespace QuanLyCuaHangBanh
     {
         private ProductView? productView;
         private CategoryView? categoryView;
-        private ProducerView? producerView;
+        private SuplierView? producerView;
         private CustomerView? customerView;
+        private GoodsReceiptNoteView? purchaseReceiptView;
+        private ReleaseNoteView? warehouseReleaseNoteView;
+        private EmployeeView? employeeView;
+        private OrderView? OrderView;
+        private InvoiceView? invoiceView;
+        private PurchaseInvoiceView? PurchaseInvoiceView;
+        private UnitView? unitView;
 
         private ProductPresenter? _productPresenter;
         private CustomerPresenter? _customerPresenter;
         private CategoryPresenter? _categoryPresenter;
         private ProducerPresenter? _producerPresenter;
+        private GoodsReceiptNotePresenter? _purchaseReceiptPresenter;
+        private WarehouseReleaseNotePresenter? _warehouseReleaseNotePresenter;
+        private EmployeePresenter? _employeePresenter;
+        private OrderPresenter? _orderPresenter;
+        private SalesInvoicePresenter? _invoicePresenter;
+        private PurchasePresenter? _purchasePresenter;
+        private UnitPresenter? _unitPresenter;
 
         private readonly IServiceProvider _serviceProvider;
 
@@ -53,8 +80,8 @@ namespace QuanLyCuaHangBanh
         {
             if (categoryView == null || categoryView.IsDisposed)
             {
-                categoryView = new CategoryView();
-                new CategoryPresenter(categoryView);
+                categoryView = _serviceProvider.GetRequiredService<ICategoryView>() as CategoryView;
+                _categoryPresenter = _serviceProvider.GetRequiredService<CategoryPresenter>();
                 categoryView.MdiParent = this;
                 categoryView.Show();
             }
@@ -68,7 +95,7 @@ namespace QuanLyCuaHangBanh
         {
             if (producerView == null || producerView.IsDisposed)
             {
-                producerView = new ProducerView();
+                producerView = new SuplierView();
                 new ProducerPresenter(producerView);
                 producerView.MdiParent = this;
                 producerView.Show();
@@ -84,13 +111,164 @@ namespace QuanLyCuaHangBanh
             if (customerView == null || customerView.IsDisposed)
             {
                 customerView = _serviceProvider.GetRequiredService<ICustomerView>() as CustomerView;
-                _customerPresenter =  _serviceProvider.GetRequiredService<CustomerPresenter>();
+                _customerPresenter = _serviceProvider.GetRequiredService<CustomerPresenter>();
                 customerView.MdiParent = this;
                 customerView.Show();
             }
             else
             {
                 customerView.Activate();
+            }
+        }
+
+        private void tsmi_PurchaseReceipts_Click(object sender, EventArgs e)
+        {
+            if (purchaseReceiptView == null || purchaseReceiptView.IsDisposed)
+            {
+                purchaseReceiptView = _serviceProvider.GetRequiredService<IGoodsReceiptNoteView>() as GoodsReceiptNoteView;
+                _purchaseReceiptPresenter = _serviceProvider.GetRequiredService<GoodsReceiptNotePresenter>();
+                purchaseReceiptView.MdiParent = this;
+                purchaseReceiptView.Show();
+            }
+            else
+            {
+                purchaseReceiptView.Activate();
+            }
+        }
+
+        private void tsmi_WarehouseNotes_Click(object sender, EventArgs e)
+        {
+            if (warehouseReleaseNoteView == null || warehouseReleaseNoteView.IsDisposed)
+            {
+                warehouseReleaseNoteView = _serviceProvider.GetRequiredService<IWareHouseReleaseNoteView>() as ReleaseNoteView;
+                _warehouseReleaseNotePresenter = _serviceProvider.GetRequiredService<WarehouseReleaseNotePresenter>();
+                warehouseReleaseNoteView.MdiParent = this;
+                warehouseReleaseNoteView.Show();
+            }
+            else
+            {
+                warehouseReleaseNoteView.Activate();
+            }
+        }
+
+        private void tsmi_Employees_Click(object sender, EventArgs e)
+        {
+            if (employeeView == null || employeeView.IsDisposed)
+            {
+                employeeView = _serviceProvider.GetRequiredService<IEmployeeView>() as EmployeeView;
+                _employeePresenter = _serviceProvider.GetRequiredService<EmployeePresenter>();
+                employeeView.MdiParent = this;
+                employeeView.Show();
+            }
+            else
+            {
+                employeeView.Activate();
+            }
+        }
+
+        private void tsmi_Order_Click(object sender, EventArgs e)
+        {
+            if (OrderView == null || OrderView.IsDisposed)
+            {
+                OrderView = _serviceProvider.GetRequiredService<IOrderView>() as OrderView;
+                _orderPresenter = _serviceProvider.GetRequiredService<OrderPresenter>();
+                OrderView.MdiParent = this;
+                OrderView.Show();
+            }
+            else
+            {
+                OrderView.Activate();
+            }
+        }
+
+        private void tsmi_Invoices_Click(object sender, EventArgs e)
+        {
+            if (invoiceView == null || invoiceView.IsDisposed)
+            {
+
+                invoiceView = _serviceProvider.GetRequiredService<ISalesInvoiceView>() as InvoiceView;
+                _invoicePresenter = _serviceProvider.GetRequiredService<SalesInvoicePresenter>();
+
+                PurchaseInvoiceView = _serviceProvider.GetRequiredService<IPurchaseView>() as PurchaseInvoiceView;
+                _purchasePresenter = _serviceProvider.GetRequiredService<PurchasePresenter>();
+
+                invoiceView.MdiParent = this;
+                invoiceView.Show();
+            }
+            else
+            {
+                invoiceView.Activate();
+            }
+        }
+
+        private void tsmi_ReportProduct_Click(object sender, EventArgs e)
+        {
+            ReportProductView reportProductView = new ReportProductView();
+            reportProductView.MdiParent = this;
+            reportProductView.Show();
+        }
+
+        private void tsmi_ReportSalesInvoice_Click(object sender, EventArgs e)
+        {
+            //ReportSalesInvoiceView reportSalesInvoiceView = new ReportSalesInvoiceView();
+            //reportSalesInvoiceView.MdiParent = this;
+            //reportSalesInvoiceView.Show();
+        }
+
+        private void tsmi_RevenueStatistics_Click(object sender, EventArgs e)
+        {
+            ReportRevenueStatisticsView revenueStatisticsView = new ReportRevenueStatisticsView();
+            revenueStatisticsView.MdiParent = this;
+            revenueStatisticsView.Show();
+        }
+
+        private void tsmi_ImportWarehouse_Click(object sender, EventArgs e)
+        {
+            ReportReceiptView reportReceiptView = new ReportReceiptView();
+            reportReceiptView.MdiParent = this;
+            reportReceiptView.Show();
+        }
+
+        private void tsmi_ExportWarehouse_Click(object sender, EventArgs e)
+        {
+            ReportReleaseView reportReleaseView = new ReportReleaseView();
+            reportReleaseView.MdiParent = this;
+            reportReleaseView.Show();
+        }
+
+        private void tsmi_Units_Click(object sender, EventArgs e)
+        {
+            if (unitView == null || unitView.IsDisposed)
+            {
+                unitView = _serviceProvider.GetRequiredService<IUnitView>() as UnitView;
+                _unitPresenter = _serviceProvider.GetRequiredService<UnitPresenter>();
+                unitView.MdiParent = this;
+                unitView.Show();
+            }
+            else
+            {
+                unitView.Activate();
+            }
+        }
+
+        private void stmi_OrderStatistics_Click(object sender, EventArgs e)
+        {
+            ReportOrderView reportOrderView = new ReportOrderView();
+            reportOrderView.MdiParent = this;
+            reportOrderView.Show();
+        }
+
+        private void tsmi_Login_Click(object sender, EventArgs e)
+        {
+            LoginView loginView = new LoginView();
+            if (loginView.ShowDialog() == DialogResult.OK)
+            {
+                tsslb_EmployeeName.Text = $"{Session.Role}: {Session.EmployeeName}";
+            }
+            else
+            {
+                // Handle failed login, e.g., show an error message
+                MessageBox.Show("Đăng nhập thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

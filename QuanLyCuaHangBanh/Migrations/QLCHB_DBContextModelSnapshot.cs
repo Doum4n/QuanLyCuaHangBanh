@@ -22,6 +22,67 @@ namespace QuanLyCuaHangBanh.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Base.Invoice", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmployeeID");
+
+                    b.ToTable("Invoices", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Base.Invoice_Detail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("InvoiceID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Product_UnitID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PurchaseInvoiceID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SalesInvoiceID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("InvoiceID");
+
+                    b.HasIndex("Product_UnitID");
+
+                    b.HasIndex("PurchaseInvoiceID");
+
+                    b.HasIndex("SalesInvoiceID");
+
+                    b.ToTable("InvoiceDetails", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -65,7 +126,7 @@ namespace QuanLyCuaHangBanh.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Custumers");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Employee", b =>
@@ -92,7 +153,7 @@ namespace QuanLyCuaHangBanh.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Position")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -105,6 +166,83 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<DateOnly>("CreatedDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("LastModifiedById")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("LastModifiedDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("LastModifiedById");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("GoodsReceiptNotes");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote_Detail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("GoodsReceiptNoteId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductUnitId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UnitId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("GoodsReceiptNoteId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductUnitId");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("GoodsReceiptNoteDetails");
+                });
+
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Inventory", b =>
                 {
                     b.Property<int>("ID")
@@ -113,32 +251,32 @@ namespace QuanLyCuaHangBanh.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProductID")
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductUnitID")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UnitID")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ID");
 
                     b.HasIndex("ProductID");
 
-                    b.HasIndex("UnitID");
+                    b.HasIndex("ProductUnitID")
+                        .IsUnique();
 
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Invoice", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -149,22 +287,29 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Property<int>("CustomerID")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("EmployeeID")
-                        .HasColumnType("integer");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CustomerID");
 
-                    b.HasIndex("EmployeeID");
-
-                    b.ToTable("Invoices");
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Invoice_Detail", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order_Detail", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -172,13 +317,17 @@ namespace QuanLyCuaHangBanh.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("InvoiceID")
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("ProductID")
+                    b.Property<int>("Product_UnitID")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
@@ -186,44 +335,11 @@ namespace QuanLyCuaHangBanh.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("InvoiceID");
+                    b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductID");
+                    b.HasIndex("Product_UnitID");
 
-                    b.ToTable("InvoiceDetails");
-                });
-
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Producer", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Producers");
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product", b =>
@@ -248,7 +364,6 @@ namespace QuanLyCuaHangBanh.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -283,9 +398,6 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Property<decimal>("ConversionRate")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("InventoryID")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ProductID")
                         .HasColumnType("integer");
 
@@ -297,13 +409,44 @@ namespace QuanLyCuaHangBanh.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("InventoryID");
-
                     b.HasIndex("ProductID");
 
                     b.HasIndex("UnitID");
 
                     b.ToTable("ProductUnits");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Supplier", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Unit", b =>
@@ -327,61 +470,268 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Inventory", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.WarehouseReleaseNote", b =>
                 {
-                    b.HasOne("QuanLyCuaHangBanh.Models.Product", "Product")
-                        .WithMany("Inventories")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.HasOne("QuanLyCuaHangBanh.Models.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Navigation("Product");
+                    b.Property<int>("CreatedByID")
+                        .HasColumnType("integer");
 
-                    b.Navigation("Unit");
+                    b.Property<DateOnly>("CreatedDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("LastModifiedByID")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("LastModifiedDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("LinkedId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CreatedByID");
+
+                    b.HasIndex("LastModifiedByID");
+
+                    b.ToTable("WarehouseReleaseNotes");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Invoice", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.WarehouseReleaseNote_Detail", b =>
                 {
-                    b.HasOne("QuanLyCuaHangBanh.Models.Customer", "Customer")
-                        .WithMany("Invoices")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Product_UnitID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WarehouseReleaseNoteId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Product_UnitID");
+
+                    b.HasIndex("WarehouseReleaseNoteId");
+
+                    b.ToTable("WarehouseReleaseNoteDetails");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.PurchaseInvoice", b =>
+                {
+                    b.HasBaseType("QuanLyCuaHangBanh.Models.Base.Invoice");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SupplierID")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("SupplierID");
+
+                    b.ToTable("PurchaseInvoices", (string)null);
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.SalesInvoice", b =>
+                {
+                    b.HasBaseType("QuanLyCuaHangBanh.Models.Base.Invoice");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("CustomerID");
+
+                    b.ToTable("SalesInvoices", (string)null);
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.PurchaseInvoice_Detail", b =>
+                {
+                    b.HasBaseType("QuanLyCuaHangBanh.Models.Base.Invoice_Detail");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("UnitCost")
+                        .HasColumnType("numeric");
+
+                    b.ToTable("PurchaseInvoiceDetails", (string)null);
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.SalesInvoice_Detail", b =>
+                {
+                    b.HasBaseType("QuanLyCuaHangBanh.Models.Base.Invoice_Detail");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("numeric");
+
+                    b.ToTable("SalesInvoiceDetails", (string)null);
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Base.Invoice", b =>
+                {
                     b.HasOne("QuanLyCuaHangBanh.Models.Employee", "Employee")
                         .WithMany("Invoices")
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Invoice_Detail", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Base.Invoice_Detail", b =>
                 {
-                    b.HasOne("QuanLyCuaHangBanh.Models.Invoice", "Invoice")
-                        .WithMany("InvoiceDetails")
+                    b.HasOne("QuanLyCuaHangBanh.Models.Base.Invoice", "Invoice")
+                        .WithMany()
                         .HasForeignKey("InvoiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product_Unit", "Product_Unit")
+                        .WithMany()
+                        .HasForeignKey("Product_UnitID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.PurchaseInvoice", null)
+                        .WithMany("InvoiceDetails")
+                        .HasForeignKey("PurchaseInvoiceID");
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.SalesInvoice", null)
+                        .WithMany("InvoiceDetails")
+                        .HasForeignKey("SalesInvoiceID");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Product_Unit");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Employee", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById");
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LastModifiedBy");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote_Detail", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.GoodsReceiptNote", "GoodsReceiptNote")
+                        .WithMany("GoodsReceiptNoteDetails")
+                        .HasForeignKey("GoodsReceiptNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuanLyCuaHangBanh.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Invoice");
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product_Unit", "ProductUnit")
+                        .WithMany()
+                        .HasForeignKey("ProductUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GoodsReceiptNote");
 
                     b.Navigation("Product");
+
+                    b.Navigation("ProductUnit");
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Inventory", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product", null)
+                        .WithMany("Inventories")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product_Unit", "ProductUnit")
+                        .WithOne("Inventory")
+                        .HasForeignKey("QuanLyCuaHangBanh.Models.Inventory", "ProductUnitID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductUnit");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order_Detail", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product_Unit", "Product_Unit")
+                        .WithMany()
+                        .HasForeignKey("Product_UnitID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product_Unit");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product", b =>
@@ -398,7 +748,7 @@ namespace QuanLyCuaHangBanh.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuanLyCuaHangBanh.Models.Producer", "Producer")
+                    b.HasOne("QuanLyCuaHangBanh.Models.Supplier", "Producer")
                         .WithMany()
                         .HasForeignKey("ProducerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -413,12 +763,6 @@ namespace QuanLyCuaHangBanh.Migrations
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product_Unit", b =>
                 {
-                    b.HasOne("QuanLyCuaHangBanh.Models.Inventory", "Inventory")
-                        .WithMany()
-                        .HasForeignKey("InventoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("QuanLyCuaHangBanh.Models.Product", "Product")
                         .WithMany("ProductUnits")
                         .HasForeignKey("ProductID")
@@ -428,14 +772,100 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.HasOne("QuanLyCuaHangBanh.Models.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Inventory");
 
                     b.Navigation("Product");
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.WarehouseReleaseNote", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Employee", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedByID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Employee", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedByID");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("LastModifiedBy");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.WarehouseReleaseNote_Detail", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Product_Unit", "Product_Unit")
+                        .WithMany()
+                        .HasForeignKey("Product_UnitID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.WarehouseReleaseNote", "WarehouseReleaseNote")
+                        .WithMany("WarehouseReleaseNoteDetails")
+                        .HasForeignKey("WarehouseReleaseNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product_Unit");
+
+                    b.Navigation("WarehouseReleaseNote");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.PurchaseInvoice", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Base.Invoice", null)
+                        .WithOne()
+                        .HasForeignKey("QuanLyCuaHangBanh.Models.PurchaseInvoice", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.SalesInvoice", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuanLyCuaHangBanh.Models.Base.Invoice", null)
+                        .WithOne()
+                        .HasForeignKey("QuanLyCuaHangBanh.Models.SalesInvoice", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.PurchaseInvoice_Detail", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Base.Invoice_Detail", null)
+                        .WithOne()
+                        .HasForeignKey("QuanLyCuaHangBanh.Models.PurchaseInvoice_Detail", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.SalesInvoice_Detail", b =>
+                {
+                    b.HasOne("QuanLyCuaHangBanh.Models.Base.Invoice_Detail", null)
+                        .WithOne()
+                        .HasForeignKey("QuanLyCuaHangBanh.Models.SalesInvoice_Detail", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Category", b =>
@@ -443,19 +873,19 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Customer", b =>
-                {
-                    b.Navigation("Invoices");
-                });
-
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Employee", b =>
                 {
                     b.Navigation("Invoices");
                 });
 
-            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Invoice", b =>
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote", b =>
                 {
-                    b.Navigation("InvoiceDetails");
+                    b.Navigation("GoodsReceiptNoteDetails");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product", b =>
@@ -465,9 +895,30 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Navigation("ProductUnits");
                 });
 
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Product_Unit", b =>
+                {
+                    b.Navigation("Inventory")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Unit", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.WarehouseReleaseNote", b =>
+                {
+                    b.Navigation("WarehouseReleaseNoteDetails");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.PurchaseInvoice", b =>
+                {
+                    b.Navigation("InvoiceDetails");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.SalesInvoice", b =>
+                {
+                    b.Navigation("InvoiceDetails");
                 });
 #pragma warning restore 612, 618
         }

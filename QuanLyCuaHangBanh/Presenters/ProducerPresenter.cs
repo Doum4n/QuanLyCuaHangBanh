@@ -7,18 +7,19 @@ using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Repositories;
 using QuanLyCuaHangBanh.Views;
+using QuanLyCuaHangBanh.Views.Suplier;
 
 namespace QuanLyCuaHangBanh.Presenters
 {
     class ProducerPresenter
     {
         private QLCHB_DBContext context = new QLCHB_DBContext();
-        private IProducerView view;
+        private ISuplierView view;
         private ProducerRepo repo;
 
         private BindingSource bindingSource;
 
-        public ProducerPresenter(IProducerView view)
+        public ProducerPresenter(ISuplierView view)
         {
             this.view = view;
             repo = new ProducerRepo(context);
@@ -41,13 +42,13 @@ namespace QuanLyCuaHangBanh.Presenters
 
         private void OnEdit(object? sender, EventArgs e)
         {
-            ProducerInputView producerInputView = new ProducerInputView((Producer)this.view.SelectedItem);
+            SuplierInputView producerInputView = new SuplierInputView((Supplier)this.view.SelectedItem);
             if (producerInputView.ShowDialog() == DialogResult.OK)
             {
                 
-                if (producerInputView.Tag is Producer producer)
+                if (producerInputView.Tag is Supplier producer)
                 {
-                    producer.ID = ((Producer)this.view.SelectedItem).ID;
+                    producer.ID = ((Supplier)this.view.SelectedItem).ID;
                     repo.Update(producer);
                     loadData();
                 }
@@ -56,10 +57,10 @@ namespace QuanLyCuaHangBanh.Presenters
 
         private void OnAddNew(object? sender, EventArgs e)
         {
-            ProducerInputView producerInputView = new ProducerInputView();
+            SuplierInputView producerInputView = new SuplierInputView();
             if (producerInputView.ShowDialog() == DialogResult.OK)
             {
-                if (producerInputView.Tag is Producer producer)
+                if (producerInputView.Tag is Supplier producer)
                 {
                     repo.Add(producer);
                     loadData();
@@ -69,7 +70,7 @@ namespace QuanLyCuaHangBanh.Presenters
 
         private void OnDelete(object? sender, EventArgs e)
         {
-            repo.Delete((Producer)this.view.SelectedItem);
+            repo.Delete((Supplier)this.view.SelectedItem);
             loadData();
         }
 

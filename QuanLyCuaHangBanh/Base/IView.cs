@@ -15,7 +15,9 @@ namespace QuanLyCuaHangBanh.Base
         event EventHandler DeleteEvent;
         event EventHandler AddNewEvent;
         event EventHandler EditEvent;
-        event EventHandler RowSelected;
+        event EventHandler ImportEvent;
+        event EventHandler ExportEvent;
+
 
         Object SelectedItem {get; set; }
         void SetBindingSource(BindingSource bindingSource);

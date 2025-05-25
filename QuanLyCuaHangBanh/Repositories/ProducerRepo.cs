@@ -9,7 +9,7 @@ using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Repositories
 {
-    class ProducerRepo : RepositoryBase<Producer>
+    class ProducerRepo : RepositoryBase<Supplier>
     {
         private QLCHB_DBContext context = new QLCHB_DBContext();
         public ProducerRepo(QLCHB_DBContext context) : base(context) { }

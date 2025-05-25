@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyCuaHangBanh.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace QuanLyCuaHangBanh.Models
 
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public string Position { get; set; } // e.g., Manager, Cashier, etc.
+        public string Role { get; set; } // e.g., Manager, Cashier, etc.
 
         public virtual ICollection<Invoice> Invoices { get; } = new List<Invoice>();
 

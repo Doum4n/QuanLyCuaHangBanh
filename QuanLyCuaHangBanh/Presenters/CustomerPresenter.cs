@@ -1,18 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using QuanLyCuaHangBanh.Base;
+﻿using QuanLyCuaHangBanh.Base;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Uitls;
 using QuanLyCuaHangBanh.Views;
+using QuanLyCuaHangBanh.Views.Customer;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Presenters
 {
     class CustomerPresenter(ICustomerView view, IRepositoryProvider repository) : PresenterBase<Customer>(view, repository)
     {
+        public override void OnExport(object? sender, EventArgs e)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID", typeof(int));
+            dataTable.Columns.Add("Tên khách hàng", typeof(string));
+            dataTable.Columns.Add("Số điện thoại", typeof(string));
+            dataTable.Columns.Add("Địa chỉ", typeof(string));
+            foreach (var item in Provider.GetRepository<Customer>().GetAll())
+            {
+                dataTable.Rows.Add(item.ID, item.Name, item.PhoneNumber, item.Address);
+            }
+            ExcelHandler.ExportExcel("Khách hàng", "Khách hàng", dataTable);
+        }
+
+        public override void OnImport(object? sender, EventArgs e)
+        {
+            ExcelHandler.ImportExcel((DataRow row) =>
+            {
+                Customer customer = new Customer()
+                {
+                    //ID = Convert.ToInt32(row[0]),
+                    Name = row[1].ToString(),
+                    PhoneNumber = row[2].ToString(),
+                    Address = row[3].ToString()
+                };
+                Provider.GetRepository<Customer>().Add(customer);
+                View.Message = "Import thành công!";
+            });
+            LoadData();
+        }
+
         public override void OnEdit(object? sender, EventArgs e)
         {
             CustomerInputView customerInputView = new CustomerInputView((Customer)(this.View.SelectedItem));

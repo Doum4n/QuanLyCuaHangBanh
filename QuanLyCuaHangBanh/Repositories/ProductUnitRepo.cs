@@ -26,5 +26,24 @@ namespace QuanLyCuaHangBanh.Repositories
                 context.SaveChanges();
             }
         }
+
+        public int GetProductUnitId(int productId, int unitId)
+        {
+            var productUnit = context.ProductUnits
+                .Where(p => p.ProductID == productId && p.UnitID == unitId)
+                .FirstOrDefault();
+            if (productUnit != null)
+            {
+                return productUnit.ID;
+            }
+            return 0;
+        }
+
+        public Product_Unit AddWithReturn(Product_Unit productUnit)
+        {
+            context.ProductUnits.Add(productUnit);
+            context.SaveChanges();
+            return productUnit;
+        }
     }
 }
