@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PurchaseInvoiceInputView));
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             panel3 = new Panel();
@@ -47,6 +47,7 @@
             Quantity = new DataGridViewTextBoxColumn();
             Note = new DataGridViewTextBoxColumn();
             groupBox1 = new GroupBox();
+            btn_SelectReceiptNote = new MaterialSkin.Controls.MaterialButton();
             cbb_Suppliers = new ComboBox();
             materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
             cbb_PaymentMethod = new ComboBox();
@@ -92,7 +93,6 @@
             nmr_Price = new NumericUpDown();
             label3 = new Label();
             panel1 = new Panel();
-            btn_SelectReceiptNote = new MaterialSkin.Controls.MaterialButton();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
@@ -236,9 +236,9 @@
             // Price
             // 
             Price.DataPropertyName = "Price";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Price.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Price.DefaultCellStyle = dataGridViewCellStyle1;
             Price.HeaderText = "Giá tiền";
             Price.MinimumWidth = 6;
             Price.Name = "Price";
@@ -282,6 +282,26 @@
             groupBox1.TabIndex = 38;
             groupBox1.TabStop = false;
             groupBox1.Text = "Hóa đơn";
+            // 
+            // btn_SelectReceiptNote
+            // 
+            btn_SelectReceiptNote.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_SelectReceiptNote.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_SelectReceiptNote.Depth = 0;
+            btn_SelectReceiptNote.HighEmphasis = true;
+            btn_SelectReceiptNote.Icon = null;
+            btn_SelectReceiptNote.Location = new Point(36, 113);
+            btn_SelectReceiptNote.Margin = new Padding(4, 6, 4, 6);
+            btn_SelectReceiptNote.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_SelectReceiptNote.Name = "btn_SelectReceiptNote";
+            btn_SelectReceiptNote.NoAccentTextColor = Color.Empty;
+            btn_SelectReceiptNote.Size = new Size(152, 36);
+            btn_SelectReceiptNote.TabIndex = 41;
+            btn_SelectReceiptNote.Text = "Chọn phiếu nhập";
+            btn_SelectReceiptNote.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_SelectReceiptNote.UseAccentColor = false;
+            btn_SelectReceiptNote.UseVisualStyleBackColor = true;
+            btn_SelectReceiptNote.Click += btn_SelectReceiptNote_Click;
             // 
             // cbb_Suppliers
             // 
@@ -551,6 +571,7 @@
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
             cbb_Categories.TabIndex = 5;
+            cbb_Categories.SelectedIndexChanged += cbb_Categories_SelectedIndexChanged;
             // 
             // label5
             // 
@@ -740,26 +761,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1226, 190);
             panel1.TabIndex = 42;
-            // 
-            // btn_SelectReceiptNote
-            // 
-            btn_SelectReceiptNote.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_SelectReceiptNote.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_SelectReceiptNote.Depth = 0;
-            btn_SelectReceiptNote.HighEmphasis = true;
-            btn_SelectReceiptNote.Icon = null;
-            btn_SelectReceiptNote.Location = new Point(36, 113);
-            btn_SelectReceiptNote.Margin = new Padding(4, 6, 4, 6);
-            btn_SelectReceiptNote.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_SelectReceiptNote.Name = "btn_SelectReceiptNote";
-            btn_SelectReceiptNote.NoAccentTextColor = Color.Empty;
-            btn_SelectReceiptNote.Size = new Size(158, 36);
-            btn_SelectReceiptNote.TabIndex = 41;
-            btn_SelectReceiptNote.Text = "Chọn phiếu nhập";
-            btn_SelectReceiptNote.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_SelectReceiptNote.UseAccentColor = false;
-            btn_SelectReceiptNote.UseVisualStyleBackColor = true;
-            btn_SelectReceiptNote.Click += btn_SelectReceiptNote_Click;
             // 
             // PurchaseInvoiceInputView
             // 

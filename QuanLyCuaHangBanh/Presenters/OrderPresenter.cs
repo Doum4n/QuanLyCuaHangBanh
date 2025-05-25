@@ -138,7 +138,47 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnEdit(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            OrderInputView orderInputView = new OrderInputView((OrderDTO)View.SelectedItem);
+            if (orderInputView.ShowDialog() == DialogResult.OK)
+            {
+                if (orderInputView.Tag is Order order)
+                {
+                    Provider.GetRepository<Order>().Update(order);
+                    // Xóa các chi tiết đơn hàng cũ
+                    var existingDetails = Provider.GetRepository<Order_Detail>().GetAll().Where(od => od.OrderId == order.ID).ToList();
+                    foreach (var detail in existingDetails)
+                    {
+                        Provider.GetRepository<Order_Detail>().Delete(detail);
+                    }
+                    // Thêm các chi tiết đơn hàng mới
+                    foreach (var product in orderInputView.Products)
+                    {
+
+                        switch (product.Status)
+                        {
+                            case DTO.Base.Status.New:
+                                product.OrderId = order.ID;
+                                product.ProductUnitId = product.ProductUnitId;
+                                Provider.GetRepository<Order_Detail>().Add(product.ToOrderDetail());
+                                break;
+                            case DTO.Base.Status.Modified:
+                                product.OrderId = order.ID;
+                                product.ProductUnitId = product.ProductUnitId;
+                                Provider.GetRepository<Order_Detail>().Add(product.ToOrderDetail());
+                                break;
+                            case DTO.Base.Status.Deleted:
+                                var existingDetail = Provider.GetRepository<Order_Detail>().GetAll().FirstOrDefault(od => od.OrderId == order.ID && od.Product_UnitID == product.ProductUnitId);
+                                if (existingDetail != null)
+                                {
+                                    Provider.GetRepository<Order_Detail>().Delete(existingDetail);
+                                }
+                                break;
+                        }
+                    }
+                    View.Message = "Cập nhật đơn hàng thành công!";
+                    LoadData();
+                }
+            }
         }
 
         public override void OnAddNew(object? sender, EventArgs e)

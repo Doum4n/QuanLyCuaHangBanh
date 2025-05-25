@@ -1,17 +1,18 @@
-﻿using QuanLyCuaHangBanh.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Reporting.WinForms;
+using QuanLyCuaHangBanh.Data;
+using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Uitls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Reporting.WinForms;
-using QuanLyCuaHangBanh.Uitls;
-using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Reports
 {
@@ -86,8 +87,6 @@ namespace QuanLyCuaHangBanh.Reports
                         )
                     ).Cast<Object>().ToList();
 
-                MessageBox.Show(salesInvoiceDetails.Count.ToString());
-
                 ReportHanler.LoadData(
                     this.reportViewer1,
                     salesInvoiceDetails,
@@ -117,10 +116,12 @@ namespace QuanLyCuaHangBanh.Reports
                         salesInvoice.Date.Month,
                         salesInvoice.Date.Year)),
 
-                    //new ReportParameter("Seller_Name", salesInvoice.Employee.Name),
-                    //new ReportParameter("Seller_Address", salesInvoice.Employee.Address),
+                    new ReportParameter("Seller_Name", ConfigurationManager.AppSettings["StoreName"].ToString()),
+                    new ReportParameter("Seller_Address", ConfigurationManager.AppSettings["StoreAddress"].ToString()),
+                    new ReportParameter("Seller_TaxCode", ConfigurationManager.AppSettings["StoreTaxCode"].ToString()),
                     new ReportParameter("Customer_Name", salesInvoice.Customer.Name),
                     new ReportParameter("Customer_Address", salesInvoice.Customer.Address),
+                    new ReportParameter("TotalPrice", salesInvoiceDetails.Sum(o => ((ReportSalesInvoiceItem)o).TotalPrice).ToString()),
 
                 };
 

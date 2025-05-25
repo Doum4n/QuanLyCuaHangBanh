@@ -44,6 +44,8 @@
             label12 = new Label();
             cbb_PaymentMethods = new ComboBox();
             panel2 = new Panel();
+            label13 = new Label();
+            nmr_Price = new NumericUpDown();
             btn_DeleteProduct = new MaterialSkin.Controls.MaterialButton();
             btn_UpdateProduct = new MaterialSkin.Controls.MaterialButton();
             nmr_ConversionRate = new NumericUpDown();
@@ -73,6 +75,7 @@
             Note = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_Price).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
             panel3.SuspendLayout();
@@ -226,6 +229,8 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(label13);
+            panel2.Controls.Add(nmr_Price);
             panel2.Controls.Add(btn_DeleteProduct);
             panel2.Controls.Add(btn_UpdateProduct);
             panel2.Controls.Add(nmr_ConversionRate);
@@ -246,8 +251,27 @@
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 215);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1251, 181);
+            panel2.Size = new Size(1251, 207);
             panel2.TabIndex = 32;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(504, 141);
+            label13.Name = "label13";
+            label13.Size = new Size(60, 20);
+            label13.TabIndex = 42;
+            label13.Text = "Giá bán";
+            // 
+            // nmr_Price
+            // 
+            nmr_Price.Location = new Point(504, 164);
+            nmr_Price.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_Price.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nmr_Price.Name = "nmr_Price";
+            nmr_Price.Size = new Size(150, 27);
+            nmr_Price.TabIndex = 41;
+            nmr_Price.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btn_DeleteProduct
             // 
@@ -294,9 +318,12 @@
             // nmr_ConversionRate
             // 
             nmr_ConversionRate.Location = new Point(504, 57);
+            nmr_ConversionRate.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            nmr_ConversionRate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
             nmr_ConversionRate.TabIndex = 38;
+            nmr_ConversionRate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btn_AddProduct
             // 
@@ -399,6 +426,7 @@
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
             cbb_Categories.TabIndex = 28;
+            cbb_Categories.SelectedIndexChanged += cbb_Categories_SelectedIndexChanged;
             // 
             // label10
             // 
@@ -452,12 +480,12 @@
             dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, PurchasePrice, Quantity, Note });
             dgv_ProductList.Dock = DockStyle.Fill;
-            dgv_ProductList.Location = new Point(0, 396);
+            dgv_ProductList.Location = new Point(0, 422);
             dgv_ProductList.Name = "dgv_ProductList";
             dgv_ProductList.ReadOnly = true;
             dgv_ProductList.RowHeadersWidth = 51;
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1251, 221);
+            dgv_ProductList.Size = new Size(1251, 195);
             dgv_ProductList.TabIndex = 34;
             // 
             // ID
@@ -543,6 +571,7 @@
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_Price).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).EndInit();
             panel3.ResumeLayout(false);
@@ -594,5 +623,7 @@
         private Label label11;
         private Label label12;
         private ComboBox cbb_PaymentMethods;
+        private Label label13;
+        private NumericUpDown nmr_Price;
     }
 }

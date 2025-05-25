@@ -3,8 +3,10 @@ using QuanLyCuaHangBanh.Base;
 using QuanLyCuaHangBanh.DTO.Base;
 using QuanLyCuaHangBanh.Presenters;
 using QuanLyCuaHangBanh.Reports;
+using QuanLyCuaHangBanh.Uitls;
 using QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice;
 using QuanLyCuaHangBanh.Views.Invoice.SalesInvoice;
+using System.Windows.Forms;
 
 namespace QuanLyCuaHangBanh.Views.Invoice
 {
@@ -89,7 +91,14 @@ namespace QuanLyCuaHangBanh.Views.Invoice
 
         private void InvoiceView_Load(object sender, EventArgs e)
         {
-
+            if(Session.Role == "Nhân viên bán hàng")
+            {
+                tabControl2.TabPages.Remove(tabPane_PurchaseInvoice);
+            }
+            else if (Session.Role == "Nhân viên kho")
+            {
+                tabControl2.TabPages.Remove(tabPage_SalesInvoice);
+            }  
         }
 
         private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)

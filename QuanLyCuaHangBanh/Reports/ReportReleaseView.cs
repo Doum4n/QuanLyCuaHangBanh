@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Reporting.WinForms;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyCuaHangBanh.Reports
 {
@@ -51,16 +52,18 @@ namespace QuanLyCuaHangBanh.Reports
         private void ReportReleaseView_Load(object sender, EventArgs e)
         {
             var releaseNotes = context.WarehouseReleaseNoteDetails
+                .Include(r => r.Product_Unit)
+                .GroupBy(o => o.Product_Unit.UnitID)
                 .Select(r => new ReportReleaseItem(
-                    r.ID,
-                    r.WarehouseReleaseNoteId,
-                    r.Product_Unit.ProductID,
-                    r.Product_Unit.Product.Name,
-                    r.Product_Unit.Product.CategoryID,
-                    r.Product_Unit.Product.Category.Name,
-                    r.Product_Unit.UnitID,
-                    r.Product_Unit.Unit.Name,
-                    r.Quantity
+                    r.First().ID,
+                    r.First().WarehouseReleaseNoteId,
+                    r.First().Product_Unit.ProductID,
+                    r.First().Product_Unit.Product.Name,
+                    r.First().Product_Unit.Product.CategoryID,
+                    r.First().Product_Unit.Product.Category.Name,
+                    r.First().Product_Unit.UnitID,
+                    r.First().Product_Unit.Unit.Name,
+                    r.First().Quantity
                 )).Cast<Object>().ToList();
 
             ReportHanler.LoadData(

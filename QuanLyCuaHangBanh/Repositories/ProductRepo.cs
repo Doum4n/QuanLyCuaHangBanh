@@ -20,6 +20,8 @@ namespace QuanLyCuaHangBanh.Repositories
             return context.Products
                 .AsNoTracking()
                 .AsSplitQuery() // nếu có nhiều include
+                .Include(p => p.ProductUnits)
+                .ThenInclude(pu => pu.Inventory)
                 .Include(p => p.Category)
                 .Include(p => p.Producer)
                 .Include(p => p.ProductUnits)
@@ -31,23 +33,24 @@ namespace QuanLyCuaHangBanh.Repositories
 
         public override void Add(Product entity)
         {
-            //if (entity.Image != "" && entity.Image != null)
-            //{
-            //    var cloudinary = CloudinaryConfig.GetCloudinaryClient();
-            //    var uploadParams = new ImageUploadParams()
-            //    {
-            //        File = new FileDescription(entity.Image)
-            //    };
-            //    var uploadResult = cloudinary.Upload(uploadParams);
-            //    entity.Image = uploadResult.SecureUri.ToString();
-            //}
+            if (entity.Image != "" && entity.Image != null)
+            {
+                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(entity.Image)
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                entity.Image = uploadResult.SecureUri.ToString();
+            }
 
             base.Add(entity);
         }
 
         public override void Update(Product entity)
         {
-            if(entity.Image != "" && !entity.Image.Contains("https://res.cloudinary.com"))
+            MessageBox.Show("Updating product: " + entity.ToString());
+            if (entity.Image != "" && !entity.Image.Contains("https://res.cloudinary.com"))
             {
                 var cloudinary = CloudinaryConfig.GetCloudinaryClient();
                 var uploadParams = new ImageUploadParams()

@@ -22,6 +22,14 @@ namespace QuanLyCuaHangBanh.Repositories
                 .ToList();
         }
 
+        public override GoodsReceiptNote? GetByValue(object value)
+        {
+            return context.GoodsReceiptNotes
+                .Include(g => g.Supplier)
+                .Include(g => g.GoodsReceiptNoteDetails) // Load dữ liệu GoodsReceiptNoteDetails
+                .FirstOrDefault(g => g.ID == (int)value);
+        }
+
         public override void Add(GoodsReceiptNote entity)
         {
 

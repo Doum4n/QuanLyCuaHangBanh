@@ -16,6 +16,7 @@ namespace QuanLyCuaHangBanh.Repositories
         {
             return context.SalesInvoices
                 .Include(i => i.InvoiceDetails)
+                .ThenInclude(o => o.Product_Unit)   
                 .Include(i => i.Employee)
                 .Select(converter).ToList();
         }

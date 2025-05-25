@@ -91,5 +91,16 @@ namespace QuanLyCuaHangBanh.Views.Unit
         {
 
         }
+
+        private void tstb_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void tstb_Search_TextChanged(object sender, EventArgs e)
+        {
+            _searchValue = tstb_Search.Text.Trim();
+            SearchEvent?.Invoke(sender, e);
+        }
     }
 }

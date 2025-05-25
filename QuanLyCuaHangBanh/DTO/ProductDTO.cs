@@ -15,6 +15,7 @@ public record ProductDTO(
     decimal Price,
     int InventoryId,
     int Quantity,
+    int TotalQuantity,
     string Description,
     String ImagePath
 )

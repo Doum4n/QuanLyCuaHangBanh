@@ -36,7 +36,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     Unit unit = new Unit
                     {
-                        ID = Convert.ToInt32(row[0]),
+                        //ID = Convert.ToInt32(row[0]),
                         Name = row[1].ToString() ?? string.Empty,
                         Description = row[2].ToString() ?? string.Empty
                     };
@@ -106,7 +106,6 @@ namespace QuanLyCuaHangBanh.Presenters
                     .ToList();
 
                 BindingSource.DataSource = searchResults;
-                View.Message = $"{searchResults.Count} kết quả tìm thấy.";
             }
         }
     }

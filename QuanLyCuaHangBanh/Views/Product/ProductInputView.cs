@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
-using QuanLyCuaHangBanh.Models;
 using System.ComponentModel;
 
 namespace QuanLyCuaHangBanh.Views
@@ -69,8 +68,9 @@ namespace QuanLyCuaHangBanh.Views
                 //_imagePath = _productDto.Image;
 
                 nmr_Quantity.Value = _productDto.Quantity;
+                nmr_TotalQuantity.Value = _productDto.TotalQuantity;
 
-                product_Units = new BindingList<Product_UnitDTO>( context.ProductUnits
+                product_Units = new BindingList<Product_UnitDTO>(context.ProductUnits
                     .Include(o => o.Inventory)
                     .Where(o => o.ProductID == _productDto.ProductId)
                     .Select(o => new Product_UnitDTO(
@@ -82,7 +82,10 @@ namespace QuanLyCuaHangBanh.Views
                         o.ConversionRate,
                         o.UnitPrice,
                         o.Inventory.Quantity
-                    )).ToList());
+                    )
+                    {
+                        status = DTO.Base.Status.None
+                    }).ToList());
 
                 dgv_ProductUnitList.DataSource = product_Units;
             }
@@ -91,6 +94,23 @@ namespace QuanLyCuaHangBanh.Views
                 product_Units = new BindingList<Product_UnitDTO>();
                 dgv_ProductUnitList.DataSource = product_Units;
             }
+
+            //cbb_Categories.DataBindings.Add("SelectedValue", _productDto, "CategoryID", true, DataSourceUpdateMode.OnPropertyChanged);
+            //cbb_Producers.DataBindings.Add("SelectedValue", _productDto, "ProducerID", true, DataSourceUpdateMode.OnPropertyChanged);
+            ////cbb_Units.DataBindings.Add("SelectedValue", _productDto, "BaseUnitID", true, DataSourceUpdateMode.OnPropertyChanged);
+            //tb_ProductName.DataBindings.Add("Text", _productDto, "ProductName", true, DataSourceUpdateMode.OnPropertyChanged);
+            //mttb_Description.DataBindings.Add("Text", _productDto, "Description", true, DataSourceUpdateMode.OnPropertyChanged);
+            ////nmr_UnitPrice.DataBindings.Add("Value", _productDto, "UnitPrice", true, DataSourceUpdateMode.OnPropertyChanged);
+            ////nmr_Quantity.DataBindings.Add("Value", _productDto, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
+            ///
+
+            cbb_Units.DataBindings.Add("SelectedValue", product_Units, "UnitID", true, DataSourceUpdateMode.OnPropertyChanged);
+            cbb_Units.DataBindings.Add("Text", product_Units, "UnitName", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_Conversion.DataBindings.Add("Value", product_Units, "ConversionRate", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_UnitPrice.DataBindings.Add("Value", product_Units, "UnitPrice", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_Quantity.DataBindings.Add("Value", product_Units, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
+        
+            tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
         }
 
         private void btn_Save_Click(object sender, EventArgs e)
@@ -107,29 +127,7 @@ namespace QuanLyCuaHangBanh.Views
 
             if (_productDto != null)
             {
-                //product.Image = _imagePath;
-                // Gán ID cho Product_Unit và Inventory
-                //foreach (var unit in _productDto.Unit)
-                //{
-                //    if (unit.IsSelected)
-                //    {
-
-                //        productUnit.ID = unit.ProductUnitId;
-                //        break;
-                //    }
-                //}
-                //inventory.ID = _productDto?.InventoryId ?? 0;
-                //inventory.Note = "";
-
-                ////// Cập nhật ProductId cho Product_Unit và Inventory
-                ////productUnit.ProductID = _productDto.ProductId;
-                ////productUnit.InventoryID = inventory.ID;
-                //inventory.ProductID = _productDto.ProductId;
-            }
-
-            foreach (var unit in product_Units)
-            {
-                MessageBox.Show(unit.UnitPrice.ToString());
+                product.Image = _imagePath;
             }
 
             this.Tag = (product);
@@ -178,16 +176,118 @@ namespace QuanLyCuaHangBanh.Views
 
         private void btn_AddUnit_Click(object sender, EventArgs e)
         {
-            product_Units.Add(new Product_UnitDTO(
+            var productUnit = new Product_UnitDTO(
                 0,
-                0,
-                (int)cbb_Units.SelectedValue,
+                Convert.ToInt32(cbb_Producers.SelectedValue),
+                Convert.ToInt32(cbb_Units.SelectedValue),
                 cbb_Units.Text,
                 0,
                 nmr_Conversion.Value,
                 nmr_UnitPrice.Value,
                 (int)nmr_Quantity.Value
-            ));
+            );
+            product_Units.Add(productUnit);
+        }
+
+        private void btn_EditUnit_Click(object sender, EventArgs e)
+        {
+            if (dgv_ProductUnitList.SelectedRows.Count > 0)
+            {
+                var selectedRow = dgv_ProductUnitList.SelectedRows[0];
+                var productUnit = (Product_UnitDTO)selectedRow.DataBoundItem;
+                productUnit.UnitID = (int)cbb_Units.SelectedValue;
+                productUnit.UnitName = cbb_Units.Text;
+                productUnit.ConversionRate = nmr_Conversion.Value;
+                productUnit.UnitPrice = nmr_UnitPrice.Value;
+                productUnit.Quantity = (int)nmr_Quantity.Value;
+                productUnit.status = DTO.Base.Status.Deleted;
+                dgv_ProductUnitList.Refresh();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một đơn vị để chỉnh sửa.");
+            }
+        }
+
+        private void btn_DeleteUnit_Click(object sender, EventArgs e)
+        {
+            if (dgv_ProductUnitList.SelectedRows.Count > 0)
+            {
+                var selectedRow = dgv_ProductUnitList.SelectedRows[0];
+                var productUnit = (Product_UnitDTO)selectedRow.DataBoundItem;
+                if (productUnit.status == DTO.Base.Status.New)
+                {
+                    product_Units.Remove(productUnit);
+                }
+                else
+                {
+                    productUnit.status = DTO.Base.Status.Deleted;
+                    product_Units = new BindingList<Product_UnitDTO>(product_Units.Where(u => u.status != DTO.Base.Status.Deleted).ToList());
+                    dgv_ProductUnitList.DataSource = product_Units;
+                    dgv_ProductUnitList.Refresh();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một đơn vị để xóa.");
+            }
+        }
+
+        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        {
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0:
+                    if (_productDto == null)
+                    {
+                        MessageBox.Show("Vui lòng chọn sản phẩm để xem thông tin sản phẩm.");
+                        return;
+                    }
+                    break;
+                case 1:
+                    if (_productDto == null)
+                    {
+                        MessageBox.Show("Vui lòng chọn sản phẩm để xem thông tin nhập hàng.");
+                        return;
+                    }
+                    dgv_ReceiptList.DataSource = context.GoodsReceiptNoteDetails
+                        .Include(o => o.GoodsReceiptNote)
+                        .Include(o => o.ProductUnit)
+                        .Include(o => o.Product)
+                        .Where(o => o.ProductUnit.ProductID == _productDto.ProductId)
+                        .Select(o => new
+                        {
+                            o.ID,
+                            UnitName = o.Unit.Name,
+                            o.ProductUnit.ConversionRate,
+                            o.PurchasePrice,
+                            o.Quantity,
+                            TotalPrice = o.PurchasePrice * o.Quantity,
+                            ReceiptDate = o.GoodsReceiptNote.CreatedDate,
+                            o.Note
+                        }).OrderByDescending(o => o.ReceiptDate).ToList();
+                    break;
+                case 2:
+                    if (_productDto == null)
+                    {
+                        MessageBox.Show("Vui lòng chọn sản phẩm để xem thông tin xuất hàng.");
+                        return;
+                    }
+                    dgv_ReleaseList.DataSource = context.WarehouseReleaseNoteDetails
+                        .Include(o => o.WarehouseReleaseNote)
+                        .Include(o => o.Product_Unit)
+                        .Where(o => o.Product_Unit.ProductID == _productDto.ProductId)
+                        .Select(o => new
+                        {
+                            o.ID,
+                            UnitName = o.Product_Unit.Unit.Name,
+                            o.Product_Unit.ConversionRate,
+                            o.Quantity,
+                            ReleaseDate = o.WarehouseReleaseNote.CreatedDate,
+                            o.Note
+                        }).OrderByDescending(o => o.ReleaseDate).ToList();
+                    break;
+            }
         }
     }
 }

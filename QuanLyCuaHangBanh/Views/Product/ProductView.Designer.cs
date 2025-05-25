@@ -28,21 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductView));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             dgv_ProductList = new DataGridView();
-            ID = new DataGridViewTextBoxColumn();
-            ProductName = new DataGridViewTextBoxColumn();
-            CategoryName = new DataGridViewTextBoxColumn();
-            ProducerName = new DataGridViewTextBoxColumn();
-            Unit = new DataGridViewComboBoxColumn();
-            Price = new DataGridViewTextBoxColumn();
-            Quantity = new DataGridViewTextBoxColumn();
-            Description = new DataGridViewTextBoxColumn();
-            Image = new DataGridViewImageColumn();
             panel1 = new Panel();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
             btn_Edit = new MaterialSkin.Controls.MaterialButton();
@@ -53,6 +44,16 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tsbtn_Import = new ToolStripButton();
             tsbnt_Export = new ToolStripButton();
+            ID = new DataGridViewTextBoxColumn();
+            ProductName = new DataGridViewTextBoxColumn();
+            CategoryName = new DataGridViewTextBoxColumn();
+            ProducerName = new DataGridViewTextBoxColumn();
+            Unit = new DataGridViewComboBoxColumn();
+            Price = new DataGridViewTextBoxColumn();
+            Quantity = new DataGridViewTextBoxColumn();
+            TotalQuantity = new DataGridViewTextBoxColumn();
+            Description = new DataGridViewTextBoxColumn();
+            Image = new DataGridViewImageColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             panel1.SuspendLayout();
@@ -80,7 +81,7 @@
             dgv_ProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProductList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, ProducerName, Unit, Price, Quantity, Description, Image });
+            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, ProducerName, Unit, Price, Quantity, TotalQuantity, Description, Image });
             dgv_ProductList.Cursor = Cursors.Hand;
             dgv_ProductList.Dock = DockStyle.Fill;
             dgv_ProductList.EditMode = DataGridViewEditMode.EditOnEnter;
@@ -96,89 +97,6 @@
             dgv_ProductList.DataError += dgv_ProductList_DataError;
             dgv_ProductList.EditingControlShowing += dgv_ProductList_EditingControlShowing;
             dgv_ProductList.RowHeightChanged += dgv_ProductList_RowHeightChanged;
-            // 
-            // ID
-            // 
-            ID.DataPropertyName = "ProductId";
-            ID.FillWeight = 14.771512F;
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            // 
-            // ProductName
-            // 
-            ProductName.DataPropertyName = "ProductName";
-            ProductName.FillWeight = 14.771512F;
-            ProductName.HeaderText = "Tên sản phẩm";
-            ProductName.MinimumWidth = 6;
-            ProductName.Name = "ProductName";
-            // 
-            // CategoryName
-            // 
-            CategoryName.DataPropertyName = "CategoryName";
-            CategoryName.FillWeight = 14.771512F;
-            CategoryName.HeaderText = "Loại sản phẩm";
-            CategoryName.MinimumWidth = 6;
-            CategoryName.Name = "CategoryName";
-            // 
-            // ProducerName
-            // 
-            ProducerName.DataPropertyName = "ProducerName";
-            ProducerName.FillWeight = 14.771512F;
-            ProducerName.HeaderText = "Hãng sản xuất";
-            ProducerName.MinimumWidth = 6;
-            ProducerName.Name = "ProducerName";
-            // 
-            // Unit
-            // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Unit.DefaultCellStyle = dataGridViewCellStyle4;
-            Unit.FillWeight = 14.771512F;
-            Unit.HeaderText = "Đơn vị tính";
-            Unit.MinimumWidth = 6;
-            Unit.Name = "Unit";
-            Unit.Resizable = DataGridViewTriState.True;
-            Unit.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
-            // Price
-            // 
-            Price.DataPropertyName = "Price";
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            Price.DefaultCellStyle = dataGridViewCellStyle5;
-            Price.FillWeight = 14.771512F;
-            Price.HeaderText = "Giá bán";
-            Price.MinimumWidth = 6;
-            Price.Name = "Price";
-            // 
-            // Quantity
-            // 
-            Quantity.DataPropertyName = "Quantity";
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N0";
-            Quantity.DefaultCellStyle = dataGridViewCellStyle6;
-            Quantity.FillWeight = 14.771512F;
-            Quantity.HeaderText = "Số lượng";
-            Quantity.MinimumWidth = 6;
-            Quantity.Name = "Quantity";
-            // 
-            // Description
-            // 
-            Description.DataPropertyName = "Description";
-            Description.FillWeight = 14.771512F;
-            Description.HeaderText = "Mô tả";
-            Description.MinimumWidth = 6;
-            Description.Name = "Description";
-            // 
-            // Image
-            // 
-            Image.DataPropertyName = "Image";
-            Image.FillWeight = 30F;
-            Image.HeaderText = "Hình ảnh";
-            Image.MinimumWidth = 6;
-            Image.Name = "Image";
-            Image.Resizable = DataGridViewTriState.True;
-            Image.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // panel1
             // 
@@ -297,6 +215,87 @@
             tsbnt_Export.Text = "Xuất...";
             tsbnt_Export.Click += tsbnt_Export_Click;
             // 
+            // ID
+            // 
+            ID.DataPropertyName = "ProductId";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 6;
+            ID.Name = "ID";
+            // 
+            // ProductName
+            // 
+            ProductName.DataPropertyName = "ProductName";
+            ProductName.HeaderText = "Tên sản phẩm";
+            ProductName.MinimumWidth = 6;
+            ProductName.Name = "ProductName";
+            // 
+            // CategoryName
+            // 
+            CategoryName.DataPropertyName = "CategoryName";
+            CategoryName.HeaderText = "Loại sản phẩm";
+            CategoryName.MinimumWidth = 6;
+            CategoryName.Name = "CategoryName";
+            // 
+            // ProducerName
+            // 
+            ProducerName.DataPropertyName = "ProducerName";
+            ProducerName.HeaderText = "Hãng sản xuất";
+            ProducerName.MinimumWidth = 6;
+            ProducerName.Name = "ProducerName";
+            // 
+            // Unit
+            // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Unit.DefaultCellStyle = dataGridViewCellStyle1;
+            Unit.HeaderText = "Đơn vị tính";
+            Unit.MinimumWidth = 6;
+            Unit.Name = "Unit";
+            Unit.Resizable = DataGridViewTriState.True;
+            Unit.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // Price
+            // 
+            Price.DataPropertyName = "Price";
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            Price.DefaultCellStyle = dataGridViewCellStyle2;
+            Price.HeaderText = "Giá bán";
+            Price.MinimumWidth = 6;
+            Price.Name = "Price";
+            // 
+            // Quantity
+            // 
+            Quantity.DataPropertyName = "Quantity";
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N0";
+            Quantity.DefaultCellStyle = dataGridViewCellStyle3;
+            Quantity.HeaderText = "Số lượng";
+            Quantity.MinimumWidth = 6;
+            Quantity.Name = "Quantity";
+            // 
+            // TotalQuantity
+            // 
+            TotalQuantity.DataPropertyName = "TotalQuantity";
+            TotalQuantity.HeaderText = "Tổng số lượng";
+            TotalQuantity.MinimumWidth = 6;
+            TotalQuantity.Name = "TotalQuantity";
+            // 
+            // Description
+            // 
+            Description.DataPropertyName = "Description";
+            Description.HeaderText = "Mô tả";
+            Description.MinimumWidth = 6;
+            Description.Name = "Description";
+            // 
+            // Image
+            // 
+            Image.DataPropertyName = "Image";
+            Image.HeaderText = "Hình ảnh";
+            Image.MinimumWidth = 6;
+            Image.Name = "Image";
+            Image.Resizable = DataGridViewTriState.True;
+            Image.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
             // ProductView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -338,6 +337,7 @@
         private DataGridViewComboBoxColumn Unit;
         private DataGridViewTextBoxColumn Price;
         private DataGridViewTextBoxColumn Quantity;
+        private DataGridViewTextBoxColumn TotalQuantity;
         private DataGridViewTextBoxColumn Description;
         private DataGridViewImageColumn Image;
     }

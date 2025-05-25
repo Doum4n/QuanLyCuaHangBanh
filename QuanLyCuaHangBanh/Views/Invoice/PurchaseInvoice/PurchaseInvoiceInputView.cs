@@ -46,10 +46,11 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 selectedProductUnitId,
                 nmr_ConversionRate.Value,
                 (int)nmr_Quantity.Value,
-                rtb_ProductNote.Text
+                rtb_ProductNote.Text,
+                nmr_Price.Value
             );
 
-            product.Status = DTO.Base.Status .New;
+            product.Status = DTO.Base.Status.New;
 
             _product.Add(product);
             bs.ResetBindings(false);
@@ -91,7 +92,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 if (selectedProduct.Status == DTO.Base.Status.None)
                 {
                     //bs.Remove(selectedProduct);
-                    selectedProduct.Status = DTO.Base.Status .Deleted;
+                    selectedProduct.Status = DTO.Base.Status.Deleted;
 
                     dgv_ProductList.DataSource = new BindingList<ProductPurchaseInvoiceDTO>(
                         _product.Where(p => p.Status != DTO.Base.Status.Deleted).ToList()
@@ -157,7 +158,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                         p.Product_Unit.ID,
                         p.Product_Unit.ConversionRate,
                         p.Quantity,
-                        p.Note
+                        p.Note,
+                        p.UnitCost
                     )
                     {
                         Status = DTO.Base.Status.None
@@ -173,6 +175,15 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 bs.DataSource = _product;
                 dgv_ProductList.DataSource = bs;
             }
+
+            cbb_Products.DataBindings.Add("Text", bs, "ProductName", true, DataSourceUpdateMode.OnPropertyChanged);
+            cbb_Categories.DataBindings.Add("Text", bs, "CategoryName", true, DataSourceUpdateMode.OnPropertyChanged);
+            cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
+            rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_ConversionRate.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.OnPropertyChanged);
+            nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.OnPropertyChanged);
+
         }
 
         private void cbb_Units_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,7 +218,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 Status = cbb_Status.Text,
             };
 
-            if(_purchaseInvoiceDTO != null)
+            if (_purchaseInvoiceDTO != null)
             {
                 purchaseInvoice.ID = _purchaseInvoiceDTO.ID;
             }
@@ -226,6 +237,16 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         private void btn_SelectReceiptNote_Click(object sender, EventArgs e)
         {
             ShowSelecteceiptFrom?.Invoke(this, new EventArgs());
+        }
+
+        private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Categories.SelectedItem is Models.Category selectedCategory)
+            {
+                cbb_Products.DataSource = context.Products.Where(p => p.CategoryID == selectedCategory.ID).ToList();
+                cbb_Products.DisplayMember = "Name";
+                cbb_Products.ValueMember = "ID";
+            }
         }
     }
 }

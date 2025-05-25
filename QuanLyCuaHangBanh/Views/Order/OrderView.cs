@@ -1,4 +1,5 @@
 ﻿using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 
 namespace QuanLyCuaHangBanh.Views.Order
 {
@@ -7,7 +8,7 @@ namespace QuanLyCuaHangBanh.Views.Order
 
         private string _searchValue = string.Empty;
         private string _message = string.Empty;
-        private Models.Order _selectedItem = null!;
+        private OrderDTO _selectedItem = null!;
 
         string IView.SearchValue
         {
@@ -30,7 +31,7 @@ namespace QuanLyCuaHangBanh.Views.Order
         object IView.SelectedItem
         {
             get => _selectedItem;
-            set => _selectedItem = (Models.Order)value;
+            set => _selectedItem = (OrderDTO)value;
         }
 
         public OrderView()
@@ -67,6 +68,18 @@ namespace QuanLyCuaHangBanh.Views.Order
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void dgv_OrderList_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgv_OrderList.SelectedRows.Count > 0)
+            {
+                var selectedRow = dgv_OrderList.SelectedRows[0];
+                if (selectedRow.DataBoundItem is OrderDTO order)
+                {
+                    _selectedItem = order;
+                }
+            }
         }
     }
 }

@@ -30,9 +30,15 @@
         {
             menuStrip1 = new MenuStrip();
             hệThốngToolStripMenuItem = new ToolStripMenuItem();
+            tsmi_Login = new ToolStripMenuItem();
+            tsmi_Logout = new ToolStripMenuItem();
+            stmi_ChangePassword = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
+            tsmi_Exit = new ToolStripMenuItem();
             quảnLýToolStripMenuItem = new ToolStripMenuItem();
             tsmi_Products = new ToolStripMenuItem();
             tsmi_Catogories = new ToolStripMenuItem();
+            stmi_Manufacturers = new ToolStripMenuItem();
             tsmi_Producers = new ToolStripMenuItem();
             toolStripSeparator4 = new ToolStripSeparator();
             tsmi_WarehouseNotes = new ToolStripMenuItem();
@@ -46,7 +52,7 @@
             tsmi_Invoices = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
             tsmi_Order = new ToolStripMenuItem();
-            báoCáoToolStripMenuItem = new ToolStripMenuItem();
+            tsmi_Statistical = new ToolStripMenuItem();
             tsmi_ReportProduct = new ToolStripMenuItem();
             tsmi_RevenueStatistics = new ToolStripMenuItem();
             tsmi_ImportWarehouse = new ToolStripMenuItem();
@@ -56,7 +62,7 @@
             statusStrip1 = new StatusStrip();
             tsslb_EmployeeName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
-            tsmi_Login = new ToolStripMenuItem();
+            tsmi_InventoryStatistical = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -64,7 +70,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { hệThốngToolStripMenuItem, quảnLýToolStripMenuItem, báoCáoToolStripMenuItem, trợGiúpToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { hệThốngToolStripMenuItem, quảnLýToolStripMenuItem, tsmi_Statistical, trợGiúpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 28);
@@ -73,14 +79,48 @@
             // 
             // hệThốngToolStripMenuItem
             // 
-            hệThốngToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_Login });
+            hệThốngToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_Login, tsmi_Logout, stmi_ChangePassword, toolStripSeparator6, tsmi_Exit });
             hệThốngToolStripMenuItem.Name = "hệThốngToolStripMenuItem";
             hệThốngToolStripMenuItem.Size = new Size(85, 24);
             hệThốngToolStripMenuItem.Text = "&Hệ thống";
             // 
+            // tsmi_Login
+            // 
+            tsmi_Login.Name = "tsmi_Login";
+            tsmi_Login.Size = new Size(183, 26);
+            tsmi_Login.Text = "Đăng &nhập...";
+            tsmi_Login.Click += tsmi_Login_Click;
+            // 
+            // tsmi_Logout
+            // 
+            tsmi_Logout.Name = "tsmi_Logout";
+            tsmi_Logout.Size = new Size(183, 26);
+            tsmi_Logout.Text = "Đăng &xuất";
+            tsmi_Logout.Click += tsmi_Logout_Click;
+            // 
+            // stmi_ChangePassword
+            // 
+            stmi_ChangePassword.Name = "stmi_ChangePassword";
+            stmi_ChangePassword.Size = new Size(183, 26);
+            stmi_ChangePassword.Text = "&Đổi mật khẩu";
+            stmi_ChangePassword.Click += stmi_ChangePassword_Click;
+            // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(180, 6);
+            // 
+            // tsmi_Exit
+            // 
+            tsmi_Exit.Name = "tsmi_Exit";
+            tsmi_Exit.ShortcutKeys = Keys.Alt | Keys.F4;
+            tsmi_Exit.Size = new Size(183, 26);
+            tsmi_Exit.Text = "&Thoát";
+            tsmi_Exit.Click += tsmi_Exit_Click;
+            // 
             // quảnLýToolStripMenuItem
             // 
-            quảnLýToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_Products, tsmi_Catogories, tsmi_Producers, toolStripSeparator4, tsmi_WarehouseNotes, tsmi_PurchaseReceipts, toolStripSeparator1, tsmi_Customers, tsmi_Employees, toolStripSeparator2, tsmi_Units, toolStripSeparator3, tsmi_Invoices, toolStripSeparator5, tsmi_Order });
+            quảnLýToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_Products, tsmi_Catogories, stmi_Manufacturers, tsmi_Producers, toolStripSeparator4, tsmi_WarehouseNotes, tsmi_PurchaseReceipts, toolStripSeparator1, tsmi_Customers, tsmi_Employees, toolStripSeparator2, tsmi_Units, toolStripSeparator3, tsmi_Invoices, toolStripSeparator5, tsmi_Order });
             quảnLýToolStripMenuItem.Name = "quảnLýToolStripMenuItem";
             quảnLýToolStripMenuItem.Size = new Size(73, 24);
             quảnLýToolStripMenuItem.Text = "&Quản lý";
@@ -99,11 +139,18 @@
             tsmi_Catogories.Text = "&Loại sản phầm";
             tsmi_Catogories.Click += tsmi_Catogories_Click;
             // 
+            // stmi_Manufacturers
+            // 
+            stmi_Manufacturers.Name = "stmi_Manufacturers";
+            stmi_Manufacturers.Size = new Size(188, 26);
+            stmi_Manufacturers.Text = "Hãng &sản xuất";
+            stmi_Manufacturers.Click += stmi_Manufacturers_Click;
+            // 
             // tsmi_Producers
             // 
             tsmi_Producers.Name = "tsmi_Producers";
             tsmi_Producers.Size = new Size(188, 26);
-            tsmi_Producers.Text = "&Hãng sản xuất";
+            tsmi_Producers.Text = "&Nhà cung cấp";
             tsmi_Producers.Click += tsmi_Producers_Click;
             // 
             // toolStripSeparator4
@@ -180,12 +227,12 @@
             tsmi_Order.Text = "Đơn hàng";
             tsmi_Order.Click += tsmi_Order_Click;
             // 
-            // báoCáoToolStripMenuItem
+            // tsmi_Statistical
             // 
-            báoCáoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmi_ReportProduct, tsmi_RevenueStatistics, tsmi_ImportWarehouse, tsmi_ExportWarehouse, stmi_OrderStatistics });
-            báoCáoToolStripMenuItem.Name = "báoCáoToolStripMenuItem";
-            báoCáoToolStripMenuItem.Size = new Size(152, 24);
-            báoCáoToolStripMenuItem.Text = "&Báo cáo - Thống kê";
+            tsmi_Statistical.DropDownItems.AddRange(new ToolStripItem[] { tsmi_ReportProduct, tsmi_RevenueStatistics, tsmi_ImportWarehouse, tsmi_ExportWarehouse, stmi_OrderStatistics, tsmi_InventoryStatistical });
+            tsmi_Statistical.Name = "tsmi_Statistical";
+            tsmi_Statistical.Size = new Size(152, 24);
+            tsmi_Statistical.Text = "&Báo cáo - Thống kê";
             // 
             // tsmi_ReportProduct
             // 
@@ -253,12 +300,12 @@
             toolStripStatusLabel2.Size = new Size(157, 20);
             toolStripStatusLabel2.Text = "@ Khoa CNTT - ĐHAG";
             // 
-            // tsmi_Login
+            // tsmi_InventoryStatistical
             // 
-            tsmi_Login.Name = "tsmi_Login";
-            tsmi_Login.Size = new Size(224, 26);
-            tsmi_Login.Text = "Đăng nhập";
-            tsmi_Login.Click += tsmi_Login_Click;
+            tsmi_InventoryStatistical.Name = "tsmi_InventoryStatistical";
+            tsmi_InventoryStatistical.Size = new Size(224, 26);
+            tsmi_InventoryStatistical.Text = "Thống kê tồn kho";
+            tsmi_InventoryStatistical.Click += tsmi_InventoryStatistical_Click;
             // 
             // MainView
             // 
@@ -286,7 +333,7 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem hệThốngToolStripMenuItem;
         private ToolStripMenuItem quảnLýToolStripMenuItem;
-        private ToolStripMenuItem báoCáoToolStripMenuItem;
+        private ToolStripMenuItem tsmi_Statistical;
         private ToolStripMenuItem trợGiúpToolStripMenuItem;
         private ToolStripMenuItem tsmi_Products;
         private ToolStripMenuItem tsmi_Catogories;
@@ -312,5 +359,11 @@
         private ToolStripStatusLabel tsslb_EmployeeName;
         private ToolStripStatusLabel toolStripStatusLabel2;
         private ToolStripMenuItem tsmi_Login;
+        private ToolStripMenuItem stmi_Manufacturers;
+        private ToolStripMenuItem tsmi_Logout;
+        private ToolStripMenuItem stmi_ChangePassword;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem tsmi_Exit;
+        private ToolStripMenuItem tsmi_InventoryStatistical;
     }
 }

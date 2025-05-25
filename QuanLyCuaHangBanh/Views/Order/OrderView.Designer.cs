@@ -87,6 +87,7 @@
             dgv_OrderList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_OrderList.Size = new Size(1266, 330);
             dgv_OrderList.TabIndex = 2;
+            dgv_OrderList.SelectionChanged += dgv_OrderList_SelectionChanged;
             // 
             // ID
             // 

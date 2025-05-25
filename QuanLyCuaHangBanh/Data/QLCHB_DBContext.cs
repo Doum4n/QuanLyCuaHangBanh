@@ -33,6 +33,7 @@ namespace QuanLyCuaHangBanh.Data
         public DbSet<SalesInvoice_Detail> SalesInvoiceDetails { get; set; }
         public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
         public DbSet<PurchaseInvoice_Detail> PurchaseInvoiceDetails { get; set; }
+        public DbSet<Manufacturer> Manufacturers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder configurationBuilder)
         {

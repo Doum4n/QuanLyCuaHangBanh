@@ -11,6 +11,7 @@ namespace QuanLyCuaHangBanh.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public int CategoryID { get; set; }
+        public int? ManufacturerID { get; set; } // Nullable if the product is not associated with a manufacturer
         public int ProducerID { get; set; }
         public DateOnly ProductionDate { get; set; } // Ngày sản xuất
         public DateOnly ExpirationDate { get; set; } // Ngày hết hạn
@@ -25,6 +26,7 @@ namespace QuanLyCuaHangBanh.Models
 
         public virtual ICollection<Product_Unit> ProductUnits { get; set; } = new List<Product_Unit>();
         public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
+        public virtual Manufacturer? Manufacturer { get; set; }
 
         public override string ToString()
         {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -110,10 +111,13 @@ namespace QuanLyCuaHangBanh.Reports
                 {
 
                     //new ReportParameter("InvoiceID", purchaseInvoices.ID.ToString()),
+                    new ReportParameter("Buyer_Name", ConfigurationManager.AppSettings["StoreName"].ToString()),
+                    new ReportParameter("Buyer_Address", ConfigurationManager.AppSettings["StoreAddress"].ToString()),
+                    new ReportParameter("Buyer_TaxCode", ConfigurationManager.AppSettings["StoreTaxCode"].ToString()),
                     new ReportParameter("CreatedDate", purchaseInvoices.Date.ToString("dd/MM/yyyy")),
                     new ReportParameter("Supplier_Name", purchaseInvoices.Supplier.Name),
                     new ReportParameter("Supplier_Address", purchaseInvoices.Supplier.Address),
-                    //new ReportParameter("TotalPrice", purchaseInvoiceDetails.Sum(p => ((ReportPurchaseInvoiceItem)p).TotalPrice).ToString())
+                    new ReportParameter("TotalPrice", purchaseInvoiceDetails.Sum(p => ((ReportPurchaseInvoiceItem)p).TotalPrice).ToString())
                 };
 
                 this.reportViewer1.LocalReport.SetParameters(parameters);

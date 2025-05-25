@@ -88,8 +88,9 @@ namespace QuanLyCuaHangBanh.Presenters
                         .Where(pu => pu.Unit != null)
                         .Select(pu => new UnitDTO(pu.Unit.ID, pu.Unit.Name, pu.ID, false)).ToList(),
                     o.ProductUnits.Select(pu => pu.UnitPrice).FirstOrDefault(),
-                    1,
-                    0,
+                    o.ProductUnits.Select(o => o.Inventory.ID).FirstOrDefault(),
+                    o.ProductUnits.Select(o => o.Inventory.Quantity).FirstOrDefault(),
+                    o.ProductUnits.Sum(pu => pu.Inventory.Quantity),
                     o.Description,
                     o.Image
                 ));
@@ -248,17 +249,24 @@ namespace QuanLyCuaHangBanh.Presenters
             productInputView.SelectImage += SelectImage;
             if (productInputView.ShowDialog() == DialogResult.OK)
             {
-                if (productInputView.Tag is (Product product, Product_Unit productUnit, Inventory inventory))
+                if (productInputView.Tag is Product product)
                 {
                     product.ID = ((ProductDTO)this.View.SelectedItem).ProductId;
 
                     Provider.GetRepository<Product>().Update(product);
-                    Provider.GetRepository<Product_Unit>().Update(productUnit);
-                    Provider.GetRepository<Inventory>().Update(inventory);
 
-                    this.View.Message = "Cập nhật sản phẩm thành công!";
-                    LoadData();
-                    BindingSource?.ResetBindings(false);
+                    foreach (var productUnit in productInputView.Product_UnitDTOs)
+                    {
+                        productUnit.ProductID = product.ID;
+                        Provider.GetRepository<Product_Unit>().Add(productUnit.ToProductUnit());
+                        View.Message = "Cập nhật sản phẩm thành công";
+
+                        //Inventory inventory = new Inventory();
+                        //inventory.ProductUnitID = addedProductUnit.ID;
+                        //inventory.Quantity = productUnit.Quantity;
+                        //Provider.GetRepository<Inventory>().Add(inventory);
+
+                    }
                 }
             }
         }
@@ -276,15 +284,13 @@ namespace QuanLyCuaHangBanh.Presenters
                     foreach (var productUnit in productInputView.Product_UnitDTOs)
                     {
                         productUnit.ProductID = product.ID;
-                        var addedProductUnit = ((ProductUnitRepo)Provider.GetRepository<Product_Unit>()).AddWithReturn(productUnit.ToProductUnit());
+                        Provider.GetRepository<Product_Unit>().Add(productUnit.ToProductUnit());
+                        View.Message = "Thêm sản phẩm thành công";
 
-                        Inventory inventory = new Inventory();
-                        inventory.ProductUnitID = addedProductUnit.ID;
-                        inventory.Quantity = productUnit.Quantity;
-
-                        MessageBox.Show(productUnit.ToString());
-
-                        Provider.GetRepository<Inventory>().Add(inventory);
+                        //Inventory inventory = new Inventory();
+                        //inventory.ProductUnitID = addedProductUnit.ID;
+                        //inventory.Quantity = productUnit.Quantity;
+                        //Provider.GetRepository<Inventory>().Add(inventory);
 
                     }
 

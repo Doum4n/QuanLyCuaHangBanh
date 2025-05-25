@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyCuaHangBanh.DTO.Base;
 
 namespace QuanLyCuaHangBanh.DTO
 {
@@ -17,6 +18,7 @@ namespace QuanLyCuaHangBanh.DTO
         public decimal ConversionRate { get; set; }
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
+        public Status status { get; set; }
 
         public Product_UnitDTO() { }
 

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel2 = new Panel();
             llb_AddUnit = new LinkLabel();
             llb_AddCategory = new LinkLabel();
@@ -188,9 +188,9 @@
             // PurchasePrice
             // 
             PurchasePrice.DataPropertyName = "PurchasePrice";
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            PurchasePrice.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            PurchasePrice.DefaultCellStyle = dataGridViewCellStyle2;
             PurchasePrice.HeaderText = "Giá tiền";
             PurchasePrice.MinimumWidth = 6;
             PurchasePrice.Name = "PurchasePrice";
@@ -486,6 +486,7 @@
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
             cbb_Products.TabIndex = 20;
+            cbb_Products.SelectedIndexChanged += cbb_Products_SelectedIndexChanged;
             // 
             // label9
             // 
@@ -549,6 +550,7 @@
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
             cbb_Units.TabIndex = 7;
+            cbb_Units.SelectedIndexChanged += cbb_Units_SelectedIndexChanged;
             // 
             // label5
             // 

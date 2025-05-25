@@ -201,7 +201,8 @@ namespace QuanLyCuaHangBanh.Presenters
                                     unit.ID,
                                     unit.ConversionRate,
                                     item.Quantity,
-                                    item.Note
+                                    item.Note,
+                                    item.PurchasePrice
                                 );
 
                                 purchaseInvoiceInputView.InvokeAddProductEvent(product);

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnitView));
             dgv_UnitList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
@@ -88,8 +88,8 @@
             // PhoneNumber
             // 
             PhoneNumber.DataPropertyName = "PhoneNumber";
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
-            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle1;
             PhoneNumber.HeaderText = "Mô tả";
             PhoneNumber.MinimumWidth = 6;
             PhoneNumber.Name = "PhoneNumber";
@@ -106,7 +106,7 @@
             groupBox1.Size = new Size(800, 450);
             groupBox1.TabIndex = 5;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Danh sách khách hàng";
+            groupBox1.Text = "Danh sách đơn vị tính";
             // 
             // panel1
             // 
@@ -193,6 +193,8 @@
             // 
             tstb_Search.Name = "tstb_Search";
             tstb_Search.Size = new Size(100, 27);
+            tstb_Search.KeyDown += tstb_Search_KeyDown;
+            tstb_Search.TextChanged += tstb_Search_TextChanged;
             // 
             // tsbtn_Search
             // 

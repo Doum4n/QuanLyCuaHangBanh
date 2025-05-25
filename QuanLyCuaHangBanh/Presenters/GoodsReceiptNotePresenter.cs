@@ -158,7 +158,24 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnDelete(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (View.SelectedItem is GoodsReceiptNoteDTO goodsReceiptNoteDTO)
+            {
+                var goodsReceiptNote = Provider.GetRepository<GoodsReceiptNote>().GetByValue(goodsReceiptNoteDTO.ID);
+                if (goodsReceiptNote != null)
+                {
+                    Provider.GetRepository<GoodsReceiptNote>().Delete(goodsReceiptNote);
+                    View.Message = "Xóa phiếu nhập thành công!";
+                    LoadData();
+                }
+                else
+                {
+                    View.Message = "Phiếu nhập không tồn tại!";
+                }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn phiếu nhập để xóa!";
+            }
         }
 
         public override void OnEdit(object? sender, EventArgs e)
@@ -168,11 +185,10 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if (inputView.Tag is (GoodsReceiptNote goodsReceiptNote))
                 {
-                    Provider.GetRepository<GoodsReceiptNote>().Add(goodsReceiptNote);
+                    Provider.GetRepository<GoodsReceiptNote>().Update(goodsReceiptNote);
 
                     foreach (var item in inputView.ProductList)
                     {
-
                         switch (item.Status)
                         {
                             case DTO.Base.Status.New:
@@ -191,7 +207,7 @@ namespace QuanLyCuaHangBanh.Presenters
                         }
                     }
 
-                    View.Message = "Thêm phiếu nhập thành công!";
+                    View.Message = "Cập nhật phiếu nhập thành công!";
                     LoadData();
                 }
             }

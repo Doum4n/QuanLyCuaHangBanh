@@ -2,8 +2,10 @@
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Uitls;
 using System.ComponentModel;
 using System.Data;
+using QuanLyCuaHangBanh.DTO.Base;
 
 namespace QuanLyCuaHangBanh.Views
 {
@@ -12,13 +14,14 @@ namespace QuanLyCuaHangBanh.Views
         private QLCHB_DBContext? context = new QLCHB_DBContext();
         private GoodsReceiptNoteDTO? dTO;
 
-        
+
         private BindingSource bs = new BindingSource();
-        
+
         private BindingList<ProductReceiptDTO> productList = new BindingList<ProductReceiptDTO>();
         public BindingList<ProductReceiptDTO> ProductList => productList;
 
         public event EventHandler ShowAddProductForm;
+        private int selectedProductUnitId = 0; // Assuming this is used to store the selected product unit ID
 
         //private List<>
         public GoodsReceiptNoteInputView(GoodsReceiptNoteDTO? dTO = null)
@@ -65,7 +68,7 @@ namespace QuanLyCuaHangBanh.Views
                 dateTimePicker.Value = dTO.CreatedDate.ToDateTime(new TimeOnly(0, 0, 0));
                 rtb_Note.Text = dTO.Note;
 
-                var products = context.GoodsReceiptNoteDetails
+                productList = new BindingList<ProductReceiptDTO>(context.GoodsReceiptNoteDetails
                     .Include(o => o.Product)
                     .ThenInclude(o => o.Category)
                     .Include(o => o.Unit)
@@ -86,9 +89,9 @@ namespace QuanLyCuaHangBanh.Views
                     )
                     {
                         Status = DTO.Base.Status.None
-                    }).ToList();
+                    }).ToList());
 
-                bs.DataSource = products;
+                bs.DataSource = productList;
                 dgv_ProductList.DataSource = bs;
 
                 tb_Id.DataBindings.Add("Text", bs, "ID", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -114,7 +117,6 @@ namespace QuanLyCuaHangBanh.Views
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
-
             GoodsReceiptNote goodsReceiptNote = new GoodsReceiptNote
             {
                 SupplierId = (int)cbb_Suppliers.SelectedValue,
@@ -125,6 +127,18 @@ namespace QuanLyCuaHangBanh.Views
                 Note = rtb_Note.Text,
                 Status = cbb_Status.Text,
             };
+
+            if (dTO != null)
+            {
+                goodsReceiptNote.ID = dTO.ID;
+                //goodsReceiptNote.LastModifiedById = Session.EmployeeId;
+                goodsReceiptNote.LastModifiedDate = DateOnly.FromDateTime(DateTime.Now);
+            }
+
+            foreach (var item in ProductList)
+            {
+                MessageBox.Show(item.ProductName);
+            }
 
             this.Tag = (goodsReceiptNote);
             this.DialogResult = DialogResult.OK;
@@ -148,14 +162,14 @@ namespace QuanLyCuaHangBanh.Views
         private void btn_Add_Click(object sender, EventArgs e)
         {
             var productReceiptDTO = new ProductReceiptDTO(
-                0, // Assuming ID is auto-generated
+               0 , // Assuming ID is auto-generated
                 (int)cbb_Products.SelectedValue,
                 cbb_Products.Text,
                 0, // Assuming you will set this later
                 "", // Assuming you will set this later
                 (int)cbb_Units.SelectedValue,
                 cbb_Units.Text,
-                0,
+                selectedProductUnitId,
                 1, // Assuming a default conversion rate of 1
                 nmr_PurchasePrice.Value,
                 (int)nmr_Quantity.Value,
@@ -165,6 +179,7 @@ namespace QuanLyCuaHangBanh.Views
             productReceiptDTO.Status = DTO.Base.Status.New;
 
             productList.Add(productReceiptDTO);
+            bs.ResetBindings(false);
         }
 
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
@@ -208,5 +223,26 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        private void cbb_Products_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Products.SelectedItem is Models.Product selectedProduct)
+            {
+                var productUnit = context.ProductUnits.Where(p => p.ProductID == selectedProduct.ID).Select(o => new AddedProduct(o.ID, o.Unit.ID, o.Unit.Name)).ToList();
+                if (productUnit != null)
+                {
+                    cbb_Units.DataSource = productUnit;
+                    cbb_Units.DisplayMember = "UnitName";
+                    cbb_Units.ValueMember = "UnitId";
+                }
+            }
+        }
+
+        private void cbb_Units_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
+            {
+                selectedProductUnitId = selectedUnit.ID;
+            }
+        }
     }
 }

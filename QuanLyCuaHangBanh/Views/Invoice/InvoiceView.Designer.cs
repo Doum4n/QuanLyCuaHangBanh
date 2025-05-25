@@ -37,6 +37,7 @@
             tsbtn_Import = new ToolStripButton();
             btn_Add = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
+            btn_PrintInvoice = new MaterialSkin.Controls.MaterialButton();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
             btn_Edit = new MaterialSkin.Controls.MaterialButton();
             groupBox1 = new GroupBox();
@@ -47,15 +48,14 @@
             Status = new DataGridViewTextBoxColumn();
             Note = new DataGridViewTextBoxColumn();
             tabControl2 = new TabControl();
-            tabPage3 = new TabPage();
+            tabPage_SalesInvoice = new TabPage();
             tabPane_PurchaseInvoice = new TabPage();
-            btn_PrintInvoice = new MaterialSkin.Controls.MaterialButton();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_InvoiceList).BeginInit();
             tabControl2.SuspendLayout();
-            tabPage3.SuspendLayout();
+            tabPage_SalesInvoice.SuspendLayout();
             SuspendLayout();
             // 
             // tsbnt_Export
@@ -133,6 +133,27 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1052, 86);
             panel1.TabIndex = 3;
+            // 
+            // btn_PrintInvoice
+            // 
+            btn_PrintInvoice.AutoSize = false;
+            btn_PrintInvoice.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_PrintInvoice.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_PrintInvoice.Depth = 0;
+            btn_PrintInvoice.HighEmphasis = true;
+            btn_PrintInvoice.Icon = null;
+            btn_PrintInvoice.Location = new Point(241, 26);
+            btn_PrintInvoice.Margin = new Padding(4, 6, 4, 6);
+            btn_PrintInvoice.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_PrintInvoice.Name = "btn_PrintInvoice";
+            btn_PrintInvoice.NoAccentTextColor = Color.Empty;
+            btn_PrintInvoice.Size = new Size(115, 36);
+            btn_PrintInvoice.TabIndex = 6;
+            btn_PrintInvoice.Text = "In hóa đơn";
+            btn_PrintInvoice.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_PrintInvoice.UseAccentColor = false;
+            btn_PrintInvoice.UseVisualStyleBackColor = true;
+            btn_PrintInvoice.Click += btn_PrintInvoice_Click;
             // 
             // btn_Delete
             // 
@@ -247,7 +268,7 @@
             // 
             // tabControl2
             // 
-            tabControl2.Controls.Add(tabPage3);
+            tabControl2.Controls.Add(tabPage_SalesInvoice);
             tabControl2.Controls.Add(tabPane_PurchaseInvoice);
             tabControl2.Dock = DockStyle.Fill;
             tabControl2.Location = new Point(0, 0);
@@ -257,16 +278,16 @@
             tabControl2.TabIndex = 5;
             tabControl2.SelectedIndexChanged += tabControl2_SelectedIndexChanged;
             // 
-            // tabPage3
+            // tabPage_SalesInvoice
             // 
-            tabPage3.Controls.Add(groupBox1);
-            tabPage3.Location = new Point(4, 29);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(1064, 441);
-            tabPage3.TabIndex = 0;
-            tabPage3.Text = "Hóa đơn bán hàng";
-            tabPage3.UseVisualStyleBackColor = true;
+            tabPage_SalesInvoice.Controls.Add(groupBox1);
+            tabPage_SalesInvoice.Location = new Point(4, 29);
+            tabPage_SalesInvoice.Name = "tabPage_SalesInvoice";
+            tabPage_SalesInvoice.Padding = new Padding(3);
+            tabPage_SalesInvoice.Size = new Size(1064, 441);
+            tabPage_SalesInvoice.TabIndex = 0;
+            tabPage_SalesInvoice.Text = "Hóa đơn bán hàng";
+            tabPage_SalesInvoice.UseVisualStyleBackColor = true;
             // 
             // tabPane_PurchaseInvoice
             // 
@@ -277,27 +298,6 @@
             tabPane_PurchaseInvoice.TabIndex = 1;
             tabPane_PurchaseInvoice.Text = "Hóa đơn nhập hàng";
             tabPane_PurchaseInvoice.UseVisualStyleBackColor = true;
-            // 
-            // btn_PrintInvoice
-            // 
-            btn_PrintInvoice.AutoSize = false;
-            btn_PrintInvoice.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_PrintInvoice.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_PrintInvoice.Depth = 0;
-            btn_PrintInvoice.HighEmphasis = true;
-            btn_PrintInvoice.Icon = null;
-            btn_PrintInvoice.Location = new Point(241, 26);
-            btn_PrintInvoice.Margin = new Padding(4, 6, 4, 6);
-            btn_PrintInvoice.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_PrintInvoice.Name = "btn_PrintInvoice";
-            btn_PrintInvoice.NoAccentTextColor = Color.Empty;
-            btn_PrintInvoice.Size = new Size(115, 36);
-            btn_PrintInvoice.TabIndex = 6;
-            btn_PrintInvoice.Text = "In hóa đơn";
-            btn_PrintInvoice.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_PrintInvoice.UseAccentColor = false;
-            btn_PrintInvoice.UseVisualStyleBackColor = true;
-            btn_PrintInvoice.Click += btn_PrintInvoice_Click;
             // 
             // InvoiceView
             // 
@@ -316,7 +316,7 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_InvoiceList).EndInit();
             tabControl2.ResumeLayout(false);
-            tabPage3.ResumeLayout(false);
+            tabPage_SalesInvoice.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -340,7 +340,7 @@
         private DataGridViewTextBoxColumn Status;
         private DataGridViewTextBoxColumn Note;
         private TabControl tabControl2;
-        private TabPage tabPage3;
+        private TabPage tabPage_SalesInvoice;
         private TabPage tabPane_PurchaseInvoice;
         private MaterialSkin.Controls.MaterialButton btn_PrintInvoice;
     }

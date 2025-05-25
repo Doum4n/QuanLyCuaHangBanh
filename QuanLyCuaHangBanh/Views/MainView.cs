@@ -11,6 +11,7 @@ using QuanLyCuaHangBanh.Views.Employee;
 using QuanLyCuaHangBanh.Views.Invoice;
 using QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice;
 using QuanLyCuaHangBanh.Views.Invoice.SalesInvoice;
+using QuanLyCuaHangBanh.Views.Manufacturer;
 using QuanLyCuaHangBanh.Views.Order;
 using QuanLyCuaHangBanh.Views.Product;
 using QuanLyCuaHangBanh.Views.ReceiptNote;
@@ -32,6 +33,7 @@ namespace QuanLyCuaHangBanh
         private InvoiceView? invoiceView;
         private PurchaseInvoiceView? PurchaseInvoiceView;
         private UnitView? unitView;
+        private ManufacturerView? manufacturerView;
 
         private ProductPresenter? _productPresenter;
         private CustomerPresenter? _customerPresenter;
@@ -44,6 +46,7 @@ namespace QuanLyCuaHangBanh
         private SalesInvoicePresenter? _invoicePresenter;
         private PurchasePresenter? _purchasePresenter;
         private UnitPresenter? _unitPresenter;
+        private ManufacturerPresenter? _manufacturerPresenter;
 
         private readonly IServiceProvider _serviceProvider;
 
@@ -55,7 +58,20 @@ namespace QuanLyCuaHangBanh
 
         private void MainView_Load(object sender, EventArgs e)
         {
+            //tsslb_EmployeeName.Text = "Chưa đăng nhập";
+            //tsmi_Products.Enabled = false;
+            //tsmi_Catogories.Enabled = false;
+            //tsmi_Producers.Enabled = false;
+            //tsmi_Customers.Enabled = false;
+            //tsmi_PurchaseReceipts.Enabled = false;
+            //tsmi_WarehouseNotes.Enabled = false;
+            //tsmi_Employees.Enabled = false;
+            //tsmi_Order.Enabled = false;
+            //tsmi_Invoices.Enabled = false;
+            //tsmi_Units.Enabled = false;
+            //stmi_Manufacturers.Enabled = false;
 
+            //tsmi_Statistical.Enabled = false;
         }
 
 
@@ -264,12 +280,108 @@ namespace QuanLyCuaHangBanh
             if (loginView.ShowDialog() == DialogResult.OK)
             {
                 tsslb_EmployeeName.Text = $"{Session.Role}: {Session.EmployeeName}";
+
+                //applyPermissions();
             }
             else
             {
                 // Handle failed login, e.g., show an error message
                 MessageBox.Show("Đăng nhập thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void applyPermissions()
+        {
+            switch (Session.Role)
+            {
+                case "Nhân viên bán hàng":
+                    tsmi_Products.Enabled = false;
+                    tsmi_Catogories.Enabled = false;
+                    tsmi_Producers.Enabled = false;
+                    tsmi_Customers.Enabled = false;
+                    tsmi_PurchaseReceipts.Enabled = false;
+                    tsmi_WarehouseNotes.Enabled = false;
+                    tsmi_Employees.Enabled = false;
+                    tsmi_Order.Enabled = true;
+                    tsmi_Invoices.Enabled = true;
+                    tsmi_Units.Enabled = false;
+                    stmi_Manufacturers.Enabled = false;
+
+                    tsmi_Statistical.Enabled = false;
+
+                    break;
+                case "Quản lý":
+                    tsmi_Products.Enabled = true;
+                    tsmi_Catogories.Enabled = true;
+                    tsmi_Producers.Enabled = true;
+                    tsmi_Customers.Enabled = true;
+                    tsmi_PurchaseReceipts.Enabled = true;
+                    tsmi_WarehouseNotes.Enabled = true;
+                    tsmi_Employees.Enabled = true;
+                    tsmi_Order.Enabled = true;
+                    tsmi_Invoices.Enabled = true;
+                    tsmi_Units.Enabled = true;
+                    stmi_Manufacturers.Enabled = true;
+                    break;
+                case "Nhân viên kho":
+                    tsmi_Products.Enabled = false;
+                    tsmi_Catogories.Enabled = false;
+                    tsmi_Producers.Enabled = false;
+                    tsmi_Customers.Enabled = false;
+                    tsmi_PurchaseReceipts.Enabled = true;
+                    tsmi_WarehouseNotes.Enabled = true;
+                    tsmi_Employees.Enabled = false;
+                    tsmi_Order.Enabled = false;
+                    tsmi_Invoices.Enabled = true;
+                    tsmi_Units.Enabled = false;
+                    stmi_Manufacturers.Enabled = false;
+
+                    tsmi_Statistical.Enabled = false;
+                    break;
+                default:
+                    tsslb_EmployeeName.Text = "Chưa đăng nhập";
+                    break;
+            }
+        }
+
+        private void stmi_Manufacturers_Click(object sender, EventArgs e)
+        {
+            if (manufacturerView == null || manufacturerView.IsDisposed)
+            {
+                manufacturerView = _serviceProvider.GetRequiredService<IManufacturerView>() as ManufacturerView;
+                _manufacturerPresenter = _serviceProvider.GetRequiredService<ManufacturerPresenter>();
+                manufacturerView.MdiParent = this;
+                manufacturerView.Show();
+            }
+            else
+            {
+                manufacturerView.Activate();
+            }
+        }
+
+        private void tsmi_Logout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            tsslb_EmployeeName.Text = "Chưa đăng nhập";
+        }
+
+        private void stmi_ChangePassword_Click(object sender, EventArgs e)
+        {
+            AccoutView accoutView = new AccoutView();
+            accoutView.MdiParent = this;
+            accoutView.Show();
+        }
+
+        private void tsmi_Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void tsmi_InventoryStatistical_Click(object sender, EventArgs e)
+        {
+            ReportInventoryView reportInventoryView = new ReportInventoryView();
+            reportInventoryView.MdiParent = this;
+            reportInventoryView.Show();
         }
     }
 }

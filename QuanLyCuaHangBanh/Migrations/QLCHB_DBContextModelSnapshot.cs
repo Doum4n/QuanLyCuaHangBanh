@@ -276,6 +276,27 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.ToTable("Inventories");
                 });
 
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Manufacturer", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Manufacturers");
+                });
+
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order", b =>
                 {
                     b.Property<int>("ID")
@@ -366,6 +387,9 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ManufacturerID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -381,6 +405,8 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.HasIndex("BaseUnitID");
 
                     b.HasIndex("CategoryID");
+
+                    b.HasIndex("ManufacturerID");
 
                     b.HasIndex("ProducerID");
 
@@ -748,6 +774,10 @@ namespace QuanLyCuaHangBanh.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QuanLyCuaHangBanh.Models.Manufacturer", "Manufacturer")
+                        .WithMany("Products")
+                        .HasForeignKey("ManufacturerID");
+
                     b.HasOne("QuanLyCuaHangBanh.Models.Supplier", "Producer")
                         .WithMany()
                         .HasForeignKey("ProducerID")
@@ -757,6 +787,8 @@ namespace QuanLyCuaHangBanh.Migrations
                     b.Navigation("BaseUnit");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Manufacturer");
 
                     b.Navigation("Producer");
                 });
@@ -881,6 +913,11 @@ namespace QuanLyCuaHangBanh.Migrations
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.GoodsReceiptNote", b =>
                 {
                     b.Navigation("GoodsReceiptNoteDetails");
+                });
+
+            modelBuilder.Entity("QuanLyCuaHangBanh.Models.Manufacturer", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("QuanLyCuaHangBanh.Models.Order", b =>

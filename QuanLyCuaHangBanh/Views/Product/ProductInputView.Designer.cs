@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             tb_ProductName = new MaterialSkin.Controls.MaterialTextBox2();
@@ -44,12 +45,16 @@
             pictureBox = new PictureBox();
             nmr_UnitPrice = new NumericUpDown();
             groupBox1 = new GroupBox();
+            label5 = new Label();
             linkLabel1 = new LinkLabel();
+            nmr_TotalQuantity = new NumericUpDown();
             nmr_Quantity = new NumericUpDown();
             nmr_Conversion = new NumericUpDown();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             btn_AddUnit = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
+            btn_DeleteUnit = new MaterialSkin.Controls.MaterialButton();
+            btn_EditUnit = new MaterialSkin.Controls.MaterialButton();
             cbb_Units = new ComboBox();
             label4 = new Label();
             label2 = new Label();
@@ -65,9 +70,27 @@
             UnitPrice = new DataGridViewTextBoxColumn();
             Quantity = new DataGridViewTextBoxColumn();
             tabPage2 = new TabPage();
+            dgv_ReceiptList = new DataGridView();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            TotalPrice = new DataGridViewTextBoxColumn();
+            ReceiptDate = new DataGridViewTextBoxColumn();
+            Note = new DataGridViewTextBoxColumn();
+            tabPage3 = new TabPage();
+            dgv_ReleaseList = new DataGridView();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
+            ReleaseDate = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_UnitPrice).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Conversion).BeginInit();
             panel1.SuspendLayout();
@@ -75,6 +98,10 @@
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductUnitList).BeginInit();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_ReceiptList).BeginInit();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_ReleaseList).BeginInit();
             SuspendLayout();
             // 
             // materialLabel1
@@ -288,7 +315,7 @@
             // 
             // nmr_UnitPrice
             // 
-            nmr_UnitPrice.Location = new Point(645, 44);
+            nmr_UnitPrice.Location = new Point(495, 52);
             nmr_UnitPrice.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_UnitPrice.Name = "nmr_UnitPrice";
             nmr_UnitPrice.Size = new Size(150, 27);
@@ -297,7 +324,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(linkLabel1);
+            groupBox1.Controls.Add(nmr_TotalQuantity);
             groupBox1.Controls.Add(btn_Save);
             groupBox1.Controls.Add(mttb_Description);
             groupBox1.Controls.Add(materialLabel1);
@@ -316,6 +345,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin sản phẩm";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(19, 241);
+            label5.Name = "label5";
+            label5.Size = new Size(105, 20);
+            label5.TabIndex = 36;
+            label5.Text = "Tổng số lượng";
+            // 
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
@@ -326,9 +364,20 @@
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Bổ xung thêm đơn vị tính";
             // 
+            // nmr_TotalQuantity
+            // 
+            nmr_TotalQuantity.Enabled = false;
+            nmr_TotalQuantity.Location = new Point(19, 264);
+            nmr_TotalQuantity.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalQuantity.Name = "nmr_TotalQuantity";
+            nmr_TotalQuantity.Size = new Size(150, 27);
+            nmr_TotalQuantity.TabIndex = 35;
+            nmr_TotalQuantity.ThousandsSeparator = true;
+            // 
             // nmr_Quantity
             // 
-            nmr_Quantity.Location = new Point(474, 44);
+            nmr_Quantity.Enabled = false;
+            nmr_Quantity.Location = new Point(711, 52);
             nmr_Quantity.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
@@ -337,7 +386,7 @@
             // 
             // nmr_Conversion
             // 
-            nmr_Conversion.Location = new Point(297, 44);
+            nmr_Conversion.Location = new Point(254, 53);
             nmr_Conversion.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_Conversion.Name = "nmr_Conversion";
             nmr_Conversion.Size = new Size(150, 27);
@@ -352,14 +401,14 @@
             btn_AddUnit.Depth = 0;
             btn_AddUnit.HighEmphasis = true;
             btn_AddUnit.Icon = null;
-            btn_AddUnit.Location = new Point(943, 35);
+            btn_AddUnit.Location = new Point(938, 21);
             btn_AddUnit.Margin = new Padding(4, 6, 4, 6);
             btn_AddUnit.MouseState = MaterialSkin.MouseState.HOVER;
             btn_AddUnit.Name = "btn_AddUnit";
             btn_AddUnit.NoAccentTextColor = Color.Empty;
-            btn_AddUnit.Size = new Size(198, 45);
+            btn_AddUnit.Size = new Size(107, 37);
             btn_AddUnit.TabIndex = 18;
-            btn_AddUnit.Text = "Thêm đơn vị tính";
+            btn_AddUnit.Text = "Thêm";
             btn_AddUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_AddUnit.UseAccentColor = false;
             btn_AddUnit.UseVisualStyleBackColor = true;
@@ -367,6 +416,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(btn_DeleteUnit);
+            panel1.Controls.Add(btn_EditUnit);
             panel1.Controls.Add(cbb_Units);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label2);
@@ -379,8 +430,50 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1159, 110);
+            panel1.Size = new Size(1159, 171);
             panel1.TabIndex = 20;
+            // 
+            // btn_DeleteUnit
+            // 
+            btn_DeleteUnit.AutoSize = false;
+            btn_DeleteUnit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_DeleteUnit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_DeleteUnit.Depth = 0;
+            btn_DeleteUnit.HighEmphasis = true;
+            btn_DeleteUnit.Icon = null;
+            btn_DeleteUnit.Location = new Point(938, 119);
+            btn_DeleteUnit.Margin = new Padding(4, 6, 4, 6);
+            btn_DeleteUnit.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_DeleteUnit.Name = "btn_DeleteUnit";
+            btn_DeleteUnit.NoAccentTextColor = Color.Empty;
+            btn_DeleteUnit.Size = new Size(107, 37);
+            btn_DeleteUnit.TabIndex = 34;
+            btn_DeleteUnit.Text = "Xóa";
+            btn_DeleteUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_DeleteUnit.UseAccentColor = false;
+            btn_DeleteUnit.UseVisualStyleBackColor = true;
+            btn_DeleteUnit.Click += btn_DeleteUnit_Click;
+            // 
+            // btn_EditUnit
+            // 
+            btn_EditUnit.AutoSize = false;
+            btn_EditUnit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_EditUnit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_EditUnit.Depth = 0;
+            btn_EditUnit.HighEmphasis = true;
+            btn_EditUnit.Icon = null;
+            btn_EditUnit.Location = new Point(938, 70);
+            btn_EditUnit.Margin = new Padding(4, 6, 4, 6);
+            btn_EditUnit.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_EditUnit.Name = "btn_EditUnit";
+            btn_EditUnit.NoAccentTextColor = Color.Empty;
+            btn_EditUnit.Size = new Size(107, 37);
+            btn_EditUnit.TabIndex = 33;
+            btn_EditUnit.Text = "Sửa";
+            btn_EditUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_EditUnit.UseAccentColor = false;
+            btn_EditUnit.UseVisualStyleBackColor = true;
+            btn_EditUnit.Click += btn_EditUnit_Click;
             // 
             // cbb_Units
             // 
@@ -393,7 +486,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(645, 21);
+            label4.Location = new Point(495, 29);
             label4.Name = "label4";
             label4.Size = new Size(60, 20);
             label4.TabIndex = 29;
@@ -402,7 +495,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(474, 21);
+            label2.Location = new Point(711, 29);
             label2.Name = "label2";
             label2.Size = new Size(69, 20);
             label2.TabIndex = 28;
@@ -411,7 +504,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 21);
+            label3.Location = new Point(27, 30);
             label3.Name = "label3";
             label3.Size = new Size(81, 20);
             label3.TabIndex = 27;
@@ -420,7 +513,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(297, 21);
+            label1.Location = new Point(254, 30);
             label1.Name = "label1";
             label1.Size = new Size(116, 20);
             label1.TabIndex = 24;
@@ -441,12 +534,14 @@
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 318);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(1173, 472);
             tabControl1.TabIndex = 1;
+            tabControl1.TabIndexChanged += tabControl1_TabIndexChanged;
             // 
             // tabPage1
             // 
@@ -457,7 +552,7 @@
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(1165, 439);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
+            tabPage1.Text = "Danh sách đơn vị tính";
             tabPage1.UseVisualStyleBackColor = true;
             // 
             // dgv_ProductUnitList
@@ -468,11 +563,12 @@
             dgv_ProductUnitList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_ProductUnitList.Columns.AddRange(new DataGridViewColumn[] { ID, UnitName, ConversionRate, UnitPrice, Quantity });
             dgv_ProductUnitList.Dock = DockStyle.Fill;
-            dgv_ProductUnitList.Location = new Point(3, 113);
+            dgv_ProductUnitList.Location = new Point(3, 174);
             dgv_ProductUnitList.Name = "dgv_ProductUnitList";
             dgv_ProductUnitList.ReadOnly = true;
             dgv_ProductUnitList.RowHeadersWidth = 51;
-            dgv_ProductUnitList.Size = new Size(1159, 323);
+            dgv_ProductUnitList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_ProductUnitList.Size = new Size(1159, 262);
             dgv_ProductUnitList.TabIndex = 0;
             dgv_ProductUnitList.CellContentClick += dgv_ProductUnitList_CellContentClick;
             // 
@@ -503,9 +599,9 @@
             // UnitPrice
             // 
             UnitPrice.DataPropertyName = "UnitPrice";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            UnitPrice.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            UnitPrice.DefaultCellStyle = dataGridViewCellStyle1;
             UnitPrice.HeaderText = "Giá tiền";
             UnitPrice.MinimumWidth = 6;
             UnitPrice.Name = "UnitPrice";
@@ -521,13 +617,172 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(dgv_ReceiptList);
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1165, 439);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            tabPage2.Text = "Danh sách nhập hàng";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgv_ReceiptList
+            // 
+            dgv_ReceiptList.AllowUserToAddRows = false;
+            dgv_ReceiptList.AllowUserToDeleteRows = false;
+            dgv_ReceiptList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_ReceiptList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_ReceiptList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, TotalPrice, ReceiptDate, Note });
+            dgv_ReceiptList.Dock = DockStyle.Fill;
+            dgv_ReceiptList.Location = new Point(3, 3);
+            dgv_ReceiptList.Name = "dgv_ReceiptList";
+            dgv_ReceiptList.ReadOnly = true;
+            dgv_ReceiptList.RowHeadersWidth = 51;
+            dgv_ReceiptList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_ReceiptList.Size = new Size(1159, 433);
+            dgv_ReceiptList.TabIndex = 1;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.DataPropertyName = "ID";
+            dataGridViewTextBoxColumn1.HeaderText = "ID";
+            dataGridViewTextBoxColumn1.MinimumWidth = 6;
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.DataPropertyName = "UnitName";
+            dataGridViewTextBoxColumn2.HeaderText = "Tên đơn vị tính";
+            dataGridViewTextBoxColumn2.MinimumWidth = 6;
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.DataPropertyName = "ConversionRate";
+            dataGridViewTextBoxColumn3.HeaderText = "Tỷ lệ chuyển đổi";
+            dataGridViewTextBoxColumn3.MinimumWidth = 6;
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.DataPropertyName = "PurchasePrice";
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewTextBoxColumn4.HeaderText = "Giá nhập";
+            dataGridViewTextBoxColumn4.MinimumWidth = 6;
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.DataPropertyName = "Quantity";
+            dataGridViewTextBoxColumn5.HeaderText = "Số lượng";
+            dataGridViewTextBoxColumn5.MinimumWidth = 6;
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // TotalPrice
+            // 
+            TotalPrice.DataPropertyName = "TotalPrice";
+            TotalPrice.HeaderText = "Thành tiền";
+            TotalPrice.MinimumWidth = 6;
+            TotalPrice.Name = "TotalPrice";
+            TotalPrice.ReadOnly = true;
+            // 
+            // ReceiptDate
+            // 
+            ReceiptDate.DataPropertyName = "ReceiptDate";
+            ReceiptDate.HeaderText = "Ngày nhập";
+            ReceiptDate.MinimumWidth = 6;
+            ReceiptDate.Name = "ReceiptDate";
+            ReceiptDate.ReadOnly = true;
+            // 
+            // Note
+            // 
+            Note.DataPropertyName = "Note";
+            Note.HeaderText = "Ghi chú";
+            Note.MinimumWidth = 6;
+            Note.Name = "Note";
+            Note.ReadOnly = true;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(dgv_ReleaseList);
+            tabPage3.Location = new Point(4, 29);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(1165, 439);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Danh sách xuất hàng";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dgv_ReleaseList
+            // 
+            dgv_ReleaseList.AllowUserToAddRows = false;
+            dgv_ReleaseList.AllowUserToDeleteRows = false;
+            dgv_ReleaseList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_ReleaseList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_ReleaseList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn10, ReleaseDate, dataGridViewTextBoxColumn13 });
+            dgv_ReleaseList.Dock = DockStyle.Fill;
+            dgv_ReleaseList.Location = new Point(3, 3);
+            dgv_ReleaseList.Name = "dgv_ReleaseList";
+            dgv_ReleaseList.ReadOnly = true;
+            dgv_ReleaseList.RowHeadersWidth = 51;
+            dgv_ReleaseList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_ReleaseList.Size = new Size(1159, 433);
+            dgv_ReleaseList.TabIndex = 2;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.DataPropertyName = "ID";
+            dataGridViewTextBoxColumn6.HeaderText = "ID";
+            dataGridViewTextBoxColumn6.MinimumWidth = 6;
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.DataPropertyName = "UnitName";
+            dataGridViewTextBoxColumn7.HeaderText = "Tên đơn vị tính";
+            dataGridViewTextBoxColumn7.MinimumWidth = 6;
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            dataGridViewTextBoxColumn7.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            dataGridViewTextBoxColumn8.DataPropertyName = "ConversionRate";
+            dataGridViewTextBoxColumn8.HeaderText = "Tỷ lệ chuyển đổi";
+            dataGridViewTextBoxColumn8.MinimumWidth = 6;
+            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            dataGridViewTextBoxColumn8.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn10
+            // 
+            dataGridViewTextBoxColumn10.DataPropertyName = "Quantity";
+            dataGridViewTextBoxColumn10.HeaderText = "Số lượng";
+            dataGridViewTextBoxColumn10.MinimumWidth = 6;
+            dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
+            dataGridViewTextBoxColumn10.ReadOnly = true;
+            // 
+            // ReleaseDate
+            // 
+            ReleaseDate.DataPropertyName = "ReleaseDate";
+            ReleaseDate.HeaderText = "Ngày nhập";
+            ReleaseDate.MinimumWidth = 6;
+            ReleaseDate.Name = "ReleaseDate";
+            ReleaseDate.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn13
+            // 
+            dataGridViewTextBoxColumn13.DataPropertyName = "Note";
+            dataGridViewTextBoxColumn13.HeaderText = "Ghi chú";
+            dataGridViewTextBoxColumn13.MinimumWidth = 6;
+            dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
+            dataGridViewTextBoxColumn13.ReadOnly = true;
             // 
             // ProductInputView
             // 
@@ -544,6 +799,7 @@
             ((System.ComponentModel.ISupportInitialize)nmr_UnitPrice).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalQuantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Conversion).EndInit();
             panel1.ResumeLayout(false);
@@ -553,6 +809,10 @@
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgv_ProductUnitList).EndInit();
+            tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_ReceiptList).EndInit();
+            tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_ReleaseList).EndInit();
             ResumeLayout(false);
         }
 
@@ -596,5 +856,26 @@
         private Label label3;
         private Label label1;
         private ComboBox cbb_Units;
+        private MaterialSkin.Controls.MaterialButton btn_DeleteUnit;
+        private MaterialSkin.Controls.MaterialButton btn_EditUnit;
+        private TabPage tabPage3;
+        private DataGridView dgv_ReceiptList;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn TotalPrice;
+        private DataGridViewTextBoxColumn ReceiptDate;
+        private DataGridViewTextBoxColumn Note;
+        private DataGridView dgv_ReleaseList;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private DataGridViewTextBoxColumn ReleaseDate;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private Label label5;
+        private NumericUpDown nmr_TotalQuantity;
     }
 }

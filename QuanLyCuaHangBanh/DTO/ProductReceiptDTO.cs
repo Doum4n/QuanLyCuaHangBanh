@@ -14,14 +14,12 @@ namespace QuanLyCuaHangBanh.DTO
         public ProductReceiptDTO(int iD, int productId, string productName, int categoryId, string categoryName, int unitId, string unitName, int productUnitId, decimal conversionRate, decimal purchasePrice, int quantity, string note) : 
             base(iD, productName, categoryId, categoryName, unitName, productUnitId, conversionRate, quantity, note)
         {
-            ID = iD;
             ProductId = productId;
             UnitId = unitId;
             PurchasePrice = purchasePrice;
             //GoodsReceiptNoteId = goodsReceiptNoteId;
         }
 
-        public int ID { get; set; }
         public int ProductId { get; set; }
         public int UnitId { get; set; }
         public decimal PurchasePrice { get; set; }
@@ -33,7 +31,7 @@ namespace QuanLyCuaHangBanh.DTO
         {
             return new GoodsReceiptNote_Detail
             {
-                ID = 0,
+                ID = ID,
                 ProductId = ProductId,
                 GoodsReceiptNoteId = GoodsReceiptNoteId,
                 ProductUnitId = ProductUnitId,

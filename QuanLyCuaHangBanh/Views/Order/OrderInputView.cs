@@ -9,7 +9,7 @@ namespace QuanLyCuaHangBanh.Views.Order
     public partial class OrderInputView : Form
     {
         private QLCHB_DBContext context = new QLCHB_DBContext();
-        private OrderDTO? orderDTO = null!;
+        private OrderDTO? orderDTO;
 
         private BindingSource bs = new BindingSource();
         BindingList<ProductOrderDTO> _products = new BindingList<ProductOrderDTO>();
@@ -27,7 +27,6 @@ namespace QuanLyCuaHangBanh.Views.Order
         {
             Models.Order addedOrder = new Models.Order()
             {
-                ID = orderDTO?.ID ?? 0,
                 CustomerID = Convert.ToInt32(cbb_Customer.SelectedValue),
                 DeliveryAddress = rtb_DeliverAddress.Text,
                 PaymentMethod = cbb_PaymentMethods.Text,
@@ -81,6 +80,7 @@ namespace QuanLyCuaHangBanh.Views.Order
 
             if (orderDTO != null)
             {
+                MessageBox.Show("Chỉnh sửa đơn hàng: " + orderDTO.ID, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //tb_PhoneNumber.Text = order.;
                 cbb_Customer.Text = orderDTO.CustomerName;
                 rtb_DeliverAddress.Text = orderDTO.DeliveryAddress;
@@ -103,15 +103,28 @@ namespace QuanLyCuaHangBanh.Views.Order
                             o.Product_Unit.ConversionRate,
                             o.Quantity,
                             o.Note,
-                            o.OrderId
-                        )).ToList()
+                            o.OrderId,
+                            o.Price
+                        )
+                        {
+                            Status = DTO.Base.Status.None
+                        }).ToList()
                 );
 
                 bs.DataSource = _products;
                 dgv_ProductList.DataSource = bs;
+
+                cbb_Categories.DataBindings.Add("Text", bs, "CategoryName", true, DataSourceUpdateMode.OnPropertyChanged);
+                cbb_Products.DataBindings.Add("Text", bs, "ProductName", true, DataSourceUpdateMode.OnPropertyChanged);
+                cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.OnPropertyChanged);
+                nmr_ConversionRate.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.OnPropertyChanged);
+                nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
+                rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.OnPropertyChanged);
+                nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.OnPropertyChanged);
             }
             else
             {
+                _products = new BindingList<ProductOrderDTO>();
                 bs.DataSource = _products;
                 dgv_ProductList.DataSource = bs;
             }
@@ -119,20 +132,23 @@ namespace QuanLyCuaHangBanh.Views.Order
 
         private void btn_AddProduct_Click(object sender, EventArgs e)
         {
-            bs.Add(
-                new ProductOrderDTO(
+            var product = new ProductOrderDTO(
                     bs.Count + 1,
                     cbb_Products.Text,
-                    (int)cbb_Products.SelectedValue,
+                    (int)cbb_Categories.SelectedValue,
                     cbb_Categories.Text,
                     cbb_Units.Text,
                     selectedProductUnitId,
                     nmr_ConversionRate.Value,
                     Convert.ToInt32(nmr_Quantity.Value),
                     rtb_ProductNote.Text,
-                    0 // Assuming OrderId is 0 for new products
-                 )
+                    0, // Assuming OrderId is 0 for new products,
+                    nmr_Price.Value
             );
+
+            product.Status = DTO.Base.Status.New;
+
+            bs.Add(product);
         }
 
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
@@ -146,6 +162,8 @@ namespace QuanLyCuaHangBanh.Views.Order
                 productOrderDTO.ConversionRate = nmr_ConversionRate.Value;
                 productOrderDTO.Quantity = Convert.ToInt32(nmr_Quantity.Value);
                 productOrderDTO.Note = rtb_ProductNote.Text;
+                productOrderDTO.Price = nmr_Price.Value;
+                productOrderDTO.Status = DTO.Base.Status.Modified;
                 bs.ResetBindings(false);
             }
         }
@@ -154,7 +172,17 @@ namespace QuanLyCuaHangBanh.Views.Order
         {
             if (dgv_ProductList.CurrentRow != null && dgv_ProductList.CurrentRow.DataBoundItem is ProductOrderDTO productOrderDTO)
             {
-                bs.Remove(productOrderDTO);
+                if (productOrderDTO.Status == DTO.Base.Status.New)
+                {
+                    bs.Remove(productOrderDTO);
+                }
+                else
+                {
+                    productOrderDTO.Status = DTO.Base.Status.Deleted;
+                    bs.DataSource = _products.Where(p => p.Status != DTO.Base.Status.Deleted).ToList();
+                    bs.ResetBindings(false);
+                    dgv_ProductList.DataSource = bs;
+                }
             }
         }
 
@@ -163,6 +191,8 @@ namespace QuanLyCuaHangBanh.Views.Order
             if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
             {
                 selectedProductUnitId = selectedUnit.ID;
+
+                
             }
         }
 
@@ -176,15 +206,35 @@ namespace QuanLyCuaHangBanh.Views.Order
                     cbb_Units.DataSource = productUnit;
                     cbb_Units.DisplayMember = "UnitName";
                     cbb_Units.ValueMember = "UnitId";
+
+                    var _productUnit = context.ProductUnits.Include(o => o.Inventory).
+                        FirstOrDefault(o => o.UnitID == Convert.ToInt32(cbb_Units.SelectedValue) && o.ProductID == Convert.ToInt32(selectedProduct.ID));
+                    if (_productUnit != null)
+                    {
+                        nmr_ConversionRate.Value = _productUnit.ConversionRate;
+                        nmr_Price.Value = _productUnit.UnitPrice;
+                        nmr_Quantity.Maximum = _productUnit.Inventory.Quantity; // Assuming you want to limit the quantity to available stock
+                    }
                 }
             }
         }
 
         private void cbb_PaymentMethods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cbb_PaymentMethods.SelectedText == "Ghi nợ")
+            if (cbb_PaymentMethods.SelectedText == "Ghi nợ")
             {
                 // Handle payment method selection if needed
+            }
+        }
+
+        private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Categories.SelectedItem is Models.Category selectedCategory)
+            {
+                cbb_Products.DataSource = context.Products.Where(p => p.CategoryID == selectedCategory.ID).ToList();
+                cbb_Products.DisplayMember = "Name";
+                cbb_Products.ValueMember = "ID";
+
             }
         }
     }
