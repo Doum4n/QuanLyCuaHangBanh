@@ -95,7 +95,7 @@ namespace QuanLyCuaHangBanh.Views
                             #region Thêm dữ liệu cho comboBox cho cột "Unit"
                             var comboCell = new DataGridViewComboBoxCell
                             {
-                                DataSource = product.Unit.ToList(),
+                                DataSource = product.Units.ToList(),
                                 DisplayMember = "UnitName",
                                 ValueMember = "ID",
                                 ReadOnly = false,
@@ -108,15 +108,15 @@ namespace QuanLyCuaHangBanh.Views
 
                             // Nếu có đơn vị nào được chọn thì gán giá trị cho comboCell
                             // Nếu không có đơn vị nào được chọn thì gán giá trị cho đơn vị đầu tiên
-                            var selectedUnit = product.Unit.FirstOrDefault(o => o.IsSelected == true);
+                            var selectedUnit = product.Units.FirstOrDefault(o => o.IsSelected == true);
                             if (selectedUnit != null)
                                 comboCell.Value = selectedUnit.ID;
                             else
                             {
-                                if (product.Unit.Any())
+                                if (product.Units.Any())
                                 {
-                                    comboCell.Value = product.Unit.First().ID;
-                                    product.Unit.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
+                                    comboCell.Value = product.Units.First().ID;
+                                    product.Units.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
                                 }
                             }
 
@@ -176,13 +176,13 @@ namespace QuanLyCuaHangBanh.Views
                 if (dgv_ProductList.CurrentRow?.DataBoundItem is ProductDTO product)
                 {
                     // Gán DataSource cho ComboBox
-                    comboBox.DataSource = product.Unit.ToList(); // Đảm bảo DataSource đúng
+                    comboBox.DataSource = product.Units.ToList(); // Đảm bảo DataSource đúng
                     comboBox.DisplayMember = "UnitName";
                     comboBox.ValueMember = "ID";
                     assignComboboxSelectedValue(product, comboBox);
 
                     // Gán giá trị hiện tại cho ComboBox
-                    product.Unit.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
+                    product.Units.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
 
                     // Gán product cho ComboBox.Tag để khi chọn đọc ra
                     comboBox.Tag = product;
@@ -194,13 +194,13 @@ namespace QuanLyCuaHangBanh.Views
         {
             // Nếu có đơn vị nào được chọn thì gán giá trị cho comboCell
             // Nếu không có đơn vị nào được chọn thì gán giá trị cho đơn vị đầu tiên
-            var selectedUnit = product.Unit.FirstOrDefault(o => o.IsSelected == true);
+            var selectedUnit = product.Units.FirstOrDefault(o => o.IsSelected == true);
             if (selectedUnit != null)
                 comboBox.SelectedValue = selectedUnit.ID;
             else
             {
-                if (product.Unit.Any())
-                    comboBox.SelectedValue = product.Unit.First().ID;
+                if (product.Units.Any())
+                    comboBox.SelectedValue = product.Units.First().ID;
             }
         }
 
@@ -222,6 +222,38 @@ namespace QuanLyCuaHangBanh.Views
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void dgv_ProductList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dgv_ProductList.Columns["ViewDetail"].Index)
+            {
+                btn_Edit_Click(sender, e);
+            }
+        }
+
+        private void tsbtn_Search_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tstb_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn chặn âm thanh "ding" khi nhấn Enter
+                SearchEvent?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void tstb_Search_TextChanged(object sender, EventArgs e)
+        {
+            searchValue = tstb_Search.Text.Trim(); // Cập nhật giá trị tìm kiếm khi người dùng nhập
         }
     }
 }

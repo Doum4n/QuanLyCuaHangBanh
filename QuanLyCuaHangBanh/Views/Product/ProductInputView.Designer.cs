@@ -28,33 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            tb_ProductName = new MaterialSkin.Controls.MaterialTextBox2();
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
-            cbb_Categories = new MaterialSkin.Controls.MaterialComboBox();
-            cbb_Producers = new MaterialSkin.Controls.MaterialComboBox();
             btn_Save = new MaterialSkin.Controls.MaterialButton();
-            llb_AddUnit = new LinkLabel();
-            llb_AddCategory = new LinkLabel();
-            llb_AddProducer = new LinkLabel();
-            mttb_Description = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
             pictureBox = new PictureBox();
             nmr_UnitPrice = new NumericUpDown();
             groupBox1 = new GroupBox();
+            cbb_Manufacturers = new ComboBox();
+            materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
+            tb_ProductName = new TextBox();
+            cbb_Categories = new ComboBox();
+            cbb_Producers = new ComboBox();
+            mttb_Description = new RichTextBox();
+            label7 = new Label();
+            dtp_ExpirationDate = new DateTimePicker();
+            label6 = new Label();
+            dtp_ProductionDate = new DateTimePicker();
             label5 = new Label();
-            linkLabel1 = new LinkLabel();
             nmr_TotalQuantity = new NumericUpDown();
             nmr_Quantity = new NumericUpDown();
             nmr_Conversion = new NumericUpDown();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            btn_AddUnit = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
-            btn_DeleteUnit = new MaterialSkin.Controls.MaterialButton();
-            btn_EditUnit = new MaterialSkin.Controls.MaterialButton();
+            btn_Cancel = new Button();
+            btn_AddUnit = new Button();
+            btn_EditUnit = new Button();
+            btn_DeleteUnit = new Button();
             cbb_Units = new ComboBox();
             label4 = new Label();
             label2 = new Label();
@@ -69,6 +72,7 @@
             ConversionRate = new DataGridViewTextBoxColumn();
             UnitPrice = new DataGridViewTextBoxColumn();
             Quantity = new DataGridViewTextBoxColumn();
+            IsChecked = new DataGridViewCheckBoxColumn();
             tabPage2 = new TabPage();
             dgv_ReceiptList = new DataGridView();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
@@ -87,6 +91,7 @@
             dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
             ReleaseDate = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_UnitPrice).BeginInit();
             groupBox1.SuspendLayout();
@@ -116,40 +121,12 @@
             materialLabel1.TabIndex = 1;
             materialLabel1.Text = "Tên sản phầm";
             // 
-            // tb_ProductName
-            // 
-            tb_ProductName.AnimateReadOnly = false;
-            tb_ProductName.BackgroundImageLayout = ImageLayout.None;
-            tb_ProductName.CharacterCasing = CharacterCasing.Normal;
-            tb_ProductName.Depth = 0;
-            tb_ProductName.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            tb_ProductName.HideSelection = true;
-            tb_ProductName.LeadingIcon = null;
-            tb_ProductName.Location = new Point(19, 68);
-            tb_ProductName.MaxLength = 32767;
-            tb_ProductName.MouseState = MaterialSkin.MouseState.OUT;
-            tb_ProductName.Name = "tb_ProductName";
-            tb_ProductName.PasswordChar = '\0';
-            tb_ProductName.PrefixSuffixText = null;
-            tb_ProductName.ReadOnly = false;
-            tb_ProductName.RightToLeft = RightToLeft.No;
-            tb_ProductName.SelectedText = "";
-            tb_ProductName.SelectionLength = 0;
-            tb_ProductName.SelectionStart = 0;
-            tb_ProductName.ShortcutsEnabled = true;
-            tb_ProductName.Size = new Size(293, 48);
-            tb_ProductName.TabIndex = 2;
-            tb_ProductName.TabStop = false;
-            tb_ProductName.TextAlign = HorizontalAlignment.Left;
-            tb_ProductName.TrailingIcon = null;
-            tb_ProductName.UseSystemPasswordChar = false;
-            // 
             // materialLabel2
             // 
             materialLabel2.AutoSize = true;
             materialLabel2.Depth = 0;
             materialLabel2.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel2.Location = new Point(19, 146);
+            materialLabel2.Location = new Point(19, 107);
             materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             materialLabel2.Name = "materialLabel2";
             materialLabel2.Size = new Size(107, 19);
@@ -161,56 +138,12 @@
             materialLabel3.AutoSize = true;
             materialLabel3.Depth = 0;
             materialLabel3.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel3.Location = new Point(325, 46);
+            materialLabel3.Location = new Point(228, 41);
             materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             materialLabel3.Name = "materialLabel3";
-            materialLabel3.Size = new Size(95, 19);
+            materialLabel3.Size = new Size(99, 19);
             materialLabel3.TabIndex = 4;
-            materialLabel3.Text = "Nhà sản xuất";
-            // 
-            // cbb_Categories
-            // 
-            cbb_Categories.AutoResize = false;
-            cbb_Categories.BackColor = Color.FromArgb(255, 255, 255);
-            cbb_Categories.Depth = 0;
-            cbb_Categories.DrawMode = DrawMode.OwnerDrawVariable;
-            cbb_Categories.DropDownHeight = 174;
-            cbb_Categories.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbb_Categories.DropDownWidth = 121;
-            cbb_Categories.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            cbb_Categories.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            cbb_Categories.FormattingEnabled = true;
-            cbb_Categories.IntegralHeight = false;
-            cbb_Categories.ItemHeight = 43;
-            cbb_Categories.Location = new Point(19, 168);
-            cbb_Categories.MaxDropDownItems = 4;
-            cbb_Categories.MouseState = MaterialSkin.MouseState.OUT;
-            cbb_Categories.Name = "cbb_Categories";
-            cbb_Categories.Size = new Size(293, 49);
-            cbb_Categories.StartIndex = 0;
-            cbb_Categories.TabIndex = 6;
-            // 
-            // cbb_Producers
-            // 
-            cbb_Producers.AutoResize = false;
-            cbb_Producers.BackColor = Color.FromArgb(255, 255, 255);
-            cbb_Producers.Depth = 0;
-            cbb_Producers.DrawMode = DrawMode.OwnerDrawVariable;
-            cbb_Producers.DropDownHeight = 174;
-            cbb_Producers.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbb_Producers.DropDownWidth = 121;
-            cbb_Producers.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            cbb_Producers.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            cbb_Producers.FormattingEnabled = true;
-            cbb_Producers.IntegralHeight = false;
-            cbb_Producers.ItemHeight = 43;
-            cbb_Producers.Location = new Point(325, 68);
-            cbb_Producers.MaxDropDownItems = 4;
-            cbb_Producers.MouseState = MaterialSkin.MouseState.OUT;
-            cbb_Producers.Name = "cbb_Producers";
-            cbb_Producers.Size = new Size(293, 49);
-            cbb_Producers.StartIndex = 0;
-            cbb_Producers.TabIndex = 7;
+            materialLabel3.Text = "Nhà cung cấp";
             // 
             // btn_Save
             // 
@@ -220,7 +153,7 @@
             btn_Save.Depth = 0;
             btn_Save.HighEmphasis = true;
             btn_Save.Icon = null;
-            btn_Save.Location = new Point(945, 32);
+            btn_Save.Location = new Point(502, 6);
             btn_Save.Margin = new Padding(4, 6, 4, 6);
             btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Save.Name = "btn_Save";
@@ -233,69 +166,12 @@
             btn_Save.UseVisualStyleBackColor = true;
             btn_Save.Click += btn_Save_Click;
             // 
-            // llb_AddUnit
-            // 
-            llb_AddUnit.AutoSize = true;
-            llb_AddUnit.Location = new Point(348, 15);
-            llb_AddUnit.Name = "llb_AddUnit";
-            llb_AddUnit.Size = new Size(120, 20);
-            llb_AddUnit.TabIndex = 10;
-            llb_AddUnit.TabStop = true;
-            llb_AddUnit.Text = "Thêm đơn vị tính";
-            llb_AddUnit.LinkClicked += llb_AddUnit_LinkClicked;
-            // 
-            // llb_AddCategory
-            // 
-            llb_AddCategory.AutoSize = true;
-            llb_AddCategory.Location = new Point(509, 15);
-            llb_AddCategory.Name = "llb_AddCategory";
-            llb_AddCategory.Size = new Size(143, 20);
-            llb_AddCategory.TabIndex = 11;
-            llb_AddCategory.TabStop = true;
-            llb_AddCategory.Text = "Thêm loại sản phẩm";
-            llb_AddCategory.LinkClicked += llb_AddCategory_LinkClicked;
-            // 
-            // llb_AddProducer
-            // 
-            llb_AddProducer.AutoSize = true;
-            llb_AddProducer.Location = new Point(693, 15);
-            llb_AddProducer.Name = "llb_AddProducer";
-            llb_AddProducer.Size = new Size(132, 20);
-            llb_AddProducer.TabIndex = 12;
-            llb_AddProducer.TabStop = true;
-            llb_AddProducer.Text = "Thêm nhà sản xuất";
-            llb_AddProducer.LinkClicked += llb_AddProducer_LinkClicked;
-            // 
-            // mttb_Description
-            // 
-            mttb_Description.AnimateReadOnly = false;
-            mttb_Description.BackgroundImageLayout = ImageLayout.None;
-            mttb_Description.CharacterCasing = CharacterCasing.Normal;
-            mttb_Description.Depth = 0;
-            mttb_Description.HideSelection = true;
-            mttb_Description.Location = new Point(325, 168);
-            mttb_Description.MaxLength = 32767;
-            mttb_Description.MouseState = MaterialSkin.MouseState.OUT;
-            mttb_Description.Name = "mttb_Description";
-            mttb_Description.PasswordChar = '\0';
-            mttb_Description.ReadOnly = false;
-            mttb_Description.ScrollBars = ScrollBars.None;
-            mttb_Description.SelectedText = "";
-            mttb_Description.SelectionLength = 0;
-            mttb_Description.SelectionStart = 0;
-            mttb_Description.ShortcutsEnabled = true;
-            mttb_Description.Size = new Size(293, 123);
-            mttb_Description.TabIndex = 13;
-            mttb_Description.TabStop = false;
-            mttb_Description.TextAlign = HorizontalAlignment.Left;
-            mttb_Description.UseSystemPasswordChar = false;
-            // 
             // materialLabel5
             // 
             materialLabel5.AutoSize = true;
             materialLabel5.Depth = 0;
             materialLabel5.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel5.Location = new Point(325, 146);
+            materialLabel5.Location = new Point(607, 34);
             materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
             materialLabel5.Name = "materialLabel5";
             materialLabel5.Size = new Size(42, 19);
@@ -305,9 +181,9 @@
             // pictureBox
             // 
             pictureBox.ImageLocation = "";
-            pictureBox.Location = new Point(665, 34);
+            pictureBox.Location = new Point(945, 34);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(215, 183);
+            pictureBox.Size = new Size(200, 185);
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 15;
             pictureBox.TabStop = false;
@@ -315,59 +191,143 @@
             // 
             // nmr_UnitPrice
             // 
-            nmr_UnitPrice.Location = new Point(495, 52);
+            nmr_UnitPrice.Location = new Point(372, 53);
             nmr_UnitPrice.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_UnitPrice.Name = "nmr_UnitPrice";
             nmr_UnitPrice.Size = new Size(150, 27);
             nmr_UnitPrice.TabIndex = 16;
             nmr_UnitPrice.ThousandsSeparator = true;
+            nmr_UnitPrice.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(linkLabel1);
-            groupBox1.Controls.Add(nmr_TotalQuantity);
-            groupBox1.Controls.Add(btn_Save);
-            groupBox1.Controls.Add(mttb_Description);
-            groupBox1.Controls.Add(materialLabel1);
+            groupBox1.Controls.Add(cbb_Manufacturers);
+            groupBox1.Controls.Add(materialLabel4);
             groupBox1.Controls.Add(tb_ProductName);
+            groupBox1.Controls.Add(cbb_Categories);
+            groupBox1.Controls.Add(cbb_Producers);
+            groupBox1.Controls.Add(mttb_Description);
+            groupBox1.Controls.Add(label7);
+            groupBox1.Controls.Add(dtp_ExpirationDate);
+            groupBox1.Controls.Add(label6);
+            groupBox1.Controls.Add(dtp_ProductionDate);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(nmr_TotalQuantity);
+            groupBox1.Controls.Add(materialLabel1);
             groupBox1.Controls.Add(pictureBox);
             groupBox1.Controls.Add(materialLabel5);
-            groupBox1.Controls.Add(cbb_Producers);
-            groupBox1.Controls.Add(cbb_Categories);
             groupBox1.Controls.Add(materialLabel2);
             groupBox1.Controls.Add(materialLabel3);
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1173, 318);
+            groupBox1.Size = new Size(1161, 249);
             groupBox1.TabIndex = 18;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin sản phẩm";
             // 
+            // cbb_Manufacturers
+            // 
+            cbb_Manufacturers.FormattingEnabled = true;
+            cbb_Manufacturers.Location = new Point(228, 133);
+            cbb_Manufacturers.Name = "cbb_Manufacturers";
+            cbb_Manufacturers.Size = new Size(183, 28);
+            cbb_Manufacturers.TabIndex = 46;
+            // 
+            // materialLabel4
+            // 
+            materialLabel4.AutoSize = true;
+            materialLabel4.Depth = 0;
+            materialLabel4.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel4.Location = new Point(228, 111);
+            materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel4.Name = "materialLabel4";
+            materialLabel4.Size = new Size(104, 19);
+            materialLabel4.TabIndex = 45;
+            materialLabel4.Text = "Hãng sản xuất";
+            // 
+            // tb_ProductName
+            // 
+            tb_ProductName.BorderStyle = BorderStyle.None;
+            tb_ProductName.Location = new Point(19, 71);
+            tb_ProductName.Name = "tb_ProductName";
+            tb_ProductName.Size = new Size(183, 20);
+            tb_ProductName.TabIndex = 44;
+            // 
+            // cbb_Categories
+            // 
+            cbb_Categories.FormattingEnabled = true;
+            cbb_Categories.Location = new Point(19, 133);
+            cbb_Categories.Name = "cbb_Categories";
+            cbb_Categories.Size = new Size(183, 28);
+            cbb_Categories.TabIndex = 43;
+            // 
+            // cbb_Producers
+            // 
+            cbb_Producers.FormattingEnabled = true;
+            cbb_Producers.Location = new Point(228, 63);
+            cbb_Producers.Name = "cbb_Producers";
+            cbb_Producers.Size = new Size(183, 28);
+            cbb_Producers.TabIndex = 42;
+            // 
+            // mttb_Description
+            // 
+            mttb_Description.BorderStyle = BorderStyle.None;
+            mttb_Description.Location = new Point(607, 59);
+            mttb_Description.Name = "mttb_Description";
+            mttb_Description.Size = new Size(293, 97);
+            mttb_Description.TabIndex = 41;
+            mttb_Description.Text = "";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(441, 104);
+            label7.Name = "label7";
+            label7.Size = new Size(97, 20);
+            label7.TabIndex = 40;
+            label7.Text = "Ngày hết hạn";
+            // 
+            // dtp_ExpirationDate
+            // 
+            dtp_ExpirationDate.CustomFormat = "dd/MM/yyyy";
+            dtp_ExpirationDate.Format = DateTimePickerFormat.Custom;
+            dtp_ExpirationDate.Location = new Point(441, 129);
+            dtp_ExpirationDate.Name = "dtp_ExpirationDate";
+            dtp_ExpirationDate.Size = new Size(147, 27);
+            dtp_ExpirationDate.TabIndex = 39;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(438, 34);
+            label6.Name = "label6";
+            label6.Size = new Size(102, 20);
+            label6.TabIndex = 38;
+            label6.Text = "Ngày sản xuất";
+            // 
+            // dtp_ProductionDate
+            // 
+            dtp_ProductionDate.CustomFormat = "dd/MM/yyyy";
+            dtp_ProductionDate.Format = DateTimePickerFormat.Custom;
+            dtp_ProductionDate.Location = new Point(438, 59);
+            dtp_ProductionDate.Name = "dtp_ProductionDate";
+            dtp_ProductionDate.Size = new Size(147, 27);
+            dtp_ProductionDate.TabIndex = 37;
+            // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(19, 241);
+            label5.Location = new Point(750, 169);
             label5.Name = "label5";
             label5.Size = new Size(105, 20);
             label5.TabIndex = 36;
             label5.Text = "Tổng số lượng";
             // 
-            // linkLabel1
-            // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(973, 271);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(175, 20);
-            linkLabel1.TabIndex = 23;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "Bổ xung thêm đơn vị tính";
-            // 
             // nmr_TotalQuantity
             // 
             nmr_TotalQuantity.Enabled = false;
-            nmr_TotalQuantity.Location = new Point(19, 264);
+            nmr_TotalQuantity.Location = new Point(750, 192);
             nmr_TotalQuantity.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_TotalQuantity.Name = "nmr_TotalQuantity";
             nmr_TotalQuantity.Size = new Size(150, 27);
@@ -377,47 +337,33 @@
             // nmr_Quantity
             // 
             nmr_Quantity.Enabled = false;
-            nmr_Quantity.Location = new Point(711, 52);
+            nmr_Quantity.Location = new Point(546, 53);
             nmr_Quantity.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
             nmr_Quantity.TabIndex = 21;
             nmr_Quantity.ThousandsSeparator = true;
+            nmr_Quantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // nmr_Conversion
             // 
-            nmr_Conversion.Location = new Point(254, 53);
+            nmr_Conversion.Location = new Point(200, 53);
             nmr_Conversion.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_Conversion.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Conversion.Name = "nmr_Conversion";
             nmr_Conversion.Size = new Size(150, 27);
             nmr_Conversion.TabIndex = 19;
             nmr_Conversion.ThousandsSeparator = true;
-            // 
-            // btn_AddUnit
-            // 
-            btn_AddUnit.AutoSize = false;
-            btn_AddUnit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_AddUnit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_AddUnit.Depth = 0;
-            btn_AddUnit.HighEmphasis = true;
-            btn_AddUnit.Icon = null;
-            btn_AddUnit.Location = new Point(938, 21);
-            btn_AddUnit.Margin = new Padding(4, 6, 4, 6);
-            btn_AddUnit.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_AddUnit.Name = "btn_AddUnit";
-            btn_AddUnit.NoAccentTextColor = Color.Empty;
-            btn_AddUnit.Size = new Size(107, 37);
-            btn_AddUnit.TabIndex = 18;
-            btn_AddUnit.Text = "Thêm";
-            btn_AddUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_AddUnit.UseAccentColor = false;
-            btn_AddUnit.UseVisualStyleBackColor = true;
-            btn_AddUnit.Click += btn_AddUnit_Click;
+            toolTip1.SetToolTip(nmr_Conversion, "Tỷ lệ chuyển đổi giữa đơn vị này với các đơn vị cơ bản");
+            nmr_Conversion.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // panel1
             // 
-            panel1.Controls.Add(btn_DeleteUnit);
+            panel1.Controls.Add(btn_Cancel);
+            panel1.Controls.Add(btn_AddUnit);
             panel1.Controls.Add(btn_EditUnit);
+            panel1.Controls.Add(btn_DeleteUnit);
             panel1.Controls.Add(cbb_Units);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label2);
@@ -425,55 +371,55 @@
             panel1.Controls.Add(label3);
             panel1.Controls.Add(nmr_Quantity);
             panel1.Controls.Add(label1);
-            panel1.Controls.Add(btn_AddUnit);
             panel1.Controls.Add(nmr_Conversion);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1159, 171);
+            panel1.Size = new Size(1147, 128);
             panel1.TabIndex = 20;
             // 
-            // btn_DeleteUnit
+            // btn_Cancel
             // 
-            btn_DeleteUnit.AutoSize = false;
-            btn_DeleteUnit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_DeleteUnit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_DeleteUnit.Depth = 0;
-            btn_DeleteUnit.HighEmphasis = true;
-            btn_DeleteUnit.Icon = null;
-            btn_DeleteUnit.Location = new Point(938, 119);
-            btn_DeleteUnit.Margin = new Padding(4, 6, 4, 6);
-            btn_DeleteUnit.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_DeleteUnit.Name = "btn_DeleteUnit";
-            btn_DeleteUnit.NoAccentTextColor = Color.Empty;
-            btn_DeleteUnit.Size = new Size(107, 37);
-            btn_DeleteUnit.TabIndex = 34;
-            btn_DeleteUnit.Text = "Xóa";
-            btn_DeleteUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_DeleteUnit.UseAccentColor = false;
-            btn_DeleteUnit.UseVisualStyleBackColor = true;
-            btn_DeleteUnit.Click += btn_DeleteUnit_Click;
+            btn_Cancel.Location = new Point(919, 75);
+            btn_Cancel.Name = "btn_Cancel";
+            btn_Cancel.Size = new Size(94, 29);
+            btn_Cancel.TabIndex = 39;
+            btn_Cancel.Text = "Hủy";
+            btn_Cancel.UseVisualStyleBackColor = true;
+            btn_Cancel.Click += btn_Cancel_Click;
+            // 
+            // btn_AddUnit
+            // 
+            btn_AddUnit.BackColor = SystemColors.ActiveCaption;
+            btn_AddUnit.Location = new Point(919, 30);
+            btn_AddUnit.Name = "btn_AddUnit";
+            btn_AddUnit.Size = new Size(94, 29);
+            btn_AddUnit.TabIndex = 38;
+            btn_AddUnit.Text = "Thêm";
+            btn_AddUnit.UseVisualStyleBackColor = false;
+            btn_AddUnit.Click += btn_AddUnit_Click;
             // 
             // btn_EditUnit
             // 
-            btn_EditUnit.AutoSize = false;
-            btn_EditUnit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_EditUnit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_EditUnit.Depth = 0;
-            btn_EditUnit.HighEmphasis = true;
-            btn_EditUnit.Icon = null;
-            btn_EditUnit.Location = new Point(938, 70);
-            btn_EditUnit.Margin = new Padding(4, 6, 4, 6);
-            btn_EditUnit.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_EditUnit.Location = new Point(1019, 30);
             btn_EditUnit.Name = "btn_EditUnit";
-            btn_EditUnit.NoAccentTextColor = Color.Empty;
-            btn_EditUnit.Size = new Size(107, 37);
-            btn_EditUnit.TabIndex = 33;
+            btn_EditUnit.Size = new Size(94, 29);
+            btn_EditUnit.TabIndex = 37;
             btn_EditUnit.Text = "Sửa";
-            btn_EditUnit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_EditUnit.UseAccentColor = false;
             btn_EditUnit.UseVisualStyleBackColor = true;
             btn_EditUnit.Click += btn_EditUnit_Click;
+            // 
+            // btn_DeleteUnit
+            // 
+            btn_DeleteUnit.BackColor = Color.Red;
+            btn_DeleteUnit.ForeColor = Color.Transparent;
+            btn_DeleteUnit.Location = new Point(1019, 75);
+            btn_DeleteUnit.Name = "btn_DeleteUnit";
+            btn_DeleteUnit.Size = new Size(94, 29);
+            btn_DeleteUnit.TabIndex = 36;
+            btn_DeleteUnit.Text = " Xóa";
+            btn_DeleteUnit.UseVisualStyleBackColor = false;
+            btn_DeleteUnit.Click += btn_DeleteUnit_Click;
             // 
             // cbb_Units
             // 
@@ -486,7 +432,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(495, 29);
+            label4.Location = new Point(372, 30);
             label4.Name = "label4";
             label4.Size = new Size(60, 20);
             label4.TabIndex = 29;
@@ -495,7 +441,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(711, 29);
+            label2.Location = new Point(546, 30);
             label2.Name = "label2";
             label2.Size = new Size(69, 20);
             label2.TabIndex = 28;
@@ -513,7 +459,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(254, 30);
+            label1.Location = new Point(200, 30);
             label1.Name = "label1";
             label1.Size = new Size(116, 20);
             label1.TabIndex = 24;
@@ -521,13 +467,11 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(llb_AddUnit);
-            panel2.Controls.Add(llb_AddCategory);
-            panel2.Controls.Add(llb_AddProducer);
+            panel2.Controls.Add(btn_Save);
             panel2.Dock = DockStyle.Bottom;
             panel2.Location = new Point(0, 790);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1173, 50);
+            panel2.Size = new Size(1161, 50);
             panel2.TabIndex = 21;
             // 
             // tabControl1
@@ -536,10 +480,10 @@
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 318);
+            tabControl1.Location = new Point(0, 249);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1173, 472);
+            tabControl1.Size = new Size(1161, 541);
             tabControl1.TabIndex = 1;
             tabControl1.TabIndexChanged += tabControl1_TabIndexChanged;
             // 
@@ -550,7 +494,7 @@
             tabPage1.Location = new Point(4, 29);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1165, 439);
+            tabPage1.Size = new Size(1153, 508);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Danh sách đơn vị tính";
             tabPage1.UseVisualStyleBackColor = true;
@@ -561,14 +505,14 @@
             dgv_ProductUnitList.AllowUserToDeleteRows = false;
             dgv_ProductUnitList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProductUnitList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProductUnitList.Columns.AddRange(new DataGridViewColumn[] { ID, UnitName, ConversionRate, UnitPrice, Quantity });
+            dgv_ProductUnitList.Columns.AddRange(new DataGridViewColumn[] { ID, UnitName, ConversionRate, UnitPrice, Quantity, IsChecked });
             dgv_ProductUnitList.Dock = DockStyle.Fill;
-            dgv_ProductUnitList.Location = new Point(3, 174);
+            dgv_ProductUnitList.Location = new Point(3, 131);
             dgv_ProductUnitList.Name = "dgv_ProductUnitList";
             dgv_ProductUnitList.ReadOnly = true;
             dgv_ProductUnitList.RowHeadersWidth = 51;
             dgv_ProductUnitList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductUnitList.Size = new Size(1159, 262);
+            dgv_ProductUnitList.Size = new Size(1147, 374);
             dgv_ProductUnitList.TabIndex = 0;
             dgv_ProductUnitList.CellContentClick += dgv_ProductUnitList_CellContentClick;
             // 
@@ -615,13 +559,23 @@
             Quantity.Name = "Quantity";
             Quantity.ReadOnly = true;
             // 
+            // IsChecked
+            // 
+            IsChecked.DataPropertyName = "IsChecked";
+            IsChecked.HeaderText = "ĐVT cơ bản";
+            IsChecked.MinimumWidth = 6;
+            IsChecked.Name = "IsChecked";
+            IsChecked.ReadOnly = true;
+            IsChecked.Resizable = DataGridViewTriState.True;
+            IsChecked.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
             // tabPage2
             // 
             tabPage2.Controls.Add(dgv_ReceiptList);
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1165, 439);
+            tabPage2.Size = new Size(1153, 508);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Danh sách nhập hàng";
             tabPage2.UseVisualStyleBackColor = true;
@@ -639,7 +593,7 @@
             dgv_ReceiptList.ReadOnly = true;
             dgv_ReceiptList.RowHeadersWidth = 51;
             dgv_ReceiptList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ReceiptList.Size = new Size(1159, 433);
+            dgv_ReceiptList.Size = new Size(1147, 502);
             dgv_ReceiptList.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -715,7 +669,7 @@
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(1165, 439);
+            tabPage3.Size = new Size(1153, 508);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Danh sách xuất hàng";
             tabPage3.UseVisualStyleBackColor = true;
@@ -733,7 +687,7 @@
             dgv_ReleaseList.ReadOnly = true;
             dgv_ReleaseList.RowHeadersWidth = 51;
             dgv_ReleaseList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ReleaseList.Size = new Size(1159, 433);
+            dgv_ReleaseList.Size = new Size(1147, 502);
             dgv_ReleaseList.TabIndex = 2;
             // 
             // dataGridViewTextBoxColumn6
@@ -788,7 +742,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1173, 840);
+            AutoSize = true;
+            ClientSize = new Size(1161, 840);
             Controls.Add(tabControl1);
             Controls.Add(panel2);
             Controls.Add(groupBox1);
@@ -805,7 +760,6 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgv_ProductUnitList).EndInit();
@@ -819,45 +773,28 @@
         #endregion
 
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialTextBox2 tb_ProductName;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
-        private MaterialSkin.Controls.MaterialComboBox cbb_Categories;
-        private MaterialSkin.Controls.MaterialComboBox cbb_Producers;
         private MaterialSkin.Controls.MaterialButton btn_Save;
-        private LinkLabel llb_AddUnit;
-        private LinkLabel llb_AddCategory;
-        private LinkLabel llb_AddProducer;
-        private MaterialSkin.Controls.MaterialMultiLineTextBox2 mttb_Description;
         private MaterialSkin.Controls.MaterialLabel materialLabel5;
         private PictureBox pictureBox;
         private NumericUpDown nmr_UnitPrice;
         private GroupBox groupBox1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private MaterialSkin.Controls.MaterialButton btn_AddUnit;
         private Panel panel1;
         private Panel panel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel7;
         private NumericUpDown nmr_Quantity;
         private NumericUpDown nmr_Conversion;
-        private LinkLabel linkLabel1;
         private DataGridViewTextBoxColumn ConvertionRate;
         private TabControl tabControl1;
         private TabPage tabPage1;
         private DataGridView dgv_ProductUnitList;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn UnitName;
-        private DataGridViewTextBoxColumn ConversionRate;
-        private DataGridViewTextBoxColumn UnitPrice;
-        private DataGridViewTextBoxColumn Quantity;
         private TabPage tabPage2;
         private Label label4;
         private Label label2;
         private Label label3;
         private Label label1;
         private ComboBox cbb_Units;
-        private MaterialSkin.Controls.MaterialButton btn_DeleteUnit;
-        private MaterialSkin.Controls.MaterialButton btn_EditUnit;
         private TabPage tabPage3;
         private DataGridView dgv_ReceiptList;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -877,5 +814,26 @@
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
         private Label label5;
         private NumericUpDown nmr_TotalQuantity;
+        private Label label7;
+        private DateTimePicker dtp_ExpirationDate;
+        private Label label6;
+        private DateTimePicker dtp_ProductionDate;
+        private ComboBox cbb_Categories;
+        private ComboBox cbb_Producers;
+        private RichTextBox mttb_Description;
+        private ComboBox cbb_Manufacturers;
+        private MaterialSkin.Controls.MaterialLabel materialLabel4;
+        private TextBox tb_ProductName;
+        private Button btn_DeleteUnit;
+        private Button btn_Cancel;
+        private Button btn_AddUnit;
+        private Button btn_EditUnit;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn UnitName;
+        private DataGridViewTextBoxColumn ConversionRate;
+        private DataGridViewTextBoxColumn UnitPrice;
+        private DataGridViewTextBoxColumn Quantity;
+        private DataGridViewCheckBoxColumn IsChecked;
+        private ToolTip toolTip1;
     }
 }

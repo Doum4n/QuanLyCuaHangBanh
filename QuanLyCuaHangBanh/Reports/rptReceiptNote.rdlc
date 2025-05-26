@@ -61,6 +61,14 @@
           <DataField>TotalPrice</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="ProductionDate">
+          <DataField>ProductionDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExpirationDate">
+          <DataField>ExpirationDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>QLCHBDataSet</rd:DataSetName>
@@ -108,7 +116,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
             <Height>0.425in</Height>
-            <Width>6.85039in</Width>
+            <Width>10.27559in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -135,7 +143,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>0.78611in</Top>
-            <Left>5.35873in</Left>
+            <Left>8.78392in</Left>
             <Height>0.25in</Height>
             <Width>1.49167in</Width>
             <ZIndex>1</ZIndex>
@@ -156,22 +164,28 @@
                   <Width>0.62507in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.64173in</Width>
+                  <Width>2.37907in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.14173in</Width>
+                  <Width>1.10006in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.7834in</Width>
+                  <Width>0.8584in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.89173in</Width>
+                  <Width>1.17506in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.66581in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.10092in</Width>
+                  <Width>1.50361in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.98425in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.98425in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -375,6 +389,66 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox15</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Production Date</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Expiration Date</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -603,12 +677,74 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ProductionDate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ProductionDate.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ProductionDate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ExpirationDate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ExpirationDate.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ExpirationDate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -631,7 +767,7 @@
             <DataSetName>dsReceiptNoteDetails</DataSetName>
             <Top>1.15556in</Top>
             <Height>0.5in</Height>
-            <Width>6.85039in</Width>
+            <Width>10.27558in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -657,7 +793,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox17</rd:DefaultName>
             <Top>1.43933cm</Top>
-            <Left>6.44737cm</Left>
+            <Left>10.465cm</Left>
             <Height>0.6cm</Height>
             <Width>4.786cm</Width>
             <ZIndex>3</ZIndex>
@@ -672,16 +808,16 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>4.20511cm</Height>
+        <Height>4.20512cm</Height>
         <Style />
       </Body>
-      <Width>17.4cm</Width>
+      <Width>26.1cm</Width>
       <Page>
-        <PageHeight>29.7cm</PageHeight>
-        <PageWidth>21cm</PageWidth>
-        <LeftMargin>2cm</LeftMargin>
+        <PageHeight>21cm</PageHeight>
+        <PageWidth>29.7cm</PageWidth>
+        <LeftMargin>1.5cm</LeftMargin>
         <RightMargin>1.5cm</RightMargin>
-        <TopMargin>1.5cm</TopMargin>
+        <TopMargin>2cm</TopMargin>
         <BottomMargin>1.5cm</BottomMargin>
         <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style />

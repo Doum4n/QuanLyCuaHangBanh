@@ -17,7 +17,8 @@ namespace QuanLyCuaHangBanh.Models
         public int ProductUnitId { get; set; } // ID của bảng Product_Unit (tham chiếu Product_Unit)
 
         public decimal PurchasePrice { get; set; } // Giá nhập (tùy chọn)
-
+        public DateOnly ProductionDate { get; set; } // Ngày sản xuất (tùy chọn)
+        public DateOnly ExpirationDate { get; set; } // Ngày hết hạn (tùy chọn)
         public string? Note { get; set; }
 
         // Navigation properties

@@ -27,8 +27,10 @@ namespace QuanLyCuaHangBanh.Reports
         public int Quantity { get; set; }
         public decimal PurchasePrice { get; set; }
         public decimal TotalPrice { get; set; }
+        public DateOnly ProductionDate { get; set; }
+        public DateOnly ExpirationDate { get; set; }
 
-        public ReportReceiptItem(int id, int receiptNoteID, int productID, string productName, int categoryID, string categoryName, int unitID, string unitName, int quantity, decimal purchasePrice, decimal totalPrice)
+        public ReportReceiptItem(int id, int receiptNoteID, int productID, string productName, int categoryID, string categoryName, int unitID, string unitName, int quantity, decimal purchasePrice, decimal totalPrice, DateOnly productionDate, DateOnly expirationDate)
         {
             ID = id;
             ReceiptNoteID = receiptNoteID;
@@ -41,6 +43,8 @@ namespace QuanLyCuaHangBanh.Reports
             Quantity = quantity;
             PurchasePrice = purchasePrice;
             TotalPrice = totalPrice;
+            ProductionDate = productionDate;
+            ExpirationDate = expirationDate;
         }
     }
 
@@ -69,7 +73,9 @@ namespace QuanLyCuaHangBanh.Reports
                     x.Unit.Name,
                     x.Quantity,
                     x.PurchasePrice,
-                    x.Quantity * x.PurchasePrice
+                    x.Quantity * x.PurchasePrice,
+                    x.ProductionDate,
+                    x.ExpirationDate
                 ))
                 .Cast<Object>().ToList();
 
@@ -93,6 +99,8 @@ namespace QuanLyCuaHangBanh.Reports
                     row["Quantity"] = item.Quantity;
                     row["PurchasePrice"] = item.PurchasePrice;
                     row["TotalPrice"] = item.TotalPrice;
+                    row["ProductionDate"] = item.ProductionDate;
+                    row["ExpirationDate"] = item.ExpirationDate;
                 }
             );
 
@@ -123,7 +131,9 @@ namespace QuanLyCuaHangBanh.Reports
                     x.Unit.Name,
                     x.Quantity,
                     x.PurchasePrice,
-                    x.Quantity * x.PurchasePrice
+                    x.Quantity * x.PurchasePrice,
+                    x.ProductionDate,
+                    x.ExpirationDate
                 )).Cast<Object>().ToList();
 
             ReportHanler.LoadData(
@@ -146,6 +156,8 @@ namespace QuanLyCuaHangBanh.Reports
                     row["Quantity"] = item.Quantity;
                     row["PurchasePrice"] = item.PurchasePrice;
                     row["TotalPrice"] = item.TotalPrice;
+                    row["ProductionDate"] = item.ProductionDate;
+                    row["ExpirationDate"] = item.ExpirationDate;
                 }
             );
 

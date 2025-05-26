@@ -16,7 +16,7 @@ namespace QuanLyCuaHangBanh.Models
 
         public virtual Product Product { get; set; } // Navigation property to the Product
         public virtual Unit Unit { get; set; } // Navigation property to the Unit
-        public virtual Inventory Inventory { get; set; } // Navigation property to the Inventory
+        public virtual Inventory? Inventory { get; set; } // Navigation property to the Inventory
 
         public override string ToString()
         {

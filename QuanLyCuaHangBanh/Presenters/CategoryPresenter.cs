@@ -1,72 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing.Design;
+using System.Drawing.Design; // Không cần thiết nếu không dùng
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms; // Thêm để sử dụng DialogResult và MessageBox
+
 using QuanLyCuaHangBanh.Base;
-using QuanLyCuaHangBanh.Data;
+using QuanLyCuaHangBanh.Data; // Có thể không cần nếu IRepositoryProvider không cần
 using QuanLyCuaHangBanh.Models;
-using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Repositories; // Có thể không cần nếu chỉ dùng qua service
 using QuanLyCuaHangBanh.Uitls;
-using QuanLyCuaHangBanh.Views;
+using QuanLyCuaHangBanh.Views; // Có thể không cần nếu ICategoryView đủ
 using QuanLyCuaHangBanh.Views.Category;
+using QuanLyCuaHangBanh.Services; // Thêm namespace của Service
 
 namespace QuanLyCuaHangBanh.Presenters
 {
     class CategoryPresenter : PresenterBase<Category>
     {
-        public CategoryPresenter(ICategoryView view, IRepositoryProvider provider) : base(view, provider)
+        public CategoryPresenter(ICategoryView view, CategoryService categoryService)
+            : base(view, (IService)categoryService) // Truyền service vào PresenterBase
         {
-            view.ImportEvent += OnImport;
+        }
+
+        public override void LoadData()
+        {
+            BindingSource.DataSource = ((CategoryService)Service).GetAllCategories().ToList();
+            // View.SetBindingSource(BindingSource); // Dòng này đã được gán trong PresenterBase
         }
 
         public override void OnEdit(object? sender, EventArgs e)
         {
-            Category selectedCategory = (Category)View.SelectedItem;
-            CategoryInputView categoryInputView = new CategoryInputView((Category)View.SelectedItem);
-
-            if (categoryInputView.ShowDialog() == DialogResult.OK)
+            if (View.SelectedItem is Category selectedCategory)
             {
-                if (categoryInputView.Tag is (string categoryName, string description))
+                CategoryInputView categoryInputView = new CategoryInputView(selectedCategory);
+
+                if (categoryInputView.ShowDialog() == DialogResult.OK)
                 {
-                    Category category = new Category(selectedCategory.ID, categoryName, description);
-                    Provider.GetRepository<Category>().Update(category);
-                    LoadData();
+                    if (categoryInputView.Tag is (string categoryName, string description))
+                    {
+                        Category category = new Category(selectedCategory.ID, categoryName, description);
+                        ((CategoryService)Service).UpdateCategory(category);
+                        View.Message = "Cập nhật danh mục thành công!";
+                        LoadData();
+                    }
                 }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn một danh mục để chỉnh sửa.";
             }
         }
 
         public override void OnExport(object? sender, EventArgs e)
         {
-
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("ID", typeof(int));
-            dataTable.Columns.Add("Tên loại", typeof(string));
-            dataTable.Columns.Add("Mô tả", typeof(string));
-
-            foreach (var item in Provider.GetRepository<Category>().GetAll())
-            {
-                dataTable.Rows.Add(item.ID, item.Name, item.Description);
-            }
-
+            DataTable dataTable = ((CategoryService)Service).ExportCategoriesToDataTable((IEnumerable<Category>)BindingSource.List);
             ExcelHandler.ExportExcel("Loại sản phẩm", "Loại sản phẩm", dataTable);
         }
 
         public override void OnImport(object? sender, EventArgs e)
         {
-            ExcelHandler.ImportExcel((DataRow row) =>
-            {
-                // Assuming the first column is ID, second is Name, third is Description
-                //int id = Convert.ToInt32(row[0]);
-                string name = row[0].ToString();
-                string description = row[1].ToString();
-                Category category = new Category( name, description);
-                Provider.GetRepository<Category>().Add(category);
-                View.Message = "Import thành công!";
-            });
-            LoadData();
+            ExcelHandler.ImportExcel(((CategoryService)Service).ImportCategoryFromDataRow);
+            View.Message = "Import thành công!";
+            LoadData(); // Load lại dữ liệu sau khi import
         }
 
         public override void OnAddNew(object? sender, EventArgs e)
@@ -76,11 +74,9 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if (categoryInputView.Tag is (string categoryName, string description))
                 {
-                    Provider.GetRepository<Category>().Add(new Category
-                    (
-                        categoryName,
-                        description
-                    ));
+                    Category newCategory = new Category(categoryName, description);
+                    ((CategoryService)Service).AddCategory(newCategory);
+                    View.Message = "Thêm danh mục thành công!";
                     LoadData();
                 }
             }
@@ -88,26 +84,32 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnDelete(object? sender, EventArgs e)
         {
-            Provider.GetRepository<Category>().Delete((Category)View.SelectedItem);
-            LoadData();
+            if (View.SelectedItem is Category categoryToDelete)
+            {
+                var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn xóa danh mục này?", "Xác nhận xóa", MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    ((CategoryService)Service).DeleteCategory(categoryToDelete);
+                    View.Message = "Xóa danh mục thành công!";
+                    LoadData(); // Load lại dữ liệu sau khi xóa
+                }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn một danh mục để xóa.";
+            }
         }
 
         public override void OnSearch(object? sender, EventArgs e)
         {
-            // Lọc danh sách theo tên Category
-            string searchValue = View.SearchValue.ToLower();  // Chuyển đổi sang chữ thường để tìm kiếm không phân biệt chữ hoa/thường
-            BindingSource.DataSource = Provider.GetRepository<Category>().GetAll()
-                .Where(category => category.Name.ToLower().Contains(searchValue))  // Lọc theo tên Category
-                .ToList();  // Chuyển thành danh sách để BindingSource có thể áp dụng
-
-        }
-
-
-        public override void LoadData()
-        {
-            // Lấy danh sách Category từ repository và gán vào BindingSource
-            BindingSource.DataSource = Provider.GetRepository<Category>().GetAll().ToList();
-            View.SetBindingSource(BindingSource);
+            if (string.IsNullOrWhiteSpace(View.SearchValue))
+            {
+                LoadData(); // Load lại tất cả dữ liệu nếu trường tìm kiếm trống
+            }
+            else
+            {
+                BindingSource.DataSource = ((CategoryService)Service).SearchCategories(View.SearchValue);
+            }
         }
     }
 }

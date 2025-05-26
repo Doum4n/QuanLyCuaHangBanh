@@ -29,14 +29,12 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PurchaseInvoiceInputView));
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             panel3 = new Panel();
             panel2 = new Panel();
             llb_AddUnit = new LinkLabel();
             llb_AddCategory = new LinkLabel();
             llb_AddProducer = new LinkLabel();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             dgv_ProductList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             ProductName = new DataGridViewTextBoxColumn();
@@ -61,18 +59,16 @@
             CreatorName = new TextBox();
             materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
             panel4 = new Panel();
-            dgv_GoodsReceiptNote = new DataGridView();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            SupplierName = new DataGridViewTextBoxColumn();
-            CreatedDate = new DataGridViewTextBoxColumn();
-            Status = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            Select = new DataGridViewCheckBoxColumn();
-            toolStrip1 = new ToolStrip();
-            toolStripTextBox1 = new ToolStripTextBox();
-            tsbtn_Search = new ToolStripButton();
-            toolStripSeparator1 = new ToolStripSeparator();
+            nmr_TotalPaymentRequired = new NumericUpDown();
+            label11 = new Label();
+            nmr_TotalAmountOwed = new NumericUpDown();
+            nmr_TotalPaid = new NumericUpDown();
+            dtp_DueDate = new DateTimePicker();
+            materialLabel7 = new MaterialSkin.Controls.MaterialLabel();
+            dtp_PaymentDate = new DateTimePicker();
+            materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+            label10 = new Label();
+            label7 = new Label();
             label2 = new Label();
             tb_Id = new TextBox();
             textbox34 = new Label();
@@ -98,8 +94,9 @@
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             groupBox1.SuspendLayout();
             panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv_GoodsReceiptNote).BeginInit();
-            toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Price).BeginInit();
@@ -185,12 +182,12 @@
             dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, Price, Quantity, Note });
             dgv_ProductList.Dock = DockStyle.Fill;
-            dgv_ProductList.Location = new Point(0, 533);
+            dgv_ProductList.Location = new Point(0, 475);
             dgv_ProductList.Name = "dgv_ProductList";
             dgv_ProductList.ReadOnly = true;
             dgv_ProductList.RowHeadersWidth = 51;
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1226, 188);
+            dgv_ProductList.Size = new Size(1226, 246);
             dgv_ProductList.TabIndex = 0;
             // 
             // ID
@@ -423,116 +420,125 @@
             // 
             // panel4
             // 
-            panel4.Controls.Add(dgv_GoodsReceiptNote);
-            panel4.Controls.Add(toolStrip1);
+            panel4.Controls.Add(nmr_TotalPaymentRequired);
+            panel4.Controls.Add(label11);
+            panel4.Controls.Add(nmr_TotalAmountOwed);
+            panel4.Controls.Add(nmr_TotalPaid);
+            panel4.Controls.Add(dtp_DueDate);
+            panel4.Controls.Add(materialLabel7);
+            panel4.Controls.Add(dtp_PaymentDate);
+            panel4.Controls.Add(materialLabel3);
+            panel4.Controls.Add(label10);
+            panel4.Controls.Add(label7);
             panel4.Dock = DockStyle.Top;
             panel4.Location = new Point(0, 171);
             panel4.Name = "panel4";
-            panel4.Size = new Size(1226, 172);
+            panel4.Size = new Size(1226, 114);
             panel4.TabIndex = 43;
             // 
-            // dgv_GoodsReceiptNote
+            // nmr_TotalPaymentRequired
             // 
-            dgv_GoodsReceiptNote.AllowUserToAddRows = false;
-            dgv_GoodsReceiptNote.AllowUserToDeleteRows = false;
-            dgv_GoodsReceiptNote.AllowUserToOrderColumns = true;
-            dgv_GoodsReceiptNote.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgv_GoodsReceiptNote.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dgv_GoodsReceiptNote.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_GoodsReceiptNote.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, SupplierName, CreatedDate, Status, dataGridViewTextBoxColumn3, Select });
-            dgv_GoodsReceiptNote.Cursor = Cursors.Hand;
-            dgv_GoodsReceiptNote.Dock = DockStyle.Fill;
-            dgv_GoodsReceiptNote.Location = new Point(0, 27);
-            dgv_GoodsReceiptNote.MultiSelect = false;
-            dgv_GoodsReceiptNote.Name = "dgv_GoodsReceiptNote";
-            dgv_GoodsReceiptNote.RowHeadersWidth = 51;
-            dgv_GoodsReceiptNote.RowTemplate.Height = 30;
-            dgv_GoodsReceiptNote.RowTemplate.ReadOnly = true;
-            dgv_GoodsReceiptNote.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_GoodsReceiptNote.Size = new Size(1226, 145);
-            dgv_GoodsReceiptNote.TabIndex = 8;
+            nmr_TotalPaymentRequired.Enabled = false;
+            nmr_TotalPaymentRequired.Location = new Point(42, 52);
+            nmr_TotalPaymentRequired.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalPaymentRequired.Name = "nmr_TotalPaymentRequired";
+            nmr_TotalPaymentRequired.Size = new Size(150, 27);
+            nmr_TotalPaymentRequired.TabIndex = 49;
+            nmr_TotalPaymentRequired.ThousandsSeparator = true;
             // 
-            // dataGridViewTextBoxColumn1
+            // label11
             // 
-            dataGridViewTextBoxColumn1.DataPropertyName = "ID";
-            dataGridViewTextBoxColumn1.FillWeight = 14.771512F;
-            dataGridViewTextBoxColumn1.HeaderText = "ID";
-            dataGridViewTextBoxColumn1.MinimumWidth = 6;
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            label11.AutoSize = true;
+            label11.Location = new Point(887, 27);
+            label11.Name = "label11";
+            label11.Size = new Size(121, 20);
+            label11.TabIndex = 48;
+            label11.Text = "Tổng tiền còn nợ";
             // 
-            // dataGridViewTextBoxColumn2
+            // nmr_TotalAmountOwed
             // 
-            dataGridViewTextBoxColumn2.DataPropertyName = "CreatorName";
-            dataGridViewTextBoxColumn2.HeaderText = "Người lập";
-            dataGridViewTextBoxColumn2.MinimumWidth = 6;
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            nmr_TotalAmountOwed.Enabled = false;
+            nmr_TotalAmountOwed.Location = new Point(887, 50);
+            nmr_TotalAmountOwed.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalAmountOwed.Name = "nmr_TotalAmountOwed";
+            nmr_TotalAmountOwed.Size = new Size(175, 27);
+            nmr_TotalAmountOwed.TabIndex = 47;
+            nmr_TotalAmountOwed.ThousandsSeparator = true;
             // 
-            // SupplierName
+            // nmr_TotalPaid
             // 
-            SupplierName.DataPropertyName = "SupplierName";
-            SupplierName.HeaderText = "Nhà cung cấp";
-            SupplierName.MinimumWidth = 6;
-            SupplierName.Name = "SupplierName";
+            nmr_TotalPaid.Increment = new decimal(new int[] { 1000, 0, 0, 0 });
+            nmr_TotalPaid.Location = new Point(250, 52);
+            nmr_TotalPaid.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalPaid.Name = "nmr_TotalPaid";
+            nmr_TotalPaid.Size = new Size(175, 27);
+            nmr_TotalPaid.TabIndex = 26;
+            nmr_TotalPaid.ThousandsSeparator = true;
             // 
-            // CreatedDate
+            // dtp_DueDate
             // 
-            CreatedDate.DataPropertyName = "CreatedDate";
-            CreatedDate.HeaderText = "Ngày lập";
-            CreatedDate.MinimumWidth = 6;
-            CreatedDate.Name = "CreatedDate";
+            dtp_DueDate.CustomFormat = "dd/MM/yyyy";
+            dtp_DueDate.Format = DateTimePickerFormat.Custom;
+            dtp_DueDate.Location = new Point(675, 52);
+            dtp_DueDate.Name = "dtp_DueDate";
+            dtp_DueDate.Size = new Size(175, 27);
+            dtp_DueDate.TabIndex = 46;
             // 
-            // Status
+            // materialLabel7
             // 
-            Status.DataPropertyName = "Status";
-            Status.HeaderText = "Trạng thái";
-            Status.MinimumWidth = 6;
-            Status.Name = "Status";
+            materialLabel7.AutoSize = true;
+            materialLabel7.Depth = 0;
+            materialLabel7.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel7.Location = new Point(675, 29);
+            materialLabel7.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel7.Name = "materialLabel7";
+            materialLabel7.Size = new Size(101, 19);
+            materialLabel7.TabIndex = 45;
+            materialLabel7.Text = "Ngày đáo hạn";
             // 
-            // dataGridViewTextBoxColumn3
+            // dtp_PaymentDate
             // 
-            dataGridViewTextBoxColumn3.DataPropertyName = "Note";
-            dataGridViewTextBoxColumn3.HeaderText = "Ghi chú";
-            dataGridViewTextBoxColumn3.MinimumWidth = 6;
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dtp_PaymentDate.CustomFormat = "dd/MM/yyyy";
+            dtp_PaymentDate.Format = DateTimePickerFormat.Custom;
+            dtp_PaymentDate.Location = new Point(465, 52);
+            dtp_PaymentDate.Name = "dtp_PaymentDate";
+            dtp_PaymentDate.Size = new Size(175, 27);
+            dtp_PaymentDate.TabIndex = 43;
             // 
-            // Select
+            // materialLabel3
             // 
-            Select.HeaderText = "Chọn";
-            Select.MinimumWidth = 6;
-            Select.Name = "Select";
+            materialLabel3.AutoSize = true;
+            materialLabel3.Depth = 0;
+            materialLabel3.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel3.Location = new Point(465, 29);
+            materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel3.Name = "materialLabel3";
+            materialLabel3.Size = new Size(119, 19);
+            materialLabel3.TabIndex = 42;
+            materialLabel3.Text = "Ngày thanh toán";
             // 
-            // toolStrip1
+            // label10
             // 
-            toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripTextBox1, tsbtn_Search, toolStripSeparator1 });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(1226, 27);
-            toolStrip1.TabIndex = 7;
-            toolStrip1.Text = "toolStrip1";
+            label10.AutoSize = true;
+            label10.Location = new Point(244, 29);
+            label10.Name = "label10";
+            label10.Size = new Size(168, 20);
+            label10.TabIndex = 43;
+            label10.Text = "Tổng tiền đã thanh toán";
             // 
-            // toolStripTextBox1
+            // label7
             // 
-            toolStripTextBox1.Name = "toolStripTextBox1";
-            toolStripTextBox1.Size = new Size(100, 27);
-            // 
-            // tsbtn_Search
-            // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
-            tsbtn_Search.ImageTransparentColor = Color.Magenta;
-            tsbtn_Search.Name = "tsbtn_Search";
-            tsbtn_Search.Size = new Size(94, 24);
-            tsbtn_Search.Text = "Tìm kiếm";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 27);
+            label7.AutoSize = true;
+            label7.Location = new Point(36, 26);
+            label7.Name = "label7";
+            label7.Size = new Size(174, 20);
+            label7.TabIndex = 0;
+            label7.Text = "Tổng tiền cần thanh toán";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(19, 9);
+            label2.Location = new Point(42, 9);
             label2.Name = "label2";
             label2.Size = new Size(30, 20);
             label2.TabIndex = 0;
@@ -541,7 +547,7 @@
             // tb_Id
             // 
             tb_Id.Enabled = false;
-            tb_Id.Location = new Point(19, 32);
+            tb_Id.Location = new Point(42, 32);
             tb_Id.Name = "tb_Id";
             tb_Id.Size = new Size(125, 27);
             tb_Id.TabIndex = 1;
@@ -718,6 +724,7 @@
             // 
             // nmr_Price
             // 
+            nmr_Price.Increment = new decimal(new int[] { 1000, 0, 0, 0 });
             nmr_Price.Location = new Point(465, 143);
             nmr_Price.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nmr_Price.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -757,7 +764,7 @@
             panel1.Controls.Add(tb_Id);
             panel1.Controls.Add(label2);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 343);
+            panel1.Location = new Point(0, 285);
             panel1.Name = "panel1";
             panel1.Size = new Size(1226, 190);
             panel1.TabIndex = 42;
@@ -784,9 +791,9 @@
             groupBox1.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv_GoodsReceiptNote).EndInit();
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Price).EndInit();
@@ -802,7 +809,6 @@
         private LinkLabel llb_AddUnit;
         private LinkLabel llb_AddCategory;
         private LinkLabel llb_AddProducer;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private DataGridView dgv_ProductList;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn ProductName;
@@ -844,20 +850,18 @@
         private NumericUpDown nmr_Price;
         private Label label3;
         private Panel panel1;
-        private DataGridView dgv_GoodsReceiptNote;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn SupplierName;
-        private DataGridViewTextBoxColumn CreatedDate;
-        private DataGridViewTextBoxColumn Status;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewCheckBoxColumn Select;
-        private ToolStrip toolStrip1;
-        private ToolStripTextBox toolStripTextBox1;
-        private ToolStripButton tsbtn_Search;
-        private ToolStripSeparator toolStripSeparator1;
         private ComboBox cbb_Suppliers;
         private MaterialSkin.Controls.MaterialLabel materialLabel6;
         private MaterialSkin.Controls.MaterialButton btn_SelectReceiptNote;
+        private Label label10;
+        private Label label7;
+        private DateTimePicker dtp_DueDate;
+        private MaterialSkin.Controls.MaterialLabel materialLabel7;
+        private DateTimePicker dtp_PaymentDate;
+        private MaterialSkin.Controls.MaterialLabel materialLabel3;
+        private Label label11;
+        private NumericUpDown nmr_TotalAmountOwed;
+        private NumericUpDown nmr_TotalPaid;
+        private NumericUpDown nmr_TotalPaymentRequired;
     }
 }

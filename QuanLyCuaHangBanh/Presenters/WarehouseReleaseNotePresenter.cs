@@ -1,4 +1,5 @@
-﻿using QuanLyCuaHangBanh.Base;
+﻿// QuanLyCuaHangBanh.Presenters/WarehouseReleaseNotePresenter.cs
+using QuanLyCuaHangBanh.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,141 +16,62 @@ using System.Data;
 using QuanLyCuaHangBanh.Data;
 using Microsoft.EntityFrameworkCore;
 using QuanLyCuaHangBanh.Uitls;
+using QuanLyCuaHangBanh.Services; // Add this namespace
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    public class WarehouseReleaseNotePresenter(IWareHouseReleaseNoteView view, IRepositoryProvider provider) : PresenterBase<IWareHouseReleaseNoteView>(view, provider)
+    public class WarehouseReleaseNotePresenter : PresenterBase<WarehouseReleaseNote> // Change generic type to Model
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
-        private ProductReleaseDTO productReleaseDTO;
+        // Declare the service as a readonly field
+
+        // The QLCHB_DBContext context field is removed as it's now injected into the service.
+        // private QLCHB_DBContext context = new QLCHB_DBContext(); // REMOVED
+
+        private ProductReleaseDTO productReleaseDTO; // Retaining this as it was in original code
+
+        // Update the constructor to accept the new service via DI
+        public WarehouseReleaseNotePresenter(IWareHouseReleaseNoteView view, WarehouseReleaseNoteService service)
+            : base(view, service) // Pass view and provider to the base class
+        {
+            // Initialize BindingSource here to prevent NullReferenceException
+            BindingSource = new BindingSource();
+        }
+
         public override void LoadData()
         {
-            BindingSource.DataSource = Provider.GetRepository<WarehouseReleaseNote>().GetAllAsDto<WarehouseReleaseNoteDTO>(
-                o => new WarehouseReleaseNoteDTO(
-                    o.ID,
-                    //o.CreatedById,
-                    //o.CreatedBy.Name,
-                    o.CreatedDate,
-                    o.Status,
-                    o.Note
-                )
-            );
+            // Use the service to get data
+            BindingSource.DataSource = ((WarehouseReleaseNoteService)Service).GetAllReleaseNotesAsDto();
+            View.SetBindingSource(BindingSource);
         }
 
         public override void OnExport(object? sender, EventArgs e)
         {
-            DataTable releaseNoteDt = new DataTable();
+            // Get data from service
+            (DataTable releaseNoteDt, DataTable releaseNoteDetailDt) = ((WarehouseReleaseNoteService)Service).GetReleaseNoteDataTablesForExport((IList<object>)BindingSource.List);
 
-            releaseNoteDt.Columns.Add("Mã phiếu xuất", typeof(int));
-            releaseNoteDt.Columns.Add("Nhân viên lập", typeof(string));
-            releaseNoteDt.Columns.Add("Ngày lập", typeof(string));
-            releaseNoteDt.Columns.Add("Trạng thái", typeof(string));
-            releaseNoteDt.Columns.Add("Ghi chú", typeof(string));
-
-            DataTable releaseNoteDetailDt = new DataTable();
-            releaseNoteDetailDt.Columns.Add("Mã phiếu xuất", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Mã sản phẩm", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Tên sản phẩm", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Mã nhà cung cấp", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Tên nhà cung cấp", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Mã ĐVT", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Tên ĐVT", typeof(string));
-            releaseNoteDetailDt.Columns.Add("Số lượng", typeof(string));
-
-            foreach (var item in BindingSource.List)
-            {
-                if( item is WarehouseReleaseNoteDTO dTO)
-                {
-                    var releaseNotes = context.WarehouseReleaseNotes
-                        .Include(o => o.CreatedBy)
-                        .Where(o => o.ID == dTO.ID)
-                        .ToList();
-
-                    foreach (var note in releaseNotes)
-                    {
-                        releaseNoteDt.Rows.Add(
-                            note.ID,
-                            note.CreatedBy?.Name ?? "",
-                            note.CreatedDate.ToString(),
-                            note.Status,
-                            note.Note
-                        );
-                    }
-
-                    var releaseNoteDetails = context.WarehouseReleaseNoteDetails
-                        .Include(o => o.Product_Unit)
-                        .ThenInclude(o => o.Product)
-                        .ThenInclude(o => o.Category)
-                        .Include(o => o.Product_Unit)
-                        .ThenInclude(o => o.Unit)
-                        .Where(o => o.WarehouseReleaseNoteId == dTO.ID)
-                        .ToList();
-
-                    foreach( var detail in releaseNoteDetails)
-                    {
-                        releaseNoteDetailDt.Rows.Add(
-                            detail.WarehouseReleaseNoteId,
-                            detail.Product_Unit.Product.ID,
-                            detail.Product_Unit.Product.Name,
-                            detail.Product_Unit.Product.CategoryID,
-                            detail.Product_Unit.Product.Category.Name,
-                            detail.Product_Unit.UnitID,
-                            detail.Product_Unit.Unit.Name,
-                            detail.Quantity
-                        );
-                    }
-                }
-            }
-
-
+            // Use ExcelHandler (assuming it's a static utility or injected)
             ExcelHandler.ExportExcel("Phiếu xuất", "Phiếu xuất", "Chi tiết phiếu xuất", releaseNoteDt, releaseNoteDetailDt);
-;        }
+        }
 
         public override void OnImport(object? sender, EventArgs e)
         {
+            // Pass service methods as callbacks to ExcelHandler
             ExcelHandler.ImportExcel(
-            ImportReleaseNote,
-            ImportReleaseNoteDetail
+                ((WarehouseReleaseNoteService)Service).ImportReleaseNote,
+                ((WarehouseReleaseNoteService)Service).ImportReleaseNoteDetail
             );
         }
 
+        // ImportReleaseNote and ImportReleaseNoteDetail methods are now in the service.
+        // private void ImportReleaseNote(DataRow row) { ... } // REMOVED
+        // private void ImportReleaseNoteDetail(DataRow row) { ... } // REMOVED
 
-        private void ImportReleaseNote(DataRow row)
-        {
-            WarehouseReleaseNote warehouseReleaseNote = new WarehouseReleaseNote()
-            {
-                ID = int.Parse(row["Mã phiếu xuất"].ToString()),
-                CreatedDate = DateOnly.Parse(row["Ngày lập"].ToString()),
-                CreatedByID = int.Parse(row["Nhân viên lập"].ToString()),
-                Note = row["Ghi chú"].ToString(),
-                Status = row["Trạng thái"].ToString()
-            };
-
-            Provider.GetRepository<WarehouseReleaseNote>().Add(warehouseReleaseNote);
-        }
-
-        private void ImportReleaseNoteDetail(DataRow row)
-        {
-            var productId = int.Parse(row["Mã sản phẩm"].ToString());
-            var unitId = int.Parse(row["Mã ĐVT"].ToString());
-
-            var productUnitId = ((ProductUnitRepo) Provider.GetRepository<Product_Unit>()).GetProductUnitId(productId, unitId);
-
-            WarehouseReleaseNote_Detail warehouseReleaseNote_Detail = new WarehouseReleaseNote_Detail()
-            {
-                Product_UnitID = productUnitId,
-                Quantity = int.Parse(row["Số lượng"].ToString()),
-                Note = "",
-                WarehouseReleaseNoteId = int.Parse(row["Mã phiếu xuất"].ToString())
-            };
-
-            Provider.GetRepository<WarehouseReleaseNote_Detail>().Add(warehouseReleaseNote_Detail);
-        }
 
         public override void OnAddNew(object? sender, EventArgs e)
         {
             ReleaseNoteInputView inputView = new ReleaseNoteInputView();
 
+            // Keep event subscriptions as they are for UI interaction
             inputView.AddProductEvent += (productReleaseDTO) =>
             {
                 inputView.AddProduct(productReleaseDTO);
@@ -162,17 +84,11 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if (inputView.Tag is WarehouseReleaseNote warehouseReleaseNote)
                 {
-                    Provider.GetRepository<WarehouseReleaseNote>().Add(warehouseReleaseNote);
+                    // Use the service to add the new release note and its details
+                    ((WarehouseReleaseNoteService)Service).AddNewReleaseNote(warehouseReleaseNote, inputView.Products);
 
-                    foreach (var item in inputView.Products)
-                    {
-                        item.WarehouseReleaseNoteId = warehouseReleaseNote.ID;
-                        item.ProductUnitId = item.ProductUnitId;
-                        Provider.GetRepository<WarehouseReleaseNote_Detail>().Add(item.ToWarehouseReleaseNoteDetail());
-
-                        View.Message = "Thêm phiếu xuất thành công!";
-                        LoadData();
-                    }
+                    View.Message = "Thêm phiếu xuất thành công!";
+                    LoadData(); // Reload data after add
                 }
             }
         }
@@ -184,12 +100,13 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if (selectOrderForm.Tag is int orderId)
                 {
-                    var order = ((OrderDetailRepo)Provider.GetRepository<Order_Detail>()).GetOrderDetail(orderId);
+                    // Use the service to get order details
+                    var order = ((WarehouseReleaseNoteService)Service).GetOrderDetails(orderId);
                     if (order != null)
                     {
                         foreach (var item in order)
                         {
-                            foreach (var unit in item.Product_Unit.Product.ProductUnits)
+                            foreach (var unit in item.Product_Unit.Product.ProductUnits) // This might need careful review if ProductUnits is always loaded
                             {
                                 var product = new ProductReleaseDTO(
                                     item.Product_Unit.Product.ID,
@@ -220,29 +137,30 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if (selectGoodsReciveNoteForm.Tag is int goodsReceiptNoteId)
                 {
-                    var goodsReceiptNote = ((GoodsReceiptNoteDetailRepo)Provider.GetRepository<GoodsReceiptNote_Detail>()).GetReceiptNote_Details(goodsReceiptNoteId);
+                    // Use the service to get goods receipt note details
+                    var goodsReceiptNote = ((WarehouseReleaseNoteService)Service).GetGoodsReceiptNoteDetails(goodsReceiptNoteId);
                     if (goodsReceiptNote != null)
                     {
                         foreach (var item in goodsReceiptNote)
                         {
-                            //foreach (var unit in item.ProductUnit)
-                            {
-                                var product = new ProductReleaseDTO(
-                                    item.Product.ID,
-                                    item.Product.Name,
-                                    item.Product.CategoryID,
-                                    item.Product.Category.Name,
-                                    item.Unit.Name,
-                                    item.ProductUnitId,
-                                    item.ProductUnit.ConversionRate,
-                                    item.Quantity,
-                                    item.Note
-                                );
+                            // Original code had commented out foreach (var unit in item.ProductUnit),
+                            // retaining the direct access logic to item.Product.ID, etc.
+                            // Ensure 'item.Product' and 'item.Unit' are loaded (e.g., via Include in service)
+                            var product = new ProductReleaseDTO(
+                                item.Product.ID,
+                                item.Product.Name,
+                                item.Product.CategoryID,
+                                item.Product.Category.Name,
+                                item.Unit.Name, // Direct access to item.Unit.Name, assuming it's loaded
+                                item.ProductUnitId,
+                                item.ProductUnit.ConversionRate,
+                                item.Quantity,
+                                item.Note
+                            );
 
-                                MessageBox.Show(product.ProductUnitId.ToString());
+                            MessageBox.Show(product.ProductUnitId.ToString());
 
-                                inputView.RaiseAddProductEvent(product);
-                            }
+                            inputView.RaiseAddProductEvent(product);
                         }
                     }
                     MessageBox.Show(goodsReceiptNoteId.ToString());
@@ -256,17 +174,10 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             if (View.SelectedItem is WarehouseReleaseNoteDTO selectedItem)
             {
-                var warehouseReleaseNote = Provider.GetRepository<WarehouseReleaseNote>().GetByValue(selectedItem.ID);
-                if (warehouseReleaseNote != null)
-                {
-                    Provider.GetRepository<WarehouseReleaseNote>().Delete(warehouseReleaseNote);
-                    View.Message = "Xóa phiếu xuất thành công!";
-                    LoadData();
-                }
-                else
-                {
-                    View.Message = "Phiếu xuất không tồn tại!";
-                }
+                // Use the service to delete the release note
+                ((WarehouseReleaseNoteService)Service).DeleteReleaseNote(selectedItem.ID);
+                View.Message = "Xóa phiếu xuất thành công!";
+                LoadData(); // Reload data after delete
             }
             else
             {
@@ -276,7 +187,14 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnEdit(object? sender, EventArgs e)
         {
-            ReleaseNoteInputView inputView = new ReleaseNoteInputView((WarehouseReleaseNoteDTO)View.SelectedItem);
+            // Ensure View.SelectedItem is handled safely if it could be null or wrong type
+            if (View.SelectedItem is not WarehouseReleaseNoteDTO selectedReleaseNoteDto)
+            {
+                View.Message = "Vui lòng chọn phiếu xuất để chỉnh sửa!";
+                return;
+            }
+
+            ReleaseNoteInputView inputView = new ReleaseNoteInputView(selectedReleaseNoteDto);
 
             inputView.AddProductEvent += (productReleaseDTO) =>
             {
@@ -284,38 +202,17 @@ namespace QuanLyCuaHangBanh.Presenters
             };
 
             inputView.ShowSelectGoodsReciveNoteForm += (s, e) => ShowSelectGoodsReciveNoteForm(inputView);
+            inputView.ShowSelectOrderForm += (s, e) => ShowSelectOrderForm(inputView); // Added missing event subscription
 
             if (inputView.ShowDialog() == DialogResult.OK)
             {
                 if (inputView.Tag is WarehouseReleaseNote warehouseReleaseNote)
                 {
-                    Provider.GetRepository<WarehouseReleaseNote>().Update(warehouseReleaseNote);
+                    // Use the service to update the release note and its details
+                    ((WarehouseReleaseNoteService)Service).UpdateReleaseNote(warehouseReleaseNote, inputView.Products);
 
-                    foreach (var item in inputView.Products)
-                    {
-                        switch (item.Status)
-                        {
-                            case DTO.Base.Status.New:
-                                item.WarehouseReleaseNoteId = warehouseReleaseNote.ID;
-                                item.ProductUnitId = item.ProductUnitId;
-                                Provider.GetRepository<WarehouseReleaseNote_Detail>().Add(item.ToWarehouseReleaseNoteDetail());
-                                break;
-                            case DTO.Base.Status.Modified:
-                                item.WarehouseReleaseNoteId = warehouseReleaseNote.ID;
-                                item.ProductUnitId = item.ProductUnitId;
-                                item.ID = item.ID; // Ensure ID is set for update
-                                Provider.GetRepository<WarehouseReleaseNote_Detail>().Update(item.ToWarehouseReleaseNoteDetail());
-                                break;
-                            case DTO.Base.Status.Deleted:
-                                ((WarehouseReleaseNoteDetailRepo)Provider.GetRepository<WarehouseReleaseNote_Detail>()).DeleteByID(item.ID);
-                                break;
-                            case DTO.Base.Status.None:
-                                break;
-                        }
-
-                        View.Message = "Cập nhật phiếu xuất thành công!";
-                        LoadData();
-                    }
+                    View.Message = "Cập nhật phiếu xuất thành công!";
+                    LoadData(); // Reload data after update
                 }
             }
         }

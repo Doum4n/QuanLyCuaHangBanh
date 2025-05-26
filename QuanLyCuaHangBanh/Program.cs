@@ -6,6 +6,7 @@ using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Models.Base;
 using QuanLyCuaHangBanh.Presenters;
 using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Services;
 using QuanLyCuaHangBanh.Views;
 using QuanLyCuaHangBanh.Views.Category;
 using QuanLyCuaHangBanh.Views.Customer;
@@ -80,7 +81,7 @@ namespace QuanLyCuaHangBanh
             services.AddScoped<IRepository<Invoice>, InvoiceRepo>();
             services.AddScoped<IRepository<Unit>, UnitRepo>();
             services.AddScoped<IRepository<Manufacturer>, ManufacturerRepo>();
-
+            services.AddScoped<IRepository<AccountsPayable>, AccountsPayableRepo>();
 
             services.AddScoped<IRepository<SalesInvoice>, SalesInvoiceRepo>();
             services.AddScoped<IRepository<SalesInvoice_Detail>, SalesInvoiceDetailRepo>();
@@ -115,6 +116,20 @@ namespace QuanLyCuaHangBanh
             services.AddScoped<UnitPresenter>();
             services.AddScoped<IManufacturerView, ManufacturerView>();
             services.AddScoped<ManufacturerPresenter>();
+
+            // Đăng ký các service
+            services.AddScoped<ProductService>();
+            services.AddScoped<CustomerService>();
+            services.AddScoped<CategoryService>();
+            services.AddScoped<GoodsReceiptNoteService>();
+            services.AddScoped<WarehouseReleaseNoteService>();
+            services.AddScoped<EmployeeService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<SalesInvoiceService>();
+            services.AddScoped<PurchaseService>();
+            services.AddScoped<UnitService>();
+            services.AddScoped<ManufacturerService>();
+            services.AddScoped<ProductService>();
 
             services.AddScoped<MainView>();  // Đảm bảo đăng ký MainView
         }

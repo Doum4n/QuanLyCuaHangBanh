@@ -1,72 +1,63 @@
 ﻿using QuanLyCuaHangBanh.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Services; // Thêm namespace của service
+using QuanLyCuaHangBanh.Uitls; // Để sử dụng ExcelHandler
 using QuanLyCuaHangBanh.Views.Unit;
+using System;
 using System.Data;
-using QuanLyCuaHangBanh.Uitls;
+using System.Linq; // Để sử dụng Where
+using System.Windows.Forms; // Thêm namespace này để sử dụng DialogResult và MessageBox
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    public class UnitPresenter(IUnitView view, IRepositoryProvider provider) : PresenterBase<Unit>(view, provider)
+    public class UnitPresenter(IUnitView view, UnitService unitService) : PresenterBase<Unit>(view, unitService)
     {
+        public override void LoadData()
+        {
+            BindingSource.DataSource = ((UnitService)Service).GetAllUnits();
+        }
+
         public override void OnExport(object? sender, EventArgs e)
         {
-            DataTable dataTable = new DataTable("Units");
-            dataTable.Columns.Add("Mã ĐVT", typeof(int));
-            dataTable.Columns.Add("ĐVT", typeof(string));
-            dataTable.Columns.Add("Mô tả", typeof(string));
-
-            foreach (var unit in Provider.GetRepository<Unit>().GetAll())
-            {
-                dataTable.Rows.Add(unit.ID, unit.Name, unit.Description);
-            }
-
+            DataTable dataTable = ((UnitService)Service).ExportUnitsToDataTable((IEnumerable<Unit>)BindingSource.List);
             ExcelHandler.ExportExcel("Đơn vị tính", "Đơn vị tính", dataTable);
         }
 
         public override void OnImport(object? sender, EventArgs e)
         {
-            ExcelHandler.ImportExcel((row) =>
-            {
-                if (row.ItemArray.Length >= 3)
-                {
-                    Unit unit = new Unit
-                    {
-                        //ID = Convert.ToInt32(row[0]),
-                        Name = row[1].ToString() ?? string.Empty,
-                        Description = row[2].ToString() ?? string.Empty
-                    };
-                    Provider.GetRepository<Unit>().Add(unit);
-                }
-            });
+            ExcelHandler.ImportExcel(((UnitService)Service).ImportUnitFromDataRow);
+            LoadData();
         }
 
         public override void OnEdit(object? sender, EventArgs e)
         {
-            UnitInputView inputView = new UnitInputView((Unit)View.SelectedItem);
-            if(inputView.ShowDialog() == DialogResult.OK)
+            if (View.SelectedItem is Unit selectedUnit)
             {
-                if(inputView.Tag is Unit updatedUnit)
+                UnitInputView inputView = new UnitInputView(selectedUnit);
+                if (inputView.ShowDialog() == DialogResult.OK)
                 {
-                    Provider.GetRepository<Unit>().Update(updatedUnit);
-                    View.Message = "Cập nhật đơn vị thành công!";
-                    LoadData();
+                    if (inputView.Tag is Unit updatedUnit)
+                    {
+                        ((UnitService)Service).UpdateUnit(updatedUnit);
+                        View.Message = "Cập nhật đơn vị thành công!";
+                        LoadData();
+                    }
                 }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn một đơn vị để chỉnh sửa.";
             }
         }
 
         public override void OnAddNew(object? sender, EventArgs e)
         {
             UnitInputView inputView = new UnitInputView();
-            if(inputView.ShowDialog() == DialogResult.OK)
+            if (inputView.ShowDialog() == DialogResult.OK)
             {
-                if(inputView.Tag is Unit newUnit)
+                if (inputView.Tag is Unit newUnit)
                 {
-                    Provider.GetRepository<Unit>().Add(newUnit);
+                    ((UnitService)Service).AddUnit(newUnit);
                     View.Message = "Thêm đơn vị thành công!";
                     LoadData();
                 }
@@ -80,7 +71,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn xóa đơn vị này?", "Xác nhận xóa", MessageBoxButtons.YesNo);
                 if (confirmResult == DialogResult.Yes)
                 {
-                    Provider.GetRepository<Unit>().Delete(unit);
+                    ((UnitService)Service).DeleteUnit(unit);
                     View.Message = "Xóa đơn vị thành công!";
                     LoadData();
                 }
@@ -99,13 +90,7 @@ namespace QuanLyCuaHangBanh.Presenters
             }
             else
             {
-                var searchResults = Provider.GetRepository<Unit>()
-                    .GetAll()
-                    .Where(u => u.Name.Contains(View.SearchValue, StringComparison.OrdinalIgnoreCase) ||
-                                u.Description.Contains(View.SearchValue, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                BindingSource.DataSource = searchResults;
+                BindingSource.DataSource = ((UnitService)Service).SearchUnits(View.SearchValue);
             }
         }
     }

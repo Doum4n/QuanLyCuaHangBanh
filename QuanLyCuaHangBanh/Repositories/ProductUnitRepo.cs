@@ -45,5 +45,17 @@ namespace QuanLyCuaHangBanh.Repositories
             context.SaveChanges();
             return productUnit;
         }
+
+        public override void Delete(Product_Unit entity)
+        {
+            // Delete the inventory associated with the product unit if it exists
+            if (entity.Inventory != null)
+            {
+                context.Inventories.Remove(entity.Inventory);
+            }
+
+            // Then delete the product unit
+            base.Delete(entity);
+        }
     }
 }

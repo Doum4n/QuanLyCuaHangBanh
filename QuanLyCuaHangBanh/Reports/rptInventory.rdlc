@@ -873,7 +873,7 @@
             <Top>2.88459cm</Top>
             <Left>0cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.1cm</Width>
+            <Width>26.10001cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -885,7 +885,7 @@
         <Height>4.08459cm</Height>
         <Style />
       </Body>
-      <Width>26.1cm</Width>
+      <Width>26.10001cm</Width>
       <Page>
         <PageHeight>21cm</PageHeight>
         <PageWidth>29.7cm</PageWidth>

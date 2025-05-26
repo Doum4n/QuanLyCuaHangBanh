@@ -85,7 +85,9 @@ namespace QuanLyCuaHangBanh.Views
                         o.ProductUnit.ConversionRate,
                         o.PurchasePrice,
                         o.Quantity,
-                        o.Note
+                        o.Note,
+                        o.ProductionDate,
+                        o.ExpirationDate
                     )
                     {
                         Status = DTO.Base.Status.None
@@ -165,15 +167,17 @@ namespace QuanLyCuaHangBanh.Views
                0 , // Assuming ID is auto-generated
                 (int)cbb_Products.SelectedValue,
                 cbb_Products.Text,
-                0, // Assuming you will set this later
-                "", // Assuming you will set this later
+                0, // Vì sản phẩm có sẵn
+                "", // Vì sản phẩm có sẵn
                 (int)cbb_Units.SelectedValue,
                 cbb_Units.Text,
                 selectedProductUnitId,
-                1, // Assuming a default conversion rate of 1
+                1, // Vì sản phẩm có sẵn
                 nmr_PurchasePrice.Value,
                 (int)nmr_Quantity.Value,
-                rtb_Note.Text
+                rtb_Note.Text,
+                DateOnly.FromDateTime(dtp_ProductionDate.Value),
+                DateOnly.FromDateTime(dtp_ExpirationDate.Value)
             );
 
             productReceiptDTO.Status = DTO.Base.Status.New;

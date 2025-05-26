@@ -13,8 +13,8 @@ namespace QuanLyCuaHangBanh.Models
         public int CategoryID { get; set; }
         public int? ManufacturerID { get; set; } // Nullable if the product is not associated with a manufacturer
         public int ProducerID { get; set; }
-        public DateOnly ProductionDate { get; set; } // Ngày sản xuất
-        public DateOnly ExpirationDate { get; set; } // Ngày hết hạn
+        //public DateOnly ProductionDate { get; set; } // Ngày sản xuất
+        //public DateOnly ExpirationDate { get; set; } // Ngày hết hạn
         public string Description { get; set; }
         public string? Image { get; set; } // URL or path to the product image
         public int BaseUnitID { get; set; } // Chỉ dùng 1 đơn vị cơ bản
@@ -30,7 +30,7 @@ namespace QuanLyCuaHangBanh.Models
 
         public override string ToString()
         {
-            return $"ID: {ID}, Name: {Name}, CategoryID: {CategoryID}, ProducerID: {ProducerID}, ProductionDate: {ProductionDate}, ExpirationDate: {ExpirationDate}, Description: {Description}, Image: {Image}, BaseUnitID: {BaseUnitID}";
+            return $"ID: {ID}, Name: {Name}, CategoryID: {CategoryID}, ProducerID: {ProducerID}, Description: {Description}, Image: {Image}, BaseUnitID: {BaseUnitID}";
         }
     }
 

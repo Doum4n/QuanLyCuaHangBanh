@@ -11,13 +11,17 @@ namespace QuanLyCuaHangBanh.DTO
 {
     public class ProductReceiptDTO : DisplayProduct
     {
-        public ProductReceiptDTO(int iD, int productId, string productName, int categoryId, string categoryName, int unitId, string unitName, int productUnitId, decimal conversionRate, decimal purchasePrice, int quantity, string note) : 
+        public DateOnly ProductionDate { get; set; }
+        public DateOnly ExpirationDate { get; set; }
+        public ProductReceiptDTO(int iD, int productId, string productName, int categoryId, string categoryName, int unitId, string unitName, int productUnitId, decimal conversionRate, decimal purchasePrice, int quantity, string note, DateOnly productionDate, DateOnly expirationDate) : 
             base(iD, productName, categoryId, categoryName, unitName, productUnitId, conversionRate, quantity, note)
         {
             ProductId = productId;
             UnitId = unitId;
             PurchasePrice = purchasePrice;
             //GoodsReceiptNoteId = goodsReceiptNoteId;
+            ProductionDate = productionDate;
+            ExpirationDate = expirationDate;
         }
 
         public int ProductId { get; set; }
@@ -38,7 +42,9 @@ namespace QuanLyCuaHangBanh.DTO
                 Quantity = (int)Quantity,
                 UnitId = UnitId,
                 PurchasePrice = PurchasePrice,
-                Note = Note
+                Note = Note,
+                ProductionDate = ProductionDate,
+                ExpirationDate = ExpirationDate
             };
         }
     }

@@ -48,6 +48,7 @@
             Email = new DataGridViewTextBoxColumn();
             Address = new DataGridViewTextBoxColumn();
             Description = new DataGridViewTextBoxColumn();
+            TotalAccountPayable = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgv_ProducerList).BeginInit();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -60,7 +61,7 @@
             dgv_ProducerList.AllowUserToDeleteRows = false;
             dgv_ProducerList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProducerList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProducerList.Columns.AddRange(new DataGridViewColumn[] { ID, Name, PhoneNumber, Email, Address, Description });
+            dgv_ProducerList.Columns.AddRange(new DataGridViewColumn[] { ID, Name, PhoneNumber, Email, Address, Description, TotalAccountPayable });
             dgv_ProducerList.Dock = DockStyle.Fill;
             dgv_ProducerList.Location = new Point(3, 50);
             dgv_ProducerList.MultiSelect = false;
@@ -250,7 +251,15 @@
             Description.Name = "Description";
             Description.ReadOnly = true;
             // 
-            // ProducerView
+            // TotalAccountPayable
+            // 
+            TotalAccountPayable.DataPropertyName = "TotalAccountPayable";
+            TotalAccountPayable.HeaderText = "Tổng công nợ phải trả";
+            TotalAccountPayable.MinimumWidth = 6;
+            TotalAccountPayable.Name = "TotalAccountPayable";
+            TotalAccountPayable.ReadOnly = true;
+            // 
+            // SuplierView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -287,5 +296,6 @@
         private DataGridViewTextBoxColumn Email;
         private DataGridViewTextBoxColumn Address;
         private DataGridViewTextBoxColumn Description;
+        private DataGridViewTextBoxColumn TotalAccountPayable;
     }
 }

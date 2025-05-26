@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuanLyCuaHangBanh.Data;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Repositories;
 using QuanLyCuaHangBanh.Views;
@@ -36,13 +37,24 @@ namespace QuanLyCuaHangBanh.Presenters
 
         private void loadData()
         {
-            bindingSource.DataSource = repo.GetAll();
+            bindingSource.DataSource = repo.GetAllAsDto<SupplierDTO>(
+                o => new SupplierDTO
+                {
+                    ID = o.ID,
+                    Name = o.Name,
+                    PhoneNumber = o.PhoneNumber,
+                    Email = o.Email,
+                    Address = o.Address,
+                    Description = o.Description,
+                    TotalAccountPayable = o.AccountsPayables.Sum(a => a.Amount) // Tính tổng công nợ phải trả
+                }
+            );
         }
 
 
         private void OnEdit(object? sender, EventArgs e)
         {
-            SuplierInputView producerInputView = new SuplierInputView((Supplier)this.view.SelectedItem);
+            SuplierInputView producerInputView = new SuplierInputView((SupplierDTO)this.view.SelectedItem);
             if (producerInputView.ShowDialog() == DialogResult.OK)
             {
                 

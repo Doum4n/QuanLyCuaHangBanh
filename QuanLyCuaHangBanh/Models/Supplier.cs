@@ -26,5 +26,7 @@ namespace QuanLyCuaHangBanh.Models
                 Description = producer.Description
             };
         }
+
+        public virtual ICollection<AccountsPayable> AccountsPayables { get; set; } = new List<AccountsPayable>();
     }
 }

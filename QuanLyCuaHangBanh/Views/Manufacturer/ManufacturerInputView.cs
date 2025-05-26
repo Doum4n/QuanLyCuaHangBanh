@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace QuanLyCuaHangBanh.Views.Manufacturer
 {
-    public partial class IManufacturerInputView : Form
+    public partial class ManufacturerInputView : Form
     {
         private Models.Manufacturer? _manufacturer;
-        public IManufacturerInputView(Models.Manufacturer? manufacturer = null)
+        public ManufacturerInputView(Models.Manufacturer? manufacturer = null)
         {
             InitializeComponent();
             _manufacturer = manufacturer;

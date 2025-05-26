@@ -34,6 +34,8 @@ namespace QuanLyCuaHangBanh.Data
         public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
         public DbSet<PurchaseInvoice_Detail> PurchaseInvoiceDetails { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<AccountsPayable> AccountsPayables { get; set; }
+        public DbSet<AccountsReceivable> AccountsReceivables { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder configurationBuilder)
         {
@@ -70,9 +72,18 @@ namespace QuanLyCuaHangBanh.Data
                 .HasForeignKey(pu => pu.UnitID)
                 .OnDelete(DeleteBehavior.Restrict); // hoặc NoAction
 
-            //modelBuilder.Entity<Account>().ToTable("Accounts");
-            //modelBuilder.Entity<AccountsPayable>().ToTable("AccountsPayable");
-            //modelBuilder.Entity<AccountsReceivable>().ToTable("AccountsReceivable");
+            modelBuilder.Entity<Account>().ToTable("Accounts");
+            modelBuilder.Entity<AccountsPayable>().ToTable("AccountsPayable");
+            modelBuilder.Entity<AccountsReceivable>().ToTable("AccountsReceivable");
+
+            modelBuilder.Entity<AccountsPayable>()
+                .ToTable("AccountsPayable") // Bảng riêng cho AccountsPayable
+                .HasBaseType<Account>();     // Chỉ định lớp cơ sở của nó
+
+            // Cấu hình TPT cho lớp AccountsReceivable
+            modelBuilder.Entity<AccountsReceivable>()
+                .ToTable("AccountsReceivable") // Bảng riêng cho AccountsReceivable
+                .HasBaseType<Account>();       // Chỉ định lớp cơ sở của nó
 
             // ==== KẾ THỪA CHO INVOICE (cha) ====
             modelBuilder.Entity<Invoice>().ToTable("Invoices");

@@ -1,72 +1,70 @@
 ﻿using QuanLyCuaHangBanh.Base;
-using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.Models;
-using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Services; // Thêm namespace của Service
 using QuanLyCuaHangBanh.Uitls;
-using QuanLyCuaHangBanh.Views;
 using QuanLyCuaHangBanh.Views.Customer;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using QuanLyCuaHangBanh.Views; // Để sử dụng DialogResult và MessageBox
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    class CustomerPresenter(ICustomerView view, IRepositoryProvider repository) : PresenterBase<Customer>(view, repository)
+    class CustomerPresenter : PresenterBase<Customer>
     {
+        public CustomerPresenter(ICustomerView view, CustomerService customerService)
+            : base(view, (IService)customerService) // Truyền service vào PresenterBase
+        {
+        }
+
+        public override void LoadData()
+        {
+            BindingSource.DataSource = ((CustomerService)Service).GetAllCustomers();
+            // View.SetBindingSource(BindingSource); // Dòng này có thể không cần thiết nếu đã được gọi trong PresenterBase
+        }
+
         public override void OnExport(object? sender, EventArgs e)
         {
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("ID", typeof(int));
-            dataTable.Columns.Add("Tên khách hàng", typeof(string));
-            dataTable.Columns.Add("Số điện thoại", typeof(string));
-            dataTable.Columns.Add("Địa chỉ", typeof(string));
-            foreach (var item in Provider.GetRepository<Customer>().GetAll())
-            {
-                dataTable.Rows.Add(item.ID, item.Name, item.PhoneNumber, item.Address);
-            }
+            DataTable dataTable = ((CustomerService)Service).ExportCustomersToDataTable((IEnumerable<Customer>)BindingSource.List);
             ExcelHandler.ExportExcel("Khách hàng", "Khách hàng", dataTable);
         }
 
         public override void OnImport(object? sender, EventArgs e)
         {
-            ExcelHandler.ImportExcel((DataRow row) =>
-            {
-                Customer customer = new Customer()
-                {
-                    //ID = Convert.ToInt32(row[0]),
-                    Name = row[1].ToString(),
-                    PhoneNumber = row[2].ToString(),
-                    Address = row[3].ToString()
-                };
-                Provider.GetRepository<Customer>().Add(customer);
-                View.Message = "Import thành công!";
-            });
-            LoadData();
+            ExcelHandler.ImportExcel(((CustomerService)Service).ImportCustomerFromDataRow);
+            View.Message = "Import thành công!";
+            LoadData(); // Load lại dữ liệu sau khi import
         }
 
         public override void OnEdit(object? sender, EventArgs e)
         {
-            CustomerInputView customerInputView = new CustomerInputView((Customer)(this.View.SelectedItem));
-            if (customerInputView.ShowDialog() == DialogResult.OK)
+            if (View.SelectedItem is Customer selectedCustomer)
             {
-                if (customerInputView.Tag is Customer updatedCustomer)
+                CustomerInputView customerInputView = new CustomerInputView(selectedCustomer);
+                if (customerInputView.ShowDialog() == DialogResult.OK)
                 {
-                    try
+                    if (customerInputView.Tag is Customer updatedCustomer)
                     {
-                        this.View.Message = "Thêm khách hàng thành công";
-                        updatedCustomer.ID = ((Customer)this.View.SelectedItem).ID;
-                        Provider.GetRepository<Customer>().Update(updatedCustomer);
-                        LoadData();
-                    }
-                    catch (Exception ex)
-                    {
-                        this.View.Message = ex.Message;
-                        return;
+                        try
+                        {
+                            // updatedCustomer.ID = ((Customer)this.View.SelectedItem).ID; // ID đã được gán qua constructor của inputView
+                            ((CustomerService)Service).UpdateCustomer(updatedCustomer);
+                            View.Message = "Cập nhật khách hàng thành công!";
+                            LoadData();
+                        }
+                        catch (Exception ex)
+                        {
+                            View.Message = ex.Message;
+                            return;
+                        }
                     }
                 }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn một khách hàng để chỉnh sửa.";
             }
         }
 
@@ -79,13 +77,13 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     try
                     {
-                        Provider.GetRepository<Customer>().Add(customer);
-                        this.View.Message = "Thêm khách hàng thành công";
+                        ((CustomerService)Service).AddCustomer(customer);
+                        View.Message = "Thêm khách hàng thành công!";
                         LoadData();
                     }
                     catch (Exception ex)
                     {
-                        this.View.Message = ex.Message;
+                        View.Message = ex.Message;
                         return;
                     }
                 }
@@ -94,14 +92,32 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnDelete(object? sender, EventArgs e)
         {
-            Provider.GetRepository<Customer>().Delete((Customer)this.View.SelectedItem);
-            this.View.Message = "Xóa khách hàng thành công";
-            LoadData();
+            if (View.SelectedItem is Customer customerToDelete)
+            {
+                var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn xóa khách hàng này?", "Xác nhận xóa", MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    ((CustomerService)Service).DeleteCustomer(customerToDelete);
+                    View.Message = "Xóa khách hàng thành công!";
+                    LoadData(); // Load lại dữ liệu sau khi xóa
+                }
+            }
+            else
+            {
+                View.Message = "Vui lòng chọn một khách hàng để xóa.";
+            }
         }
 
         public override void OnSearch(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(View.SearchValue))
+            {
+                LoadData(); // Load lại tất cả dữ liệu nếu trường tìm kiếm trống
+            }
+            else
+            {
+                BindingSource.DataSource = ((CustomerService)Service).SearchCustomers(View.SearchValue);
+            }
         }
     }
 }

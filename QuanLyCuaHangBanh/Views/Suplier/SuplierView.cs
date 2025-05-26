@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Views.Suplier;
 
@@ -17,7 +18,7 @@ namespace QuanLyCuaHangBanh.Views
     {
         private string message;
         private string searchValue;
-        private Supplier selectedProducer;
+        private SupplierDTO selectedProducer;
         public SuplierView()
         {
             InitializeComponent();
@@ -29,7 +30,7 @@ namespace QuanLyCuaHangBanh.Views
         {
             if (dgv_ProducerList.SelectedRows.Count > 0)
             {
-                selectedProducer = (Supplier)dgv_ProducerList.SelectedRows[0].DataBoundItem;
+                selectedProducer = (SupplierDTO)dgv_ProducerList.SelectedRows[0].DataBoundItem;
                 RowSelected?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -63,7 +64,7 @@ namespace QuanLyCuaHangBanh.Views
         public event EventHandler ImportEvent;
         public event EventHandler ExportEvent;
 
-        object IView.SelectedItem { get => selectedProducer; set => selectedProducer = (Supplier)value; }
+        object IView.SelectedItem { get => selectedProducer; set => selectedProducer = (SupplierDTO)value; }
         public void SetBindingSource(BindingSource bindingSource)
         {
             dgv_ProducerList.DataSource = bindingSource;

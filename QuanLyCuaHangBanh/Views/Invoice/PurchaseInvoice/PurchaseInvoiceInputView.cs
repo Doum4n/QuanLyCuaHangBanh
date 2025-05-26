@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.DTO.Base;
+using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 {
@@ -27,6 +28,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 
         public event Action<ProductPurchaseInvoiceDTO> AddProductEvent;
         public event Func<object, EventArgs, int> ShowSelecteceiptFrom;
+
+        private int accountPayableId;
 
         public PurchaseInvoiceInputView(PurchaseInvoiceDTO? purchaseInvoiceDTO = null)
         {
@@ -53,6 +56,9 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
             product.Status = DTO.Base.Status.New;
 
             _product.Add(product);
+
+            nmr_TotalPaymentRequired.Value = _product.Sum(p => p.Quantity * p.Price);
+
             bs.ResetBindings(false);
         }
 
@@ -94,9 +100,11 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                     //bs.Remove(selectedProduct);
                     selectedProduct.Status = DTO.Base.Status.Deleted;
 
-                    dgv_ProductList.DataSource = new BindingList<ProductPurchaseInvoiceDTO>(
+                    bs.DataSource = new BindingList<ProductPurchaseInvoiceDTO>(
                         _product.Where(p => p.Status != DTO.Base.Status.Deleted).ToList()
                     );
+
+                    bs.ResetBindings(false);
                 }
             }
         }
@@ -168,6 +176,20 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 
                 bs.DataSource = _product;
                 dgv_ProductList.DataSource = bs;
+
+                var accountPayable = context.AccountsPayables.FirstOrDefault(a => a.InvoiceID == _purchaseInvoiceDTO.ID);
+
+                if (accountPayable != null)
+                {
+                    accountPayableId = accountPayable.ID;
+                    //cbb_PaymentMethod.SelectedItem = accountPayable.PaymentMethod;
+                    nmr_TotalPaymentRequired.Value = _product.Sum(p => p.Quantity * p.Price);
+                    nmr_TotalAmountOwed.Value = accountPayable.Amount;
+                    nmr_TotalPaid.Maximum = nmr_TotalPaymentRequired.Value;
+                    nmr_TotalPaid.Value = nmr_TotalPaymentRequired.Value - nmr_TotalAmountOwed.Value;
+                    dtp_DueDate.Value = accountPayable.DueDate;
+                    dtp_PaymentDate.Value = accountPayable.PaidDate ?? DateTime.Now;
+                }
             }
             else
             {
@@ -214,7 +236,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
             {
                 EmployeeID = 1, // Assuming you will set this later
                 SupplierID = (int)cbb_Suppliers.SelectedValue,
-                Date = dateTimePicker.Value,
+                Date = dateTimePicker.Value.ToUniversalTime(),
                 Status = cbb_Status.Text,
             };
 
@@ -223,13 +245,32 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 purchaseInvoice.ID = _purchaseInvoiceDTO.ID;
             }
 
-
-            foreach (var item in _product)
+            AccountsPayable accountsPayable = new AccountsPayable()
             {
-                MessageBox.Show(item.Status.ToString());
+                SupplierID = (int)cbb_Suppliers.SelectedValue,
+                Amount = nmr_TotalPaymentRequired.Value - nmr_TotalPaid.Value, // Calculating the amount owed
+                TransactionDate = dateTimePicker.Value.ToUniversalTime(),
+                DueDate = dtp_DueDate.Value.ToUniversalTime(),
+                IsPaid = nmr_TotalPaid.Value >= nmr_TotalPaymentRequired.Value, // Assuming payment is made if total paid is greater than or equal to total required
+                PaidDate = dtp_PaymentDate.Value.ToUniversalTime(),
+                //Note = rtb_Note.Text,
+            };
+
+            if (accountsPayable.IsPaid)
+            {
+                accountsPayable.PaidDate = dtp_PaymentDate.Value.ToUniversalTime();
+            }
+            else
+            {
+                accountsPayable.PaidDate = null; // If not paid, set PaidDate to null
             }
 
-            this.Tag = purchaseInvoice;
+            if (_purchaseInvoiceDTO != null)
+            {
+                accountsPayable.ID = accountPayableId;
+            }
+
+            this.Tag = (purchaseInvoice, accountsPayable);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

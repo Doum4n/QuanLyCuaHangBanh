@@ -20,6 +20,8 @@ namespace QuanLyCuaHangBanh.DTO
         public int Quantity { get; set; }
         public Status status { get; set; }
 
+        public bool IsChecked { get; set; }
+
         public Product_UnitDTO() { }
 
         public Product_UnitDTO(
@@ -30,7 +32,9 @@ namespace QuanLyCuaHangBanh.DTO
             int inventoryId,
             decimal conversionRate,
             decimal unitPrice,
-            int quantity)
+            int quantity,
+            bool isChecked = false
+        )
         {
             ID = id;
             ProductID = productId;
@@ -40,6 +44,7 @@ namespace QuanLyCuaHangBanh.DTO
             ConversionRate = conversionRate;
             UnitPrice = unitPrice;
             Quantity = quantity;
+            IsChecked = isChecked;
         }
 
         public Product_Unit ToProductUnit()

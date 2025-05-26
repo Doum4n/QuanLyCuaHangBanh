@@ -1,6 +1,6 @@
 ﻿namespace QuanLyCuaHangBanh.Views.Manufacturer
 {
-    partial class IManufacturerInputView
+    partial class ManufacturerInputView
     {
         /// <summary>
         /// Required designer variable.

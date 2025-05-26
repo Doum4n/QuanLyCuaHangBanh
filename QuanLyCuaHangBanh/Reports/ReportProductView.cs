@@ -14,35 +14,7 @@ using System.Windows.Forms;
 
 namespace QuanLyCuaHangBanh.Reports
 {
-    public class ProductReportItem
-    {
-        public int ID { get; set; }
-        public string ProductName { get; set; }
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
-        public int ProducerID { get; set; }
-        public string SupplierName { get; set; }
-        public DateOnly ProductionDate { get; set; }
-        public DateOnly ExpirationDate { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
-
-        public ProductReportItem() { }
-
-        public ProductReportItem(int id, string productName, int categoryID, string categoryName, int producerID, string supplierName, DateOnly productionDate, DateOnly expirationDate, string description, string image)
-        {
-            ID = id;
-            ProductName = productName;
-            CategoryID = categoryID;
-            CategoryName = categoryName;
-            ProducerID = producerID;
-            SupplierName = supplierName;
-            ProductionDate = productionDate;
-            ExpirationDate = expirationDate;
-            Description = description;
-            Image = image;
-        }
-    }
+    
 
     public partial class ReportProductView : Form
     {
@@ -52,6 +24,10 @@ namespace QuanLyCuaHangBanh.Reports
         public ReportProductView()
         {
             InitializeComponent();
+
+            this.reportViewer1.LocalReport.EnableExternalImages = true;
+            this.reportViewer1.LocalReport.EnableHyperlinks = true;
+
         }
 
         private void ReportProductView_Load(object sender, EventArgs e)
@@ -68,8 +44,8 @@ namespace QuanLyCuaHangBanh.Reports
                     o.Category.Name,
                     o.ProducerID,
                     o.Producer.Name,
-                    o.ProductionDate,
-                    o.ExpirationDate,
+                    //o.ProductionDate,
+                    //o.ExpirationDate,
                     o.Description,
                     o.Image
                 )).Cast<Object>().ToList();
@@ -89,12 +65,41 @@ namespace QuanLyCuaHangBanh.Reports
                         row["CategoryName"] = product.CategoryName;
                         row["SupplierID"] = product.ProducerID;
                         row["SupplierName"] = product.SupplierName;
-                        row["ProductionDate"] = product.ProductionDate.ToDateTime(TimeOnly.MinValue);
-                        row["ExpirationDate"] = product.ExpirationDate.ToDateTime(TimeOnly.MinValue);
+                        //row["ProductionDate"] = product.ProductionDate.ToDateTime(TimeOnly.MinValue);
+                        //row["ExpirationDate"] = product.ExpirationDate.ToDateTime(TimeOnly.MinValue);
                         row["Description"] = product.Description;
                         row["Image"] = product.Image;
                     }
                 );
+        }
+    }
+    public class ProductReportItem
+    {
+        public int ID { get; set; }
+        public string ProductName { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public int ProducerID { get; set; }
+        public string SupplierName { get; set; }
+        //public DateOnly ProductionDate { get; set; }
+        //public DateOnly ExpirationDate { get; set; }
+        public string Description { get; set; }
+        public string Image { get; set; }
+
+        public ProductReportItem() { }
+
+        public ProductReportItem(int id, string productName, int categoryID, string categoryName, int producerID, string supplierName, string description, string image)
+        {
+            ID = id;
+            ProductName = productName;
+            CategoryID = categoryID;
+            CategoryName = categoryName;
+            ProducerID = producerID;
+            SupplierName = supplierName;
+            //ProductionDate = productionDate;
+            //ExpirationDate = expirationDate;
+            Description = description;
+            Image = image;
         }
     }
 }

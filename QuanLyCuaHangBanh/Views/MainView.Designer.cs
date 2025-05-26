@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             menuStrip1 = new MenuStrip();
             hệThốngToolStripMenuItem = new ToolStripMenuItem();
             tsmi_Login = new ToolStripMenuItem();
@@ -58,11 +59,13 @@
             tsmi_ImportWarehouse = new ToolStripMenuItem();
             tsmi_ExportWarehouse = new ToolStripMenuItem();
             stmi_OrderStatistics = new ToolStripMenuItem();
+            tsmi_InventoryStatistical = new ToolStripMenuItem();
             trợGiúpToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tsslb_EmployeeName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
-            tsmi_InventoryStatistical = new ToolStripMenuItem();
+            thôngTinPhầnMềmToolStripMenuItem = new ToolStripMenuItem();
+            hướngDẫnSửDụngToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -86,35 +89,39 @@
             // 
             // tsmi_Login
             // 
+            tsmi_Login.Image = Properties.Resources.dang_nhap;
             tsmi_Login.Name = "tsmi_Login";
-            tsmi_Login.Size = new Size(183, 26);
+            tsmi_Login.Size = new Size(224, 26);
             tsmi_Login.Text = "Đăng &nhập...";
             tsmi_Login.Click += tsmi_Login_Click;
             // 
             // tsmi_Logout
             // 
+            tsmi_Logout.Image = Properties.Resources.dang_xuat;
             tsmi_Logout.Name = "tsmi_Logout";
-            tsmi_Logout.Size = new Size(183, 26);
+            tsmi_Logout.Size = new Size(224, 26);
             tsmi_Logout.Text = "Đăng &xuất";
             tsmi_Logout.Click += tsmi_Logout_Click;
             // 
             // stmi_ChangePassword
             // 
+            stmi_ChangePassword.Image = Properties.Resources.doi_mat_khau;
             stmi_ChangePassword.Name = "stmi_ChangePassword";
-            stmi_ChangePassword.Size = new Size(183, 26);
+            stmi_ChangePassword.Size = new Size(224, 26);
             stmi_ChangePassword.Text = "&Đổi mật khẩu";
             stmi_ChangePassword.Click += stmi_ChangePassword_Click;
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(180, 6);
+            toolStripSeparator6.Size = new Size(221, 6);
             // 
             // tsmi_Exit
             // 
+            tsmi_Exit.Image = Properties.Resources.thoat;
             tsmi_Exit.Name = "tsmi_Exit";
             tsmi_Exit.ShortcutKeys = Keys.Alt | Keys.F4;
-            tsmi_Exit.Size = new Size(183, 26);
+            tsmi_Exit.Size = new Size(224, 26);
             tsmi_Exit.Text = "&Thoát";
             tsmi_Exit.Click += tsmi_Exit_Click;
             // 
@@ -128,102 +135,102 @@
             // tsmi_Products
             // 
             tsmi_Products.Name = "tsmi_Products";
-            tsmi_Products.Size = new Size(188, 26);
+            tsmi_Products.Size = new Size(224, 26);
             tsmi_Products.Text = "&Sản phẩm";
             tsmi_Products.Click += tsmi_Products_Click;
             // 
             // tsmi_Catogories
             // 
             tsmi_Catogories.Name = "tsmi_Catogories";
-            tsmi_Catogories.Size = new Size(188, 26);
+            tsmi_Catogories.Size = new Size(224, 26);
             tsmi_Catogories.Text = "&Loại sản phầm";
             tsmi_Catogories.Click += tsmi_Catogories_Click;
             // 
             // stmi_Manufacturers
             // 
             stmi_Manufacturers.Name = "stmi_Manufacturers";
-            stmi_Manufacturers.Size = new Size(188, 26);
+            stmi_Manufacturers.Size = new Size(224, 26);
             stmi_Manufacturers.Text = "Hãng &sản xuất";
             stmi_Manufacturers.Click += stmi_Manufacturers_Click;
             // 
             // tsmi_Producers
             // 
             tsmi_Producers.Name = "tsmi_Producers";
-            tsmi_Producers.Size = new Size(188, 26);
+            tsmi_Producers.Size = new Size(224, 26);
             tsmi_Producers.Text = "&Nhà cung cấp";
             tsmi_Producers.Click += tsmi_Producers_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(185, 6);
+            toolStripSeparator4.Size = new Size(221, 6);
             // 
             // tsmi_WarehouseNotes
             // 
             tsmi_WarehouseNotes.Name = "tsmi_WarehouseNotes";
-            tsmi_WarehouseNotes.Size = new Size(188, 26);
+            tsmi_WarehouseNotes.Size = new Size(224, 26);
             tsmi_WarehouseNotes.Text = "Phiếu xuất";
             tsmi_WarehouseNotes.Click += tsmi_WarehouseNotes_Click;
             // 
             // tsmi_PurchaseReceipts
             // 
             tsmi_PurchaseReceipts.Name = "tsmi_PurchaseReceipts";
-            tsmi_PurchaseReceipts.Size = new Size(188, 26);
+            tsmi_PurchaseReceipts.Size = new Size(224, 26);
             tsmi_PurchaseReceipts.Text = "&Phiếu nhập";
             tsmi_PurchaseReceipts.Click += tsmi_PurchaseReceipts_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(185, 6);
+            toolStripSeparator1.Size = new Size(221, 6);
             // 
             // tsmi_Customers
             // 
             tsmi_Customers.Name = "tsmi_Customers";
-            tsmi_Customers.Size = new Size(188, 26);
+            tsmi_Customers.Size = new Size(224, 26);
             tsmi_Customers.Text = "&Khách hàng";
             tsmi_Customers.Click += tsmi_Customers_Click;
             // 
             // tsmi_Employees
             // 
             tsmi_Employees.Name = "tsmi_Employees";
-            tsmi_Employees.Size = new Size(188, 26);
+            tsmi_Employees.Size = new Size(224, 26);
             tsmi_Employees.Text = "&Nhân viên";
             tsmi_Employees.Click += tsmi_Employees_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(185, 6);
+            toolStripSeparator2.Size = new Size(221, 6);
             // 
             // tsmi_Units
             // 
             tsmi_Units.Name = "tsmi_Units";
-            tsmi_Units.Size = new Size(188, 26);
+            tsmi_Units.Size = new Size(224, 26);
             tsmi_Units.Text = "&Đơn vị tính";
             tsmi_Units.Click += tsmi_Units_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(185, 6);
+            toolStripSeparator3.Size = new Size(221, 6);
             // 
             // tsmi_Invoices
             // 
             tsmi_Invoices.Name = "tsmi_Invoices";
-            tsmi_Invoices.Size = new Size(188, 26);
+            tsmi_Invoices.Size = new Size(224, 26);
             tsmi_Invoices.Text = "&Hóa đơn";
             tsmi_Invoices.Click += tsmi_Invoices_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(185, 6);
+            toolStripSeparator5.Size = new Size(221, 6);
             // 
             // tsmi_Order
             // 
             tsmi_Order.Name = "tsmi_Order";
-            tsmi_Order.Size = new Size(188, 26);
+            tsmi_Order.Size = new Size(224, 26);
             tsmi_Order.Text = "Đơn hàng";
             tsmi_Order.Click += tsmi_Order_Click;
             // 
@@ -269,8 +276,16 @@
             stmi_OrderStatistics.Text = "Thống kê đơn hàng";
             stmi_OrderStatistics.Click += stmi_OrderStatistics_Click;
             // 
+            // tsmi_InventoryStatistical
+            // 
+            tsmi_InventoryStatistical.Name = "tsmi_InventoryStatistical";
+            tsmi_InventoryStatistical.Size = new Size(224, 26);
+            tsmi_InventoryStatistical.Text = "Thống kê tồn kho";
+            tsmi_InventoryStatistical.Click += tsmi_InventoryStatistical_Click;
+            // 
             // trợGiúpToolStripMenuItem
             // 
+            trợGiúpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thôngTinPhầnMềmToolStripMenuItem, hướngDẫnSửDụngToolStripMenuItem });
             trợGiúpToolStripMenuItem.Name = "trợGiúpToolStripMenuItem";
             trợGiúpToolStripMenuItem.Size = new Size(78, 24);
             trợGiúpToolStripMenuItem.Text = "&Trợ giúp";
@@ -300,12 +315,18 @@
             toolStripStatusLabel2.Size = new Size(157, 20);
             toolStripStatusLabel2.Text = "@ Khoa CNTT - ĐHAG";
             // 
-            // tsmi_InventoryStatistical
+            // thôngTinPhầnMềmToolStripMenuItem
             // 
-            tsmi_InventoryStatistical.Name = "tsmi_InventoryStatistical";
-            tsmi_InventoryStatistical.Size = new Size(224, 26);
-            tsmi_InventoryStatistical.Text = "Thống kê tồn kho";
-            tsmi_InventoryStatistical.Click += tsmi_InventoryStatistical_Click;
+            thôngTinPhầnMềmToolStripMenuItem.Name = "thôngTinPhầnMềmToolStripMenuItem";
+            thôngTinPhầnMềmToolStripMenuItem.Size = new Size(277, 26);
+            thôngTinPhầnMềmToolStripMenuItem.Text = "Thông tin &phần mềm";
+            // 
+            // hướngDẫnSửDụngToolStripMenuItem
+            // 
+            hướngDẫnSửDụngToolStripMenuItem.Name = "hướngDẫnSửDụngToolStripMenuItem";
+            hướngDẫnSửDụngToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F1;
+            hướngDẫnSửDụngToolStripMenuItem.Size = new Size(277, 26);
+            hướngDẫnSửDụngToolStripMenuItem.Text = "&Hướng dẫn sử dụng";
             // 
             // MainView
             // 
@@ -314,6 +335,7 @@
             ClientSize = new Size(800, 488);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             IsMdiContainer = true;
             MainMenuStrip = menuStrip1;
             Name = "MainView";
@@ -365,5 +387,7 @@
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripMenuItem tsmi_Exit;
         private ToolStripMenuItem tsmi_InventoryStatistical;
+        private ToolStripMenuItem thôngTinPhầnMềmToolStripMenuItem;
+        private ToolStripMenuItem hướngDẫnSửDụngToolStripMenuItem;
     }
 }

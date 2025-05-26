@@ -77,6 +77,10 @@
             textbox34 = new Label();
             tb_Id = new TextBox();
             label2 = new Label();
+            label3 = new Label();
+            dtp_ExpirationDate = new DateTimePicker();
+            label10 = new Label();
+            dtp_ProductionDate = new DateTimePicker();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             groupBox2.SuspendLayout();
@@ -96,7 +100,7 @@
             panel2.Dock = DockStyle.Bottom;
             panel2.Location = new Point(0, 652);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1277, 50);
+            panel2.Size = new Size(1390, 50);
             panel2.TabIndex = 25;
             // 
             // llb_AddUnit
@@ -142,7 +146,7 @@
             dgv_ProductList.ReadOnly = true;
             dgv_ProductList.RowHeadersWidth = 51;
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1271, 219);
+            dgv_ProductList.Size = new Size(1384, 219);
             dgv_ProductList.TabIndex = 0;
             // 
             // ID
@@ -218,7 +222,7 @@
             groupBox2.Dock = DockStyle.Fill;
             groupBox2.Location = new Point(0, 326);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1277, 245);
+            groupBox2.Size = new Size(1390, 245);
             groupBox2.TabIndex = 23;
             groupBox2.TabStop = false;
             groupBox2.Text = " Danh sách sản phẩm";
@@ -238,7 +242,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1277, 176);
+            groupBox1.Size = new Size(1390, 176);
             groupBox1.TabIndex = 22;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin phiếu nhập";
@@ -349,7 +353,7 @@
             btn_Save.Depth = 0;
             btn_Save.HighEmphasis = true;
             btn_Save.Icon = null;
-            btn_Save.Location = new Point(421, 18);
+            btn_Save.Location = new Point(544, 19);
             btn_Save.Margin = new Padding(4, 6, 4, 6);
             btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Save.Name = "btn_Save";
@@ -368,17 +372,21 @@
             panel3.Dock = DockStyle.Bottom;
             panel3.Location = new Point(0, 571);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1277, 81);
+            panel3.Size = new Size(1390, 81);
             panel3.TabIndex = 26;
             // 
             // panel1
             // 
+            panel1.Controls.Add(label3);
             panel1.Controls.Add(btn_DeleteProduct);
             panel1.Controls.Add(btn_UpdateProduct);
+            panel1.Controls.Add(dtp_ExpirationDate);
             panel1.Controls.Add(btn_Add);
             panel1.Controls.Add(nmr_PurchasePrice);
+            panel1.Controls.Add(label10);
             panel1.Controls.Add(nmr_ConversionRate);
             panel1.Controls.Add(cbb_Products);
+            panel1.Controls.Add(dtp_ProductionDate);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(rtb_ProductNote);
             panel1.Controls.Add(label8);
@@ -395,7 +403,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 176);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1277, 150);
+            panel1.Size = new Size(1390, 150);
             panel1.TabIndex = 27;
             // 
             // btn_DeleteProduct
@@ -406,7 +414,7 @@
             btn_DeleteProduct.Depth = 0;
             btn_DeleteProduct.HighEmphasis = true;
             btn_DeleteProduct.Icon = null;
-            btn_DeleteProduct.Location = new Point(1127, 101);
+            btn_DeleteProduct.Location = new Point(1289, 105);
             btn_DeleteProduct.Margin = new Padding(4, 6, 4, 6);
             btn_DeleteProduct.MouseState = MaterialSkin.MouseState.HOVER;
             btn_DeleteProduct.Name = "btn_DeleteProduct";
@@ -427,7 +435,7 @@
             btn_UpdateProduct.Depth = 0;
             btn_UpdateProduct.HighEmphasis = true;
             btn_UpdateProduct.Icon = null;
-            btn_UpdateProduct.Location = new Point(1127, 57);
+            btn_UpdateProduct.Location = new Point(1289, 61);
             btn_UpdateProduct.Margin = new Padding(4, 6, 4, 6);
             btn_UpdateProduct.MouseState = MaterialSkin.MouseState.HOVER;
             btn_UpdateProduct.Name = "btn_UpdateProduct";
@@ -448,7 +456,7 @@
             btn_Add.Depth = 0;
             btn_Add.HighEmphasis = true;
             btn_Add.Icon = null;
-            btn_Add.Location = new Point(1127, 16);
+            btn_Add.Location = new Point(1289, 20);
             btn_Add.Margin = new Padding(4, 6, 4, 6);
             btn_Add.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Add.Name = "btn_Add";
@@ -463,7 +471,7 @@
             // 
             // nmr_PurchasePrice
             // 
-            nmr_PurchasePrice.Location = new Point(668, 33);
+            nmr_PurchasePrice.Location = new Point(668, 38);
             nmr_PurchasePrice.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_PurchasePrice.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_PurchasePrice.Name = "nmr_PurchasePrice";
@@ -474,7 +482,7 @@
             // 
             // nmr_ConversionRate
             // 
-            nmr_ConversionRate.Location = new Point(486, 33);
+            nmr_ConversionRate.Location = new Point(478, 41);
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
             nmr_ConversionRate.TabIndex = 21;
@@ -482,7 +490,7 @@
             // cbb_Products
             // 
             cbb_Products.FormattingEnabled = true;
-            cbb_Products.Location = new Point(19, 86);
+            cbb_Products.Location = new Point(19, 97);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
             cbb_Products.TabIndex = 20;
@@ -491,7 +499,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(858, 9);
+            label9.Location = new Point(1038, 9);
             label9.Name = "label9";
             label9.Size = new Size(58, 20);
             label9.TabIndex = 15;
@@ -500,7 +508,7 @@
             // rtb_ProductNote
             // 
             rtb_ProductNote.BorderStyle = BorderStyle.None;
-            rtb_ProductNote.Location = new Point(858, 33);
+            rtb_ProductNote.Location = new Point(1038, 33);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(227, 80);
             rtb_ProductNote.TabIndex = 14;
@@ -509,7 +517,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(668, 62);
+            label8.Location = new Point(668, 85);
             label8.Name = "label8";
             label8.Size = new Size(69, 20);
             label8.TabIndex = 13;
@@ -518,7 +526,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(668, 9);
+            label7.Location = new Point(668, 14);
             label7.Name = "label7";
             label7.Size = new Size(60, 20);
             label7.TabIndex = 12;
@@ -526,7 +534,7 @@
             // 
             // nmr_Quantity
             // 
-            nmr_Quantity.Location = new Point(668, 85);
+            nmr_Quantity.Location = new Point(668, 108);
             nmr_Quantity.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
@@ -537,7 +545,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(486, 8);
+            label6.Location = new Point(478, 16);
             label6.Name = "label6";
             label6.Size = new Size(116, 20);
             label6.TabIndex = 8;
@@ -546,7 +554,7 @@
             // cbb_Units
             // 
             cbb_Units.FormattingEnabled = true;
-            cbb_Units.Location = new Point(245, 84);
+            cbb_Units.Location = new Point(245, 95);
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
             cbb_Units.TabIndex = 7;
@@ -555,7 +563,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(245, 62);
+            label5.Location = new Point(245, 73);
             label5.Name = "label5";
             label5.Size = new Size(106, 20);
             label5.TabIndex = 6;
@@ -564,7 +572,7 @@
             // cbb_Categories
             // 
             cbb_Categories.FormattingEnabled = true;
-            cbb_Categories.Location = new Point(245, 30);
+            cbb_Categories.Location = new Point(245, 41);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
             cbb_Categories.TabIndex = 5;
@@ -572,7 +580,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(245, 8);
+            label4.Location = new Point(245, 19);
             label4.Name = "label4";
             label4.Size = new Size(101, 20);
             label4.TabIndex = 4;
@@ -581,7 +589,7 @@
             // textbox34
             // 
             textbox34.AutoSize = true;
-            textbox34.Location = new Point(19, 63);
+            textbox34.Location = new Point(19, 74);
             textbox34.Name = "textbox34";
             textbox34.Size = new Size(100, 20);
             textbox34.TabIndex = 2;
@@ -590,7 +598,7 @@
             // tb_Id
             // 
             tb_Id.Enabled = false;
-            tb_Id.Location = new Point(19, 32);
+            tb_Id.Location = new Point(19, 43);
             tb_Id.Name = "tb_Id";
             tb_Id.Size = new Size(125, 27);
             tb_Id.TabIndex = 1;
@@ -598,17 +606,53 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(19, 9);
+            label2.Location = new Point(19, 20);
             label2.Name = "label2";
             label2.Size = new Size(30, 20);
             label2.TabIndex = 0;
             label2.Text = "Mã";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(847, 83);
+            label3.Name = "label3";
+            label3.Size = new Size(97, 20);
+            label3.TabIndex = 44;
+            label3.Text = "Ngày hết hạn";
+            // 
+            // dtp_ExpirationDate
+            // 
+            dtp_ExpirationDate.CustomFormat = "dd/MM/yyyy";
+            dtp_ExpirationDate.Format = DateTimePickerFormat.Custom;
+            dtp_ExpirationDate.Location = new Point(847, 108);
+            dtp_ExpirationDate.Name = "dtp_ExpirationDate";
+            dtp_ExpirationDate.Size = new Size(147, 27);
+            dtp_ExpirationDate.TabIndex = 43;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(844, 13);
+            label10.Name = "label10";
+            label10.Size = new Size(102, 20);
+            label10.TabIndex = 42;
+            label10.Text = "Ngày sản xuất";
+            // 
+            // dtp_ProductionDate
+            // 
+            dtp_ProductionDate.CustomFormat = "dd/MM/yyyy";
+            dtp_ProductionDate.Format = DateTimePickerFormat.Custom;
+            dtp_ProductionDate.Location = new Point(844, 38);
+            dtp_ProductionDate.Name = "dtp_ProductionDate";
+            dtp_ProductionDate.Size = new Size(147, 27);
+            dtp_ProductionDate.TabIndex = 41;
+            // 
             // GoodsReceiptNoteInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1277, 702);
+            ClientSize = new Size(1390, 702);
             Controls.Add(groupBox2);
             Controls.Add(panel3);
             Controls.Add(panel2);
@@ -682,5 +726,9 @@
         private MaterialSkin.Controls.MaterialButton btn_DeleteProduct;
         private MaterialSkin.Controls.MaterialButton btn_UpdateProduct;
         private MaterialSkin.Controls.MaterialButton btn_Add;
+        private Label label3;
+        private DateTimePicker dtp_ExpirationDate;
+        private Label label10;
+        private DateTimePicker dtp_ProductionDate;
     }
 }

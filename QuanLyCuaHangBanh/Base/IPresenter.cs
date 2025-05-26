@@ -8,7 +8,7 @@ namespace QuanLyCuaHangBanh.Base
 {
     public interface IPresenter<T> where T : class
     {
-        IRepositoryProvider Provider { get; set; }
+        IService Service { get; set; }
         IView View { get; set; }
         BindingSource BindingSource { get; set; }
 

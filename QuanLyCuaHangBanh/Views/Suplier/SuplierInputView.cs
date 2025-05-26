@@ -7,14 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Views
 {
     public partial class SuplierInputView : Form
     {
-        private Supplier? _producer;
-        public SuplierInputView(Supplier? producer = null)
+        private SupplierDTO? _producer;
+        public SuplierInputView(SupplierDTO? producer = null)
         {
             InitializeComponent();
 

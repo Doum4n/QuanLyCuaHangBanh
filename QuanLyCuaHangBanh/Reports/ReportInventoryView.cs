@@ -51,6 +51,7 @@ namespace QuanLyCuaHangBanh.Reports
 
             var inventoryItems = context.Inventories
                 .AsNoTracking()
+                .Include(o => o.GoodsReceiptNoteDetail)
                 .Include(i => i.ProductUnit)
                 .ThenInclude(i => i.Product)
                 .Select(i => new InventoryItem
@@ -61,8 +62,8 @@ namespace QuanLyCuaHangBanh.Reports
                     UnitName = i.ProductUnit.Unit.Name,
                     SupplierName = i.ProductUnit.Product.Producer.Name,
                     ManufacturerName = i.ProductUnit.Product.Manufacturer.Name,
-                    ProductionDate = i.ProductUnit.Product.ProductionDate.ToString("dd/MM/yyyy"),
-                    ExpirationDate = i.ProductUnit.Product.ExpirationDate.ToString("dd/MM/yyyy"),
+                    ProductionDate = i.GoodsReceiptNoteDetail.ProductionDate.ToString("dd/MM/yyyy"),
+                    ExpirationDate = i.GoodsReceiptNoteDetail.ExpirationDate.ToString("dd/MM/yyyy"),
                     ConversionRate = i.ProductUnit.ConversionRate,
                     Quantity = i.Quantity
                 }).Cast<Object>()
@@ -126,8 +127,8 @@ namespace QuanLyCuaHangBanh.Reports
                     UnitName = i.ProductUnit.Unit.Name,
                     SupplierName = i.ProductUnit.Product.Producer.Name,
                     ManufacturerName = i.ProductUnit.Product.Manufacturer.Name,
-                    ProductionDate = i.ProductUnit.Product.ProductionDate.ToString("dd/MM/yyyy"),
-                    ExpirationDate = i.ProductUnit.Product.ExpirationDate.ToString("dd/MM/yyyy"),
+                    ProductionDate = i.GoodsReceiptNoteDetail.ProductionDate.ToString("dd/MM/yyyy"),
+                    ExpirationDate = i.GoodsReceiptNoteDetail.ExpirationDate.ToString("dd/MM/yyyy"),
                     ConversionRate = i.ProductUnit.ConversionRate,
                     Quantity = i.Quantity
                 }).Cast<Object>()

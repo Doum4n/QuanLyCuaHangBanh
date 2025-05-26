@@ -27,9 +27,12 @@ namespace QuanLyCuaHangBanh.Repositories
 
         public override void Add(GoodsReceiptNote_Detail entity)
         {
+
+            base.Add(entity);
+
             // Update the quantity in the inventory
             var inventory = context.Inventories
-                .FirstOrDefault(i => i.ProductUnitID == entity.ProductUnitId);
+                .FirstOrDefault(i => i.ProductUnitID == entity.ProductUnitId && i.GoodsReceiptNoteDetailID == entity.ID);
             if (inventory != null)
             {
                 inventory.Quantity += entity.Quantity;
@@ -37,16 +40,18 @@ namespace QuanLyCuaHangBanh.Repositories
             }
             else
             {
+                MessageBox.Show("it work");
                 // If inventory doesn't exist, create a new one
                 Inventory newInventory = new Inventory
                 {
                     ProductUnitID = entity.ProductUnitId,
+                    GoodsReceiptNoteDetailID = entity.ID,
                     Quantity = entity.Quantity
                 };
                 context.Inventories.Add(newInventory);
             }
+            context.SaveChanges();
 
-            base.Add(entity);
         }
 
         internal List<GoodsReceiptNote_Detail> GetReceiptNote_Details(int value)

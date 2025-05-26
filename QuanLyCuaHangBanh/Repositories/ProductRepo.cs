@@ -20,6 +20,7 @@ namespace QuanLyCuaHangBanh.Repositories
             return context.Products
                 .AsNoTracking()
                 .AsSplitQuery() // nếu có nhiều include
+                .Include(p => p.Manufacturer)
                 .Include(p => p.ProductUnits)
                 .ThenInclude(pu => pu.Inventory)
                 .Include(p => p.Category)
@@ -47,10 +48,16 @@ namespace QuanLyCuaHangBanh.Repositories
             base.Add(entity);
         }
 
+        // TODO sửa lại
         public override void Update(Product entity)
         {
-            MessageBox.Show("Updating product: " + entity.ToString());
-            if (entity.Image != "" && !entity.Image.Contains("https://res.cloudinary.com"))
+            var oldEntity = context.Products.AsNoTracking().FirstOrDefault(p => p.ID == entity.ID);
+            bool isNewImageUploaded = false;
+            string oldImageUrl = oldEntity?.Image;
+
+            // Chỉ upload nếu người dùng đã chọn ảnh mới từ máy
+            if (!string.IsNullOrEmpty(entity.Image) &&
+                !entity.Image.StartsWith("https://res.cloudinary.com"))
             {
                 var cloudinary = CloudinaryConfig.GetCloudinaryClient();
                 var uploadParams = new ImageUploadParams()
@@ -60,9 +67,42 @@ namespace QuanLyCuaHangBanh.Repositories
                 var uploadResult = cloudinary.Upload(uploadParams);
                 entity.Image = uploadResult.SecureUri.ToString();
             }
+            else
+            {
+                // Nếu không đổi ảnh, giữ ảnh cũ
+                entity.Image = oldEntity?.Image;
+            }
+
+            // Nếu đã upload ảnh mới, xóa ảnh cũ (nếu nó nằm trên cloudinary)
+            if (isNewImageUploaded && !string.IsNullOrEmpty(oldImageUrl) &&
+                oldImageUrl.StartsWith("https://res.cloudinary.com"))
+            {
+                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+
+                // Tách public_id từ URL (giả định ảnh ở dạng: https://res.cloudinary.com/<cloud_name>/image/upload/v<version>/<public_id>.<ext>)
+                Uri uri = new Uri(oldImageUrl);
+
+                // Lấy phần path sau "upload/"
+                string pathAfterUpload = uri.AbsolutePath.Split("/upload/")[1]; // "v1748229852/lh8zjmsny3nlzqmwehoo.png"
+
+                // Bỏ version và đuôi ảnh
+                string[] segments = pathAfterUpload.Split('/');
+
+                // Nếu có version (bắt đầu bằng "v")
+                if (segments[0].StartsWith("v"))
+                {
+                    string publicIdWithExtension = string.Join('/', segments.Skip(1)); // "lh8zjmsny3nlzqmwehoo.png"
+                    string publicId = Path.ChangeExtension(publicIdWithExtension, null); // => "lh8zjmsny3nlzqmwehoo"
+
+                    // Dùng để xóa:
+                    var deletionParams = new DeletionParams(publicId);
+                    var result = cloudinary.Destroy(deletionParams);
+                }
+            }
 
             base.Update(entity);
         }
+
 
         public void DeleteById(int ID)
         {

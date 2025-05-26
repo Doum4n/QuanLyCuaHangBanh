@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginView));
             label1 = new Label();
             tb_Username = new TextBox();
             tb_password = new TextBox();
@@ -40,7 +41,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(188, 61);
+            label1.Location = new Point(207, 50);
             label1.Name = "label1";
             label1.Size = new Size(111, 20);
             label1.TabIndex = 0;
@@ -49,7 +50,7 @@
             // tb_Username
             // 
             tb_Username.BorderStyle = BorderStyle.None;
-            tb_Username.Location = new Point(321, 61);
+            tb_Username.Location = new Point(324, 50);
             tb_Username.Name = "tb_Username";
             tb_Username.Size = new Size(182, 20);
             tb_Username.TabIndex = 1;
@@ -57,7 +58,7 @@
             // tb_password
             // 
             tb_password.BorderStyle = BorderStyle.None;
-            tb_password.Location = new Point(321, 116);
+            tb_password.Location = new Point(324, 105);
             tb_password.Name = "tb_password";
             tb_password.Size = new Size(182, 20);
             tb_password.TabIndex = 3;
@@ -66,7 +67,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(229, 116);
+            label2.Location = new Point(248, 105);
             label2.Name = "label2";
             label2.Size = new Size(70, 20);
             label2.TabIndex = 2;
@@ -79,7 +80,7 @@
             btn_Login.Depth = 0;
             btn_Login.HighEmphasis = true;
             btn_Login.Icon = null;
-            btn_Login.Location = new Point(321, 180);
+            btn_Login.Location = new Point(324, 166);
             btn_Login.Margin = new Padding(4, 6, 4, 6);
             btn_Login.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Login.Name = "btn_Login";
@@ -94,9 +95,11 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(36, 40);
+            pictureBox1.Image = Properties.Resources.access_control_system_abstract_concept;
+            pictureBox1.Location = new Point(20, 40);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(113, 151);
+            pictureBox1.Size = new Size(162, 176);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 5;
             pictureBox1.TabStop = false;
             // 
@@ -104,13 +107,14 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(554, 251);
+            ClientSize = new Size(530, 251);
             Controls.Add(pictureBox1);
             Controls.Add(btn_Login);
             Controls.Add(tb_password);
             Controls.Add(label2);
             Controls.Add(tb_Username);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LoginView";
             Text = "LoginView";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
