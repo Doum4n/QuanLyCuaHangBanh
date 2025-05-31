@@ -53,6 +53,12 @@ namespace QuanLyCuaHangBanh.Views
             dgv_WarehouseNoteList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_WarehouseNoteList.Refresh();
+            dgv_WarehouseNoteList.ClearSelection(); 
+        }
+
         private void btn_Add_Click(object sender, EventArgs e)
         {
             AddNewEvent?.Invoke(sender, e);

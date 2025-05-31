@@ -15,23 +15,16 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class ProductRepo(QLCHB_DBContext context) : RepositoryBase<Product>(context)
     {
-        public override IList<TDto> GetAllAsDto<TDto>(Func<Product, TDto> converter)
+
+        public override async Task<IList<TDto>> GetAllAsDto<TDto>(System.Linq.Expressions.Expression<Func<Product, TDto>> selector)
         {
-            return context.Products
-                .AsNoTracking()
-                .AsSplitQuery() // nếu có nhiều include
-                .Include(p => p.Manufacturer)
-                .Include(p => p.ProductUnits)
-                .ThenInclude(pu => pu.Inventory)
-                .Include(p => p.Category)
-                .Include(p => p.Producer)
+            return await context.Products
                 .Include(p => p.ProductUnits)
                 .ThenInclude(pu => pu.Unit)
-                .Select(converter)
-                .ToList();
-
+                .AsNoTracking()
+                .Select(selector)
+                .ToListAsync();
         }
-
         public override void Add(Product entity)
         {
             if (entity.Image != "" && entity.Image != null)

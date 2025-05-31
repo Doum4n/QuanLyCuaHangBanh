@@ -1,8 +1,12 @@
 ﻿using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Uitls;
 using System.Collections.Generic;
-using System.Linq; // Để sử dụng .ToList()
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks; // Để sử dụng .ToList()
 
 namespace QuanLyCuaHangBanh.Services
 {
@@ -10,9 +14,19 @@ namespace QuanLyCuaHangBanh.Services
     {
         private readonly IRepositoryProvider _provider = provider;
 
-        public IEnumerable<Employee> GetAllEmployees()
+        public async Task<IList<EmployeeDTO>> GetAllEmployees()
         {
-            return _provider.GetRepository<Employee>().GetAll();
+            return await _provider.GetRepository<Employee>().GetAllAsDto(
+                o => new EmployeeDTO
+                {
+                    ID = o.ID,
+                    Name = o.Name,
+                    PhoneNumber = o.PhoneNumber,
+                    Address = o.Address,
+                    Role = o.Role,
+                    Username = o.Username,
+                    Password = o.Password
+                });
         }
 
         public void AddEmployee(Employee employee)
@@ -30,9 +44,35 @@ namespace QuanLyCuaHangBanh.Services
             _provider.GetRepository<Employee>().Delete(employee);
         }
 
-        // Bạn có thể thêm các phương thức Export/Import/Search ở đây nếu cần, ví dụ:
-        // public void ExportEmployeesToExcel() { ... }
-        // public void ImportEmployeesFromExcel() { ... }
-        // public IEnumerable<Employee> SearchEmployees(string searchValue) { ... }
+        public async Task ExportEmployees(IList<Employee> employees)
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("Mã nhân viên");
+            dataTable.Columns.Add("Tên nhân viên");
+            dataTable.Columns.Add("Số điện thoại");
+            dataTable.Columns.Add("Địa chỉ");
+            dataTable.Columns.Add("Chức vụ");
+            foreach (var employee in employees)
+            {
+                dataTable.Rows.Add(employee.ID, employee.Name, employee.PhoneNumber, employee.Address, employee.Role);
+            }
+            ExcelHandler.ExportExcel("Nhân viên", "Nhân viên", dataTable);
+        }
+
+        public void ImportEmployees()
+        {
+            ExcelHandler.ImportExcel(ImportEmployee);
+        }
+
+        public void ImportEmployee(DataRow row)
+        {
+            var employee = new Employee(){
+                Name = row["Tên nhân viên"].ToString() ?? string.Empty,
+                PhoneNumber = row["Số điện thoại"].ToString() ?? string.Empty,
+                Address = row["Địa chỉ"].ToString() ?? string.Empty,
+                Role = row["Chức vụ"].ToString() ?? string.Empty
+            };
+            _provider.GetRepository<Employee>().Add(employee);
+        }
     }
 }

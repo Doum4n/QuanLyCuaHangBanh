@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms.Design;
 
 namespace QuanLyCuaHangBanh.Services
@@ -13,9 +14,9 @@ namespace QuanLyCuaHangBanh.Services
     {
         private readonly IRepositoryProvider _provider = provider;
 
-        public IEnumerable<Unit> GetAllUnits()
+        public async Task<IEnumerable<Unit>> GetAllUnits()
         {
-            return _provider.GetRepository<Unit>().GetAll();
+            return await _provider.GetRepository<Unit>().GetAll();
         }
 
         public void AddUnit(Unit unit)
@@ -35,8 +36,10 @@ namespace QuanLyCuaHangBanh.Services
 
         public IEnumerable<Unit> SearchUnits(string searchValue)
         {
-            return _provider.GetRepository<Unit>()
-                .GetAll()
+
+            IList<Unit> allUnits = _provider.GetRepository<Unit>().GetAll().Result; // Assuming GetAll() is async and returns Task<IList<Unit>>
+
+            return allUnits
                 .Where(u => u.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                             u.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
                 .ToList();

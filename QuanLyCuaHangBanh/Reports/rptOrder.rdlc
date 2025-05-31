@@ -103,7 +103,7 @@
             <Top>0cm</Top>
             <Left>0cm</Left>
             <Height>1.06567cm</Height>
-            <Width>19.41217cm</Width>
+            <Width>26.1cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -130,9 +130,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>1.98289cm</Top>
-            <Left>15.53634cm</Left>
+            <Left>22.75334cm</Left>
             <Height>0.6cm</Height>
-            <Width>3.87583cm</Width>
+            <Width>3.34666cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -151,25 +151,25 @@
                   <Width>1.14487cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.53704cm</Width>
+                  <Width>6.60104cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.53704cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.44721cm</Width>
+                  <Width>4.7223cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.53704cm</Width>
+                  <Width>2.51587cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.83338cm</Width>
+                  <Width>2.48879cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.36771cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.00787cm</Width>
+                  <Width>3.72237cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -185,11 +185,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>STT</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -215,7 +217,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Customer Name</Value>
+                                  <Value>Khách hàng</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -245,11 +247,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Order Date</Value>
+                                  <Value>Ngày đặt</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox7</rd:DefaultName>
@@ -275,7 +279,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Deliver Address</Value>
+                                  <Value>Địa chỉ giao hàng</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -305,11 +309,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Phone Numer</Value>
+                                  <Value>SĐT</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox4</rd:DefaultName>
@@ -335,11 +341,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Payment Method</Value>
+                                  <Value>PTTT</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox12</rd:DefaultName>
@@ -365,11 +373,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Status</Value>
+                                  <Value>Trạng thái</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox14</rd:DefaultName>
@@ -395,11 +405,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Total Price</Value>
+                                  <Value>Tổng tiền</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox16</rd:DefaultName>
@@ -434,7 +446,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
@@ -494,7 +508,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>OrderDate</rd:DefaultName>
@@ -524,7 +540,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>DeliveryAddress</rd:DefaultName>
@@ -554,7 +572,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>PhoneNumber</rd:DefaultName>
@@ -569,7 +589,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -585,7 +604,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>PaymentMethod</rd:DefaultName>
@@ -615,7 +636,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Status</rd:DefaultName>
@@ -641,11 +664,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalPrice.Value</Value>
+                                  <Value>=Format(Fields!TotalPrice.Value, "N0")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>TotalPrice</rd:DefaultName>
@@ -692,7 +717,7 @@
             <Top>2.75928cm</Top>
             <Left>0cm</Left>
             <Height>1.2cm</Height>
-            <Width>19.41216cm</Width>
+            <Width>26.1cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -718,9 +743,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox18</rd:DefaultName>
             <Top>1.24206cm</Top>
-            <Left>7.83967cm</Left>
+            <Left>9.82934cm</Left>
             <Height>0.6cm</Height>
-            <Width>4.08837cm</Width>
+            <Width>6.2897cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -736,7 +761,7 @@
         <Height>3.95928cm</Height>
         <Style />
       </Body>
-      <Width>19.41217cm</Width>
+      <Width>26.1cm</Width>
       <Page>
         <PageHeight>21cm</PageHeight>
         <PageWidth>29.7cm</PageWidth>

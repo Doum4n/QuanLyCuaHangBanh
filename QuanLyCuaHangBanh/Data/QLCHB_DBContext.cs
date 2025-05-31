@@ -41,11 +41,19 @@ namespace QuanLyCuaHangBanh.Data
         {
             configurationBuilder
                 .UseNpgsql(ConfigurationManager.ConnectionStrings["QLCHB_Connection"].ConnectionString)
-                .LogTo(Console.WriteLine, LogLevel.Information);
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging(); // CHỈ DÙNG KHI DEBUG
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // modelBuilder.Entity<LogEntry>(entity =>
+            // {
+            //     entity.ToTable("AppLogs"); // Đặt tên bảng là AppLogs
+            //     entity.Property(e => e.Timestamp).IsRequired().HasDefaultValueSql("NOW()"); // Đặt giá trị mặc định cho Timestamp
+            //     // Các cấu hình khác nếu cần
+            // });
 
             modelBuilder.Entity<Order>()
                 .Property(o => o.OrderDate)
@@ -72,40 +80,51 @@ namespace QuanLyCuaHangBanh.Data
                 .HasForeignKey(pu => pu.UnitID)
                 .OnDelete(DeleteBehavior.Restrict); // hoặc NoAction
 
-            modelBuilder.Entity<Account>().ToTable("Accounts");
-            modelBuilder.Entity<AccountsPayable>().ToTable("AccountsPayable");
-            modelBuilder.Entity<AccountsReceivable>().ToTable("AccountsReceivable");
+            // Cấu hình Kế thừa TPT cho Account
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.ToTable("Accounts"); // Đảm bảo bảng Account cơ sở được đặt tên (nếu TPT)
 
+                // Cấu hình mối quan hệ với Invoice
+                entity.HasOne(d => d.Invoice)               // Một Account thuộc về một Invoice
+                      .WithMany(p => p.Accounts)           // Một Invoice có nhiều Accounts (đảm bảo Invoice.cs có ICollection<Account> Accounts)
+                      .HasForeignKey(d => d.InvoiceID)     // Khóa ngoại là InvoiceID trong bảng Accounts
+                      .OnDelete(DeleteBehavior.Cascade);   // Hoặc Restrict/SetNull tùy logic của bạn
+            });
+
+            // Cấu hình TPT cho Account (bạn đã có phần này và nó có vẻ đúng)
+            // modelBuilder.Entity<Account>().ToTable("Accounts"); // Lặp lại nếu đã có ở trên
             modelBuilder.Entity<AccountsPayable>()
-                .ToTable("AccountsPayable") // Bảng riêng cho AccountsPayable
-                .HasBaseType<Account>();     // Chỉ định lớp cơ sở của nó
-
-            // Cấu hình TPT cho lớp AccountsReceivable
+                .ToTable("AccountsPayable")
+                .HasBaseType<Account>();
             modelBuilder.Entity<AccountsReceivable>()
-                .ToTable("AccountsReceivable") // Bảng riêng cho AccountsReceivable
-                .HasBaseType<Account>();       // Chỉ định lớp cơ sở của nó
+                .ToTable("AccountsReceivable")
+                .HasBaseType<Account>();
 
-            // ==== KẾ THỪA CHO INVOICE (cha) ====
+            // Cấu hình Kế thừa TPT cho Invoice
             modelBuilder.Entity<Invoice>().ToTable("Invoices");
-            modelBuilder.Entity<SalesInvoice>().ToTable("SalesInvoices");
-            modelBuilder.Entity<PurchaseInvoice>().ToTable("PurchaseInvoices");
+            modelBuilder.Entity<SalesInvoice>()
+                .ToTable("SalesInvoices")
+                .HasBaseType<Invoice>(); 
+            modelBuilder.Entity<PurchaseInvoice>()
+                .ToTable("PurchaseInvoices")
+                .HasBaseType<Invoice>();
 
-            // ==== KẾ THỪA CHO INVOICE_DETAIL (cha) ====
-            modelBuilder.Entity<SalesInvoice_Detail>()
-                .HasBaseType<Invoice_Detail>(); // Khẳng định kế thừa
-            modelBuilder.Entity<Invoice_Detail>().ToTable("InvoiceDetails");
-
-            // KHÔNG thêm foreign key nào riêng tới SalesInvoice
-
-
-            modelBuilder.Entity<SalesInvoice_Detail>().ToTable("SalesInvoiceDetails");
-            modelBuilder.Entity<PurchaseInvoice_Detail>().ToTable("PurchaseInvoiceDetails");
-
-            // ==== QUAN HỆ GIỮA InvoiceDetail → Invoice ====
+            // Cấu hình Kế thừa TPH cho Invoice_Detail
             modelBuilder.Entity<Invoice_Detail>()
-                .HasOne(d => d.Invoice)
-                .WithMany() // hoặc WithMany(i => i.Details) nếu cần truy xuất ngược
-                .HasForeignKey(d => d.InvoiceID);
+                .ToTable("InvoiceDetails") // Bảng duy nhất cho TPH
+                .HasDiscriminator<string>("Discriminator") // Cột phân biệt
+                .HasValue<SalesInvoice_Detail>("sales_invoice_detail")
+                .HasValue<PurchaseInvoice_Detail>("purchase_invoice_detail");
+            // EF Core sẽ tự động xử lý SalesInvoice_Detail và PurchaseInvoice_Detail là một phần của bảng "InvoiceDetails"
+            // Không cần .ToTable() riêng cho SalesInvoice_Detail và PurchaseInvoice_Detail khi dùng TPH
+
+            // Quan hệ giữa Invoice_Detail và Invoice
+            modelBuilder.Entity<Invoice_Detail>()
+                .HasOne(d => d.Invoice) // Từ Invoice_Detail có một Invoice
+                .WithMany(i => i.InvoiceDetails) // Invoice có nhiều InvoiceDetails (đảm bảo Invoice.cs có ICollection<Invoice_Detail> InvoiceDetails)
+                .HasForeignKey(d => d.InvoiceID) // Khóa ngoại trong Invoice_Detail là InvoiceID
+                .OnDelete(DeleteBehavior.Cascade); // Hoặc Restrict/NoAction tùy vào logic nghiệp vụ
 
         }
 

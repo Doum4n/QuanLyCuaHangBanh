@@ -13,23 +13,7 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class GoodsReceiptNoteRepo(QLCHB_DBContext context) : RepositoryBase<GoodsReceiptNote>(context)
     {
-        public override IList<TDto> GetAllAsDto<TDto>(Func<GoodsReceiptNote, TDto> converter)
-        {
-            return context.GoodsReceiptNotes   
-                .Include(g => g.Supplier)
-                .Include(g => g.GoodsReceiptNoteDetails) // Load dữ liệu GoodsReceiptNoteDetails
-                .Select(converter)
-                .ToList();
-        }
-
-        public override GoodsReceiptNote? GetByValue(object value)
-        {
-            return context.GoodsReceiptNotes
-                .Include(g => g.Supplier)
-                .Include(g => g.GoodsReceiptNoteDetails) // Load dữ liệu GoodsReceiptNoteDetails
-                .FirstOrDefault(g => g.ID == (int)value);
-        }
-
+       
         public override void Add(GoodsReceiptNote entity)
         {
 

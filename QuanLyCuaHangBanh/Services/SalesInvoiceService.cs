@@ -2,6 +2,7 @@
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Models.Base;
 using QuanLyCuaHangBanh.Repositories;
 using System;
 using System.Collections.Generic;
@@ -9,100 +10,221 @@ using System.ComponentModel; // For BindingList
 using System.Linq;
 using QuanLyCuaHangBanh.Base;
 using QuanLyCuaHangBanh.DTO.Base;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.Data;
+using QuanLyCuaHangBanh.Uitls;
 
 namespace QuanLyCuaHangBanh.Services
 {
-    public class SalesInvoiceService : IService
+    public class SalesInvoiceService(IRepositoryProvider repositoryProvider, QLCHB_DBContext context) : IService
     {
-        private readonly IRepositoryProvider _repositoryProvider;
-        private readonly QLCHB_DBContext _context; // Required for direct EF Core operations like Includes, FirstOrDefault
-
-        public SalesInvoiceService(IRepositoryProvider repositoryProvider, QLCHB_DBContext context)
+        private int _salesInvoiceId = 0;
+        public async Task<IList<SaleInvoiceDTO>> GetAllSalesInvoicesAsDto()
         {
-            _repositoryProvider = repositoryProvider;
-            _context = context;
-        }
-
-        public IList<InvoiceDTO> GetAllSalesInvoicesAsDto()
-        {
-            // This logic is directly from your original LoadData method
-            return _repositoryProvider.GetRepository<SalesInvoice>().GetAllAsDto<InvoiceDTO>(
-                i => new SaleInvoiceDTO
+            return await repositoryProvider.GetRepository<SalesInvoice>().GetAllAsDto(i =>
+                new SaleInvoiceDTO
                 (
                     i.ID,
-                    i.Employee.Name,
+                    i.Employee.Name ?? "",
                     i.Date,
-                    i.InvoiceDetails.Sum(o => o.Quantity * o.Product_Unit.UnitPrice),
-                    i.Status
+                    i.InvoiceDetails.OfType<SalesInvoice_Detail>().Sum(o => o.Quantity * o.UnitPrice),
+                    i.Status,
+                    i.CustomerID,
+                    i.Customer.Name ?? "",
+                    i.Customer.Type ?? "",
+                    i.PaymentMethod,
+                    i.Customer.CreditPeriod,
+                    i.Accounts.OfType<AccountsReceivable>().Sum(o => o.Amount),
+                    i.Note
                 )
             );
         }
 
-        public void AddSalesInvoice(SalesInvoice salesInvoice, BindingList<ProductSaleInvoiceDTO> products)
+        public IEnumerable<Order_Detail> GetOrderDetails(int orderId)
         {
-            _repositoryProvider.GetRepository<SalesInvoice>().Add(salesInvoice);
+            return ((OrderDetailRepo)repositoryProvider.GetRepository<Order_Detail>()).GetOrderDetail(orderId);
+        }
+
+        public void AddSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
+        {
+            salesInvoice.ID = 0; // Invoice chưa được tạo
+            repositoryProvider.GetRepository<SalesInvoice>().Add(salesInvoice);
+            accountsReceivable.InvoiceID = salesInvoice.ID;
+            repositoryProvider.GetRepository<AccountsReceivable>().Add(accountsReceivable);
             // After adding, salesInvoice.ID should be populated by the database
             foreach (var productDto in products)
             {
                 if (productDto != null) // Ensure productDto is not null
                 {
                     // Map ProductDTO to SalesInvoice_Detail model
+                    productDto.ID = 0; // Set ID to 0 to ensure it's a new record
                     var salesInvoiceDetail = productDto.ToSalesInvoiceDetail();
                     salesInvoiceDetail.InvoiceID = salesInvoice.ID; // Link to the newly added invoice
-                    _repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
+                    repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
                 }
             }
         }
 
-        public void UpdateSalesInvoice(SalesInvoice salesInvoice, BindingList<ProductSaleInvoiceDTO> products)
+        public async Task UpdateSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
         {
-            _repositoryProvider.GetRepository<SalesInvoice>().Update(salesInvoice);
-
-            // This part mirrors your original logic for updating invoice details.
-            // It currently re-adds details without considering existing ones or deletions.
-            // A more robust solution would involve tracking changes (added, modified, deleted)
-            // within the 'products' list and applying appropriate repository actions.
-            // However, sticking to the "no logic change" rule:
+            repositoryProvider.GetRepository<SalesInvoice>().Update(salesInvoice);
+            accountsReceivable.InvoiceID = salesInvoice.ID;
+            repositoryProvider.GetRepository<AccountsReceivable>().Update(accountsReceivable);
             foreach (var productDto in products)
             {
                 if (productDto != null)
                 {
-                    // Assuming ToSalesInvoiceDetail creates a new instance.
-                    // This might lead to duplicate entries if not handled carefully in the UI.
-                    // For example, if a product is already on the invoice and just its quantity changes,
-                    // you'd typically update the existing detail, not add a new one.
-                    var salesInvoiceDetail = productDto.ToSalesInvoiceDetail();
-                    salesInvoiceDetail.InvoiceID = salesInvoice.ID; // Ensure it's linked
-                    _repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
+
+                    switch (productDto.Status)
+                    {
+                        case Status.New:
+                            var salesInvoiceDetail = productDto.ToSalesInvoiceDetail();
+                            salesInvoiceDetail.InvoiceID = salesInvoice.ID; // Ensure it's linked
+                            repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
+                            break;
+                        case Status.Modified:
+                            productDto.InvoiceID = salesInvoice.ID; // Ensure it's linked
+                            repositoryProvider.GetRepository<SalesInvoice_Detail>().Update(productDto.ToSalesInvoiceDetail());
+                            break;
+                        case Status.Deleted:
+                            // Find the existing detail to delete
+                            var existingDetail = await repositoryProvider.GetRepository<SalesInvoice_Detail>()
+                                .GetByValue(productDto.ID);
+                            if (existingDetail != null)
+                            {
+                                repositoryProvider.GetRepository<SalesInvoice_Detail>().Delete(existingDetail);
+                            }
+                            break;
+                    }
                 }
             }
         }
 
-        public void DeleteSalesInvoice(int invoiceId)
+        public async Task DeleteSalesInvoice(int invoiceId)
         {
             // IMPORTANT: Delete related entities first due to foreign key constraints.
             // You might need to adjust this based on your actual database cascade delete rules.
 
             // 1. Delete SalesInvoice_Details linked to this invoice
-            var salesInvoiceDetails = _context.SalesInvoiceDetails
+            var salesInvoiceDetails = context.SalesInvoiceDetails
                                               .Where(d => d.InvoiceID == invoiceId)
                                               .ToList();
             foreach (var detail in salesInvoiceDetails)
             {
-                _repositoryProvider.GetRepository<SalesInvoice_Detail>().Delete(detail);
+                repositoryProvider.GetRepository<SalesInvoice_Detail>().Delete(detail);
             }
 
             // 2. Delete the SalesInvoice itself
-            var salesInvoiceToDelete = _repositoryProvider.GetRepository<SalesInvoice>().GetByValue(invoiceId);
+            var salesInvoiceToDelete = await repositoryProvider.GetRepository<SalesInvoice>().GetByValue(invoiceId);
             if (salesInvoiceToDelete != null)
             {
-                _repositoryProvider.GetRepository<SalesInvoice>().Delete(salesInvoiceToDelete);
+                repositoryProvider.GetRepository<SalesInvoice>().Delete(salesInvoiceToDelete);
             }
+        }
+
+        public async Task ExportSalesInvoices(IList<SaleInvoiceDTO> saleInvoiceDTOs)
+        {
+            var (dataTable, dataTableDetail) = await PrepareExportData(saleInvoiceDTOs);
+            ExcelHandler.ExportExcel("Hóa đơn bán hàng", "Hóa đơn bán hàng", "Chi tiết hóa đơn bán hàng", dataTable, dataTableDetail);
+        }
+
+        public async Task<(DataTable salesInvoiceTable, DataTable salesInvoiceDetailTable)> PrepareExportData(IList<SaleInvoiceDTO> salesInvoiceDTOs)
+        {
+            DataTable dataTable = new DataTable("SalesInvoice");
+            dataTable.Columns.Add("Mã hóa đơn", typeof(int));
+            dataTable.Columns.Add("Mã khách hàng", typeof(int));
+            dataTable.Columns.Add("Mã nhân viên lập", typeof(int));
+            dataTable.Columns.Add("Ngày lập", typeof(DateTime));
+            dataTable.Columns.Add("Trạng thái", typeof(string));
+            dataTable.Columns.Add("Phương thức thanh toán", typeof(string));
+
+            DataTable dataTableDetail = new DataTable("SalesInvoiceDetail");
+            dataTableDetail.Columns.Add("Mã hóa đơn", typeof(int));
+            dataTableDetail.Columns.Add("Mã sản phẩm", typeof(int));
+            dataTableDetail.Columns.Add("Tên sản phẩm", typeof(string));
+            dataTableDetail.Columns.Add("Mã đơn vị tính", typeof(int));
+            dataTableDetail.Columns.Add("Tên đơn vị tính", typeof(string));
+            dataTableDetail.Columns.Add("Số lượng", typeof(int));
+            dataTableDetail.Columns.Add("Giá bán", typeof(decimal));
+            dataTableDetail.Columns.Add("Ghi chú", typeof(string));
+
+            foreach (var item in salesInvoiceDTOs)
+            {
+                var salesInvoice = await repositoryProvider.GetRepository<SalesInvoice>().GetByValue(item.ID);
+                IList<SalesInvoice_Detail> salesInvoiceDetail = ((SalesInvoiceDetailRepo)repositoryProvider.GetRepository<SalesInvoice_Detail>()).GetBySalesInvoiceId(item.ID);
+
+                if (salesInvoice != null)
+                {
+                    dataTable.Rows.Add(
+                        salesInvoice.ID,
+                        salesInvoice.CustomerID,
+                        salesInvoice.EmployeeID,
+                        salesInvoice.Date,
+                        salesInvoice.Status,
+                        salesInvoice.PaymentMethod
+                    );
+                    foreach (var detail in salesInvoiceDetail)
+                    {
+                        dataTableDetail.Rows.Add(
+                            detail.InvoiceID,
+                            detail.Product_Unit.ProductID,
+                            detail.Product_Unit.Product.Name,
+                            detail.Product_Unit.UnitID,
+                            detail.Product_Unit.Unit.Name,
+                            detail.Quantity,
+                            detail.UnitPrice,
+                            detail.Note
+                        );
+                    }
+                }
+            }
+            return (dataTable, dataTableDetail);
+        }
+
+        public void ImportSalesInvoices()
+        {
+            ExcelHandler.ImportExcel(ImportSalesInvoice, ImportSalesInvoiceDetail);
+        }
+
+        public void ImportSalesInvoice(DataRow row)
+        {
+            var salesInvoice = new SalesInvoice
+            {
+                CustomerID = Convert.ToInt32(row["Mã khách hàng"]),
+                EmployeeID = Convert.ToInt32(row["Mã nhân viên lập"]),
+                Date = DateTime.UtcNow,
+                Status = "Chờ xác nhận",
+            };
+            repositoryProvider.GetRepository<SalesInvoice>().Add(salesInvoice);
+            _salesInvoiceId = salesInvoice.ID;
+        }
+
+        public void ImportSalesInvoiceDetail(DataRow row)
+        {
+            if (_salesInvoiceId == 0) return;
+
+            var productId = Convert.ToInt32(row["Mã sản phẩm"]);
+            var unitId = Convert.ToInt32(row["Mã đơn vị tính"]);
+
+            var productUnit = ((ProductUnitRepo)repositoryProvider.GetRepository<Product_Unit>()).GetProductUnitId(productId, unitId);
+
+            var salesInvoiceDetail = new SalesInvoice_Detail
+            {
+                InvoiceID = _salesInvoiceId,
+                Product_UnitID = productUnit,
+                Quantity = Convert.ToInt32(row["Số lượng"]),
+                UnitPrice = Convert.ToDecimal(row["Giá bán"]),
+                Note = row["Ghi chú"].ToString(),
+            };
+
+            repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
         }
 
         // You would also move other methods here if they become complex enough:
         // public DataTable GetSalesInvoiceDataTableForExport() { /* ... */ }
         // public void ImportSalesInvoice(DataRow row) { /* ... */ }
         // public IList<InvoiceDTO> SearchSalesInvoices(string searchValue) { /* ... */ }
+
     }
 }

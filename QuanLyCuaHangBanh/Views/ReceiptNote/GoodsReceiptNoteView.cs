@@ -47,6 +47,12 @@ namespace QuanLyCuaHangBanh.Views
             dgv_PurchaseReceiptList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_PurchaseReceiptList.Refresh();
+            dgv_PurchaseReceiptList.ClearSelection();
+        }
+
         private void dgv_PurchaseReceiptList_SelectionChanged(object sender, EventArgs e)
         {
             if (dgv_PurchaseReceiptList.SelectedRows.Count > 0)

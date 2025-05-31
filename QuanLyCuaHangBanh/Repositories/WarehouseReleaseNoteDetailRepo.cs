@@ -12,17 +12,6 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class WarehouseReleaseNoteDetailRepo(QLCHB_DBContext context) : RepositoryBase<WarehouseReleaseNote_Detail>(context)
     {
-        public override IList<TDto> GetAllAsDto<TDto>(Func<WarehouseReleaseNote_Detail, TDto> converter)
-        {
-            return context.WarehouseReleaseNoteDetails
-                .Include(g => g.WarehouseReleaseNote)
-                .Include(g => g.Product_Unit.Product)
-                .ThenInclude(p => p.Category)
-                .Include(g => g.Product_Unit.Unit)
-                .Select(converter)
-                .ToList();
-        }
-
         public override void Add(WarehouseReleaseNote_Detail entity)
         {
             Product_Unit productUnit = context.ProductUnits.FirstOrDefault(o => o.ID == entity.Product_UnitID);

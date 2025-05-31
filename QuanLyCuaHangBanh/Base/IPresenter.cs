@@ -12,6 +12,6 @@ namespace QuanLyCuaHangBanh.Base
         IView View { get; set; }
         BindingSource BindingSource { get; set; }
 
-        void LoadData();
+        Task InitializeAsync();
     }
 }

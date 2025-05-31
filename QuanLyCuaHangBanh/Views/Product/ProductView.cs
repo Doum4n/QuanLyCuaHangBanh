@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Helpers;
 using QuanLyCuaHangBanh.Views.Product;
+using System.Threading.Tasks;
+using QuanLyCuaHangBanh.Presenters;
 
 namespace QuanLyCuaHangBanh.Views
 {
@@ -69,7 +71,7 @@ namespace QuanLyCuaHangBanh.Views
 
         private void btn_Edit_Click(object sender, EventArgs e)
         {
-            EditEvent?.Invoke(this, EventArgs.Empty);
+            EditEvent?.Invoke(this, e);
         }
 
         private void btn_Delete_Click(object sender, EventArgs e)
@@ -82,62 +84,119 @@ namespace QuanLyCuaHangBanh.Views
 
             dgv_ProductList.DataSource = bindingSource;
 
-            dgv_ProductList.DataBindingComplete += (s, e) =>
+            dgv_ProductList.DataBindingComplete += dgv_ProductList_DataBindingComplete;
+        }
+
+        public void RefreshData()
+        {
+            dgv_ProductList.Refresh();
+            dgv_ProductList.ClearSelection();
+            selecProduct = null;
+            dgv_ProductList.DataBindingComplete -= dgv_ProductList_DataBindingComplete; // Ngăn chặn sự kiện này được gọi nhiều lần
+            dgv_ProductList.DataBindingComplete += dgv_ProductList_DataBindingComplete; // Đăng ký lại sự kiện
+        }
+
+        private async void dgv_ProductList_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Kiểm tra xem DataGridView đã được khởi tạo hoàn chỉnh chưa
+            if (dgv_ProductList.IsDisposed || !dgv_ProductList.IsHandleCreated) return;
+
+            // Dùng Task.WhenAll nếu muốn tải ảnh song song và không chặn UI
+            var tasks = new List<Task>();
+
+            foreach (DataGridViewRow row in dgv_ProductList.Rows)
             {
-                this.BeginInvoke(new MethodInvoker(() =>
+                if (row.IsNewRow) continue;
+
+                // Kiểm tra lại row có hợp lệ không
+                if (row == null || row.Cells == null || row.DataBoundItem == null) continue;
+
+                if (row.DataBoundItem is ProductDTO product)
                 {
-                    foreach (DataGridViewRow row in dgv_ProductList.Rows)
+                    #region Cập nhật dữ liệu cho ComboBox cho cột "Unit" (Cell type là DataGridViewComboBoxCell)
+                    // Cần đảm bảo cột "Unit" là DataGridViewComboBoxColumn trong designer hoặc khi tạo cột
+                    if (dgv_ProductList.Columns.Contains("Unit") && row.Cells["Unit"] is DataGridViewComboBoxCell comboCell)
                     {
-                        if (row.IsNewRow) continue;
+                        // Gán DataSource cho cell cụ thể (rất quan trọng)
+                        comboCell.DataSource = product.Units.ToList();
+                        comboCell.DisplayMember = "UnitName";
+                        comboCell.ValueMember = "ID";
+                        comboCell.ReadOnly = false;
 
-                        if (row.DataBoundItem is ProductDTO product)
+                        // Gán giá trị được chọn
+                        var selectedUnit = product.Units.FirstOrDefault(o => o.IsSelected);
+                        if (selectedUnit != null)
                         {
-                            #region Thêm dữ liệu cho comboBox cho cột "Unit"
-                            var comboCell = new DataGridViewComboBoxCell
-                            {
-                                DataSource = product.Units.ToList(),
-                                DisplayMember = "UnitName",
-                                ValueMember = "ID",
-                                ReadOnly = false,
-                            };
-
-                            if (row.Cells["Unit"].Value != null)
-                            {
-                                comboCell.Value = row.Cells["Unit"].Value;
-                            }
-
-                            // Nếu có đơn vị nào được chọn thì gán giá trị cho comboCell
-                            // Nếu không có đơn vị nào được chọn thì gán giá trị cho đơn vị đầu tiên
-                            var selectedUnit = product.Units.FirstOrDefault(o => o.IsSelected == true);
-                            if (selectedUnit != null)
-                                comboCell.Value = selectedUnit.ID;
-                            else
-                            {
-                                if (product.Units.Any())
-                                {
-                                    comboCell.Value = product.Units.First().ID;
-                                    product.Units.First().IsSelected = true; // Đánh dấu đơn vị đầu tiên là true
-                                }
-                            }
-
-                            row.Cells["Unit"] = comboCell;
-                            row.Cells["Unit"].ReadOnly = false;
-                            #endregion
-
-                            #region Thêm dữ liệu cho cột "Image"
-                            var imageCell = new DataGridViewImageCell
-                            {
-                                ImageLayout = DataGridViewImageCellLayout.Zoom,
-                                Value = ImageHelper.LoadImageFromUrl(product.ImagePath),
-                            };
-                            row.Cells["Image"] = imageCell;
-                            #endregion
+                            comboCell.Value = selectedUnit.ID;
+                        }
+                        else if (product.Units.Any())
+                        {
+                            comboCell.Value = product.Units.First().ID;
                         }
                     }
-                }));
+                    #endregion
 
-            };
+                    #region Thêm dữ liệu cho cột "Image" (Cell type là DataGridViewImageCell)
+                    if (dgv_ProductList.Columns.Contains("Image") && row.Cells["Image"] is DataGridViewImageCell imageCell)
+                    {
+                        imageCell.ImageLayout = DataGridViewImageCellLayout.Zoom;
+                        // Bắt đầu tải ảnh bất đồng bộ và thêm vào danh sách tasks
+                        tasks.Add(LoadImageForCellAsync(imageCell, product.ImagePath));
+                    }
+                    #endregion
+                }
+            }
+            // Chờ tất cả các tác vụ tải ảnh hoàn thành
+            await Task.WhenAll(tasks);
         }
+
+        private async Task LoadImageForCellAsync(DataGridViewImageCell cell, string imagePath)
+        {
+            // Kiểm tra null và disposed trước khi truy cập
+            if (cell == null || cell.OwningRow == null || cell.OwningColumn == null || cell.OwningColumn.DataGridView == null)
+            {
+                return;
+            }
+
+            var dgv = cell.OwningColumn.DataGridView;
+            if (dgv.IsDisposed || !dgv.IsHandleCreated)
+            {
+                return;
+            }
+
+            try
+            {
+                Image image = null;
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    // Tải ảnh bất đồng bộ từ ImageHelper
+                    image = await ImageHelper.LoadImageFromUrl(imagePath);
+                }
+
+                // Cập nhật UI trên luồng UI chính
+                if (dgv.InvokeRequired)
+                {
+                    dgv.Invoke(new MethodInvoker(() =>
+                    {
+                        // Kiểm tra lại các đối tượng có còn hợp lệ sau khi Invoke không
+                        if (cell.OwningRow != null && cell.OwningColumn != null && !dgv.IsDisposed)
+                        {
+                            cell.Value = image;
+                        }
+                    }));
+                }
+                else
+                {
+                    cell.Value = image;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi tải ảnh cho ô: {ex.Message}");
+                // Có thể gán một ảnh lỗi mặc định ở đây nếu muốn
+            }
+        }
+
 
 
         private void HandleDataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -233,7 +292,7 @@ namespace QuanLyCuaHangBanh.Views
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dgv_ProductList.Columns["ViewDetail"].Index)
             {
-                btn_Edit_Click(sender, e);
+                btn_Edit_Click(sender, new ProductViewEventArgs(false));
             }
         }
 

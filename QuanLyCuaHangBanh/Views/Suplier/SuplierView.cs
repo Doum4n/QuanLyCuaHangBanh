@@ -70,6 +70,12 @@ namespace QuanLyCuaHangBanh.Views
             dgv_ProducerList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_ProducerList.Refresh();
+            dgv_ProducerList.ClearSelection();
+        }
+
         private void tstb_Search_TextChanged(object sender, EventArgs e)
         {
             searchValue = tstb_Search.Text;

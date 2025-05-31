@@ -51,6 +51,13 @@ namespace QuanLyCuaHangBanh.Views
             dgv_CategoryList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_CategoryList.Refresh();
+            dgv_CategoryList.ClearSelection();
+            selectedCategory = null;
+        }
+
         private void btn_Add_Click(object sender, EventArgs e)
         {
             AddNewEvent?.Invoke(sender, e);

@@ -13,7 +13,10 @@ namespace QuanLyCuaHangBanh.Base
         public IView View { get; set; }
         public BindingSource BindingSource { get; set; }
 
-        public abstract void LoadData();
+        public virtual async Task InitializeAsync()
+        {
+            await Task.CompletedTask; // Trả về một Task đã hoàn thành
+        }
 
         protected PresenterBase(IView view, IService service)
         {
@@ -27,9 +30,9 @@ namespace QuanLyCuaHangBanh.Base
             View.EditEvent += OnEdit;
             View.ImportEvent += OnImport;
             View.ExportEvent += OnExport;
-            View.SetBindingSource(BindingSource);
 
-            LoadData();
+            // Set BindingSource trước ròi mới tải dữ liệu
+            View.SetBindingSource(BindingSource);
         }
 
         public abstract void OnExport(object? sender, EventArgs e);
@@ -38,5 +41,11 @@ namespace QuanLyCuaHangBanh.Base
         public abstract void OnAddNew(object? sender, EventArgs e);
         public abstract void OnDelete(object? sender, EventArgs e);
         public abstract void OnSearch(object? sender, EventArgs e);
+
+        public virtual void ShowMessage(string message, string title, MessageBoxIcon icon)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
+        }
+
     }
 }

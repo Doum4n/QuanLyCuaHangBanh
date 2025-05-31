@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.DTO.Base;
 using QuanLyCuaHangBanh.Presenters;
 using QuanLyCuaHangBanh.Reports;
@@ -14,7 +15,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
     {
         private string messenge;
         private string searchValue;
-        private InvoiceDTO selectedInvoice;
+        private SaleInvoiceDTO selectedInvoice;
         string IView.SearchValue
         {
             get => searchValue;
@@ -36,7 +37,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         object IView.SelectedItem
         {
             get => selectedInvoice;
-            set => selectedInvoice = (InvoiceDTO)selectedInvoice;
+            set => selectedInvoice = (SaleInvoiceDTO)value;
         }
         private readonly IServiceProvider serviceProvider;
         public InvoiceView(IServiceProvider serviceProvider)
@@ -67,7 +68,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
 
         private void dgv_InvoiceList_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgv_InvoiceList.CurrentRow != null && dgv_InvoiceList.CurrentRow.DataBoundItem is InvoiceDTO selectedInvoice)
+            if (dgv_InvoiceList.CurrentRow != null && dgv_InvoiceList.CurrentRow.DataBoundItem is SaleInvoiceDTO selectedInvoice)
             {
                 this.selectedInvoice = selectedInvoice;
                 RowSelected?.Invoke(sender, e);
@@ -91,14 +92,14 @@ namespace QuanLyCuaHangBanh.Views.Invoice
 
         private void InvoiceView_Load(object sender, EventArgs e)
         {
-            if(Session.Role == "Nhân viên bán hàng")
+            if (Session.Role == "Nhân viên bán hàng")
             {
                 tabControl2.TabPages.Remove(tabPane_PurchaseInvoice);
             }
             else if (Session.Role == "Nhân viên kho")
             {
                 tabControl2.TabPages.Remove(tabPage_SalesInvoice);
-            }  
+            }
         }
 
         private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
@@ -116,8 +117,10 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 var purchasePresenter = serviceProvider.GetRequiredService<PurchasePresenter>();
 
                 tabPane_PurchaseInvoice.Controls.Add(purchaseView);
-
-                purchaseView.Dock = DockStyle.Fill;
+                if (selectedInvoice != null)
+                {
+                    purchaseView.Dock = DockStyle.Fill;
+                }
             }
         }
 
@@ -125,6 +128,16 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         {
             ReportSalesInvoiceView reportSalesInvoiceView = new ReportSalesInvoiceView((int)selectedInvoice.ID);
             reportSalesInvoiceView.ShowDialog();
+        }
+
+        private void tsbtn_Import_Click(object sender, EventArgs e)
+        {
+            ImportEvent?.Invoke(sender, e);
+        }
+
+        private void tsbnt_Export_Click(object sender, EventArgs e)
+        {
+            ExportEvent?.Invoke(sender, e);
         }
     }
 }

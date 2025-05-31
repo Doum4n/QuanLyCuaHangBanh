@@ -231,7 +231,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Product Name</Value>
+                                  <Value>Sản phẩm</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -261,7 +261,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Catrgory Name</Value>
+                                  <Value>Loại</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -291,7 +291,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Unit Name</Value>
+                                  <Value>ĐVT</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -321,7 +321,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Purchase Price</Value>
+                                  <Value>Giá nhập</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -351,7 +351,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Quantity</Value>
+                                  <Value>Số lượng</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -381,7 +381,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Total Price</Value>
+                                  <Value>Tổng tiền</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -411,7 +411,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Production Date</Value>
+                                  <Value>NSX</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -441,7 +441,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Expiration Date</Value>
+                                  <Value>HSD</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -540,7 +540,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>CategoryName</rd:DefaultName>
@@ -570,7 +572,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>UnitName</rd:DefaultName>
@@ -596,11 +600,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PurchasePrice.Value</Value>
+                                  <Value>= Format(Fields!PurchasePrice.Value, "N0")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>PurchasePrice</rd:DefaultName>
@@ -656,11 +662,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalPrice.Value</Value>
+                                  <Value>=Format(Fields!TotalPrice.Value, "N0")</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>TotalPrice</rd:DefaultName>
@@ -690,7 +698,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>ProductionDate</rd:DefaultName>
@@ -720,7 +730,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>ExpirationDate</rd:DefaultName>

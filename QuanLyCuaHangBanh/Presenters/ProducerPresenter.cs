@@ -3,100 +3,102 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyCuaHangBanh.Base;
 using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Repositories;
+using QuanLyCuaHangBanh.Services;
 using QuanLyCuaHangBanh.Views;
 using QuanLyCuaHangBanh.Views.Suplier;
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    class ProducerPresenter
+    class ProducerPresenter(ISuplierView view, SupplierService service) : PresenterBase<Supplier>(view, service)
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
-        private ISuplierView view;
-        private ProducerRepo repo;
-
-        private BindingSource bindingSource;
-
-        public ProducerPresenter(ISuplierView view)
+        private IList<SupplierDTO> supplies = new List<SupplierDTO>();
+        public override async Task InitializeAsync()
         {
-            this.view = view;
-            repo = new ProducerRepo(context);
-            this.view.SearchEvent += OnSearch;
-            this.view.DeleteEvent += OnDelete;
-            this.view.AddNewEvent += OnAddNew;
-            this.view.EditEvent += OnEdit;
-
-            bindingSource = new BindingSource();
-            this.view.SetBindingSource(bindingSource);
-
-            loadData();
+            supplies = await ((SupplierService)Service).GetAllOrdersAsDto();
+            BindingSource.DataSource = supplies;
         }
 
-        private void loadData()
+        public override void OnExport(object? sender, EventArgs e)
         {
-            bindingSource.DataSource = repo.GetAllAsDto<SupplierDTO>(
-                o => new SupplierDTO
-                {
-                    ID = o.ID,
-                    Name = o.Name,
-                    PhoneNumber = o.PhoneNumber,
-                    Email = o.Email,
-                    Address = o.Address,
-                    Description = o.Description,
-                    TotalAccountPayable = o.AccountsPayables.Sum(a => a.Amount) // Tính tổng công nợ phải trả
-                }
-            );
+            throw new NotImplementedException();
         }
 
-
-        private void OnEdit(object? sender, EventArgs e)
+        public override void OnImport(object? sender, EventArgs e)
         {
-            SuplierInputView producerInputView = new SuplierInputView((SupplierDTO)this.view.SelectedItem);
+            throw new NotImplementedException();
+        }
+
+        public override void OnEdit(object? sender, EventArgs e)
+        {
+            SuplierInputView producerInputView = new SuplierInputView((SupplierDTO)this.View.SelectedItem);
             if (producerInputView.ShowDialog() == DialogResult.OK)
             {
                 
-                if (producerInputView.Tag is Supplier producer)
+                if (producerInputView.Tag is (Supplier producer))
                 {
-                    producer.ID = ((Supplier)this.view.SelectedItem).ID;
-                    repo.Update(producer);
-                    loadData();
+                    producer.ID = ((SupplierDTO)this.View.SelectedItem).ID;
+                    ((SupplierService)Service).UpdateSupplier(producer);
+                    InitializeAsync();
                 }
             }
         }
 
-        private void OnAddNew(object? sender, EventArgs e)
+        public override void OnAddNew(object? sender, EventArgs e)
         {
             SuplierInputView producerInputView = new SuplierInputView();
             if (producerInputView.ShowDialog() == DialogResult.OK)
             {
-                if (producerInputView.Tag is Supplier producer)
+                if (producerInputView.Tag is (Supplier producer))
                 {
-                    repo.Add(producer);
-                    loadData();
+                    ((SupplierService)Service).AddSupplier(producer);
+                    InitializeAsync();
                 }
             }
         }
 
-        private void OnDelete(object? sender, EventArgs e)
+        public override void OnDelete(object? sender, EventArgs e)
         {
-            repo.Delete((Supplier)this.view.SelectedItem);
-            loadData();
+            if (this.View.SelectedItem is SupplierDTO selectedSupplier)
+            {
+                if (MessageBox.Show($"Bạn có chắc chắn muốn xóa nhà cung cấp {selectedSupplier.Name} không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    ((SupplierService)Service).DeleteSupplier(selectedSupplier.ID);
+                    InitializeAsync();  // Tải lại dữ liệu sau khi xóa
+                }
+            }
+            else
+            {
+                ShowMessage("Vui lòng chọn nhà cung cấp để xóa.", "Thông báo", MessageBoxIcon.Warning);
+            }
         }
 
-        private void OnSearch(object? sender, EventArgs e)
+        public override void OnSearch(object? sender, EventArgs e)
         {
-            string searchValue = this.view.SearchValue.ToLower();  // Chuyển đổi sang chữ thường để tìm kiếm không phân biệt chữ hoa/thường
-
-            bindingSource.DataSource = repo.GetAll().Where(
-                p => p.Name.ToLower().Contains(searchValue) ||
-                     p.PhoneNumber.Contains(searchValue) ||
-                     p.Address.ToLower().Contains(searchValue) ||
-                     p.Email.ToLower().Contains(searchValue) ||
-                     p.Address.ToLower().Contains(searchValue)
-                ).ToList();
+            string searchValue = this.View.SearchValue.ToLower();  // Chuyển đổi sang chữ thường để tìm kiếm không phân biệt chữ hoa/thường
+                                                                   // 
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                InitializeAsync();  // Nếu không có giá trị tìm kiếm, tải lại tất cả dữ liệu
+            }
+            else
+            {
+                if(supplies != null)
+                {
+                    var filteredItems = supplies
+                        .Where(item => item.MatchesSearch(searchValue))
+                        .ToList();
+                    BindingSource.DataSource = filteredItems;
+                }
+                else
+                {
+                    ShowMessage("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

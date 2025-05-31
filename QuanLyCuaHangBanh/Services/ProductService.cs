@@ -15,27 +15,21 @@ namespace QuanLyCuaHangBanh.Services
 {
     public class ProductService(IRepositoryProvider repositoryProvider, QLCHB_DBContext context) : IService
     {
-        public IList<ProductDTO> GetAllProductsAsDto()
+        public async Task<IList<ProductDTO>> GetAllProductsAsDto()
         {
-            return repositoryProvider.GetRepository<Product>().GetAllAsDto(o => new ProductDTO(
-                o.ID,
-                o.Name,
-                o.Category?.ID ?? 0,
-                o.Category?.Name ?? "",
-                o.Producer?.ID ?? 0,
-                o.Producer?.Name ?? "",
-                o.Manufacturer?.ID ?? 0,
-                o.Manufacturer.Name,
-                o.ProductUnits
-                    .Where(pu => pu.Unit != null)
-                    .Select(pu => new UnitDTO(pu.Unit.ID, pu.Unit.Name, pu.ID, false)).ToList(),
-                o.ProductUnits.Select(pu => pu.UnitPrice).FirstOrDefault(),
-                o.ProductUnits.Select(pu => pu.Inventory?.ID ?? 0).FirstOrDefault(),
-                o.ProductUnits.Select(pu => pu.Inventory?.Quantity ?? 0).FirstOrDefault(),
-                o.ProductUnits.Sum(pu => pu.Inventory?.Quantity ?? 0),
-                o.Description,
-                o.Image,
-                "Xem chi tiết"
+            return await repositoryProvider.GetRepository<Product>().GetAllAsDto(o => new ProductDTO(
+                    o.ID,
+                    o.Name,
+                    o.Category.ID,
+                    o.Category.Name,
+                    o.Producer.ID,
+                    o.Producer.Name,
+                    o.Manufacturer.ID,
+                    o.Manufacturer.Name,
+                    o.ProductUnits, // Truyền trực tiếp collection ProductUnits
+                    o.Description,
+                    o.Image
+                    // "Xem chi tiết" được gán cố định trong ProductDTO constructor
             ));
         }
 
@@ -56,7 +50,7 @@ namespace QuanLyCuaHangBanh.Services
                 .FirstOrDefault(inv => inv.ProductUnitID == unit.ID);
 
             if (unit != null)
-                product.Price = unit.UnitPrice;
+                product.UnitPrice = unit.UnitPrice;
 
             if (inventory != null)
             {
@@ -76,7 +70,8 @@ namespace QuanLyCuaHangBanh.Services
             dataTable.Columns.Add("ID", typeof(int));
             dataTable.Columns.Add("Tên sản phẩm", typeof(string));
             dataTable.Columns.Add("Danh mục", typeof(string));
-            dataTable.Columns.Add("Nhà sản xuất", typeof(string));
+            dataTable.Columns.Add("Hãng sản xuất", typeof(string));
+            dataTable.Columns.Add("Nhà cung cấp", typeof(string));
             dataTable.Columns.Add("Hình ảnh", typeof(string));
             dataTable.Columns.Add("Mô tả", typeof(string));
             dataTable.Columns.Add("Số lượng", typeof(int));
@@ -91,6 +86,7 @@ namespace QuanLyCuaHangBanh.Services
                     .ThenInclude(pu => pu.Inventory)
                 .Include(p => p.Category)
                 .Include(p => p.Producer)
+                .Include(o => o.Manufacturer)
                 .ToList();
 
             foreach (var item in products)
@@ -101,6 +97,7 @@ namespace QuanLyCuaHangBanh.Services
                         item.ID,
                         item.Name,
                         item.Category?.Name ?? string.Empty,
+                        item.Manufacturer?.Name ?? string.Empty,
                         item.Producer?.Name ?? string.Empty,
                         item.Image,
                         item.Description,
@@ -118,11 +115,13 @@ namespace QuanLyCuaHangBanh.Services
         {
             string tenSanPham = SafeGet(row, "Tên sản phẩm");
             string danhMuc = SafeGet(row, "Danh mục");
-            string nhaSanXuat = SafeGet(row, "Nhà sản xuất");
+            string nhaSanXuat = SafeGet(row, "Hãng sản xuất");
+            string nhaCungCap = SafeGet(row, "Nhà cung cấp");
             string moTa = SafeGet(row, "Mô tả");
             string donVi = SafeGet(row, "Đơn vị");
             string soLuongStr = SafeGet(row, "Số lượng");
             string giaBanStr = SafeGet(row, "Giá bán");
+            string image = SafeGet(row, "Hình ảnh");
 
             int existingCategoryId = context.Categories
                 .Where(c => c.Name == danhMuc)
@@ -130,40 +129,93 @@ namespace QuanLyCuaHangBanh.Services
                 .FirstOrDefault();
 
             int existingSupplierId = context.Suppliers
-                .Where(s => s.Name == nhaSanXuat)
+                .Where(s => s.Name == nhaCungCap)
                 .Select(s => s.ID)
                 .FirstOrDefault();
 
-            Product product = new Product()
+            int existingManufacturerId = context.Manufacturers
+                .Where(m => m.Name == nhaSanXuat)
+                .Select(m => m.ID)
+                .FirstOrDefault();
+
+            // 1. Tìm sản phẩm hiện có
+            Product product = context.Products
+                .FirstOrDefault(p => p.Name == tenSanPham &&
+                                     p.CategoryID == existingCategoryId &&
+                                     p.ManufacturerID == existingManufacturerId);
+
+            // 2. Nếu sản phẩm chưa tồn tại, tạo mới
+            if (product == null)
             {
-                Name = tenSanPham,
-                CategoryID = existingCategoryId,
-                ProducerID = existingSupplierId,
-                BaseUnitID = 1, // Bạn có thể cần điều chỉnh giá trị này
-                Description = moTa,
-            };
+                product = new Product()
+                {
+                    Name = tenSanPham,
+                    CategoryID = existingCategoryId,
+                    ProducerID = existingSupplierId, // Có thể ProducerID là nhà cung cấp
+                    BaseUnitID = 1, // Cần xem xét cách xác định BaseUnitID
+                    ManufacturerID = existingManufacturerId,
+                    Description = moTa,
+                    Image = image
+                };
+                repositoryProvider.GetRepository<Product>().Add(product);
+                // Lưu thay đổi để product.ID có giá trị trước khi thêm Product_Unit
+                context.SaveChanges();
+            }
 
-            repositoryProvider.GetRepository<Product>().Add(product);
-
+            // 3. Xử lý đơn vị tính và tồn kho cho sản phẩm (có thể là mới hoặc đã tồn tại)
             int existingUnitId = context.Units
                 .Where(u => u.Name == donVi)
                 .Select(u => u.ID)
                 .FirstOrDefault();
 
-            Product_Unit productUnit = new Product_Unit()
-            {
-                ProductID = product.ID,
-                UnitID = existingUnitId,
-                UnitPrice = decimal.TryParse(giaBanStr, out var price) ? price : 0,
-            };
-            repositoryProvider.GetRepository<Product_Unit>().Add(productUnit);
+            // Kiểm tra xem Product_Unit cho đơn vị này đã tồn tại chưa
+            Product_Unit productUnit = context.ProductUnits
+                .FirstOrDefault(pu => pu.ProductID == product.ID && pu.UnitID == existingUnitId);
 
-            Inventory inventory = new Inventory()
+            if (productUnit == null)
             {
-                ProductUnitID = productUnit.ID,
-                Quantity = int.TryParse(soLuongStr, out var qty) ? qty : 0,
-            };
-            repositoryProvider.GetRepository<Inventory>().Add(inventory);
+                productUnit = new Product_Unit()
+                {
+                    ProductID = product.ID,
+                    UnitID = existingUnitId,
+                    UnitPrice = decimal.TryParse(giaBanStr, out var price) ? price : 0,
+                };
+                repositoryProvider.GetRepository<Product_Unit>().Add(productUnit);
+                context.SaveChanges();
+            }
+            else
+            {
+                // Nếu Product_Unit đã tồn tại, bạn có thể cập nhật giá nếu cần
+                productUnit.UnitPrice = decimal.TryParse(giaBanStr, out var price) ? price : productUnit.UnitPrice;
+                repositoryProvider.GetRepository<Product_Unit>().Update(productUnit);
+                context.SaveChanges();
+            }
+
+
+            // Xử lý tồn kho (có thể là mới hoặc cập nhật)
+            Inventory inventory = context.Inventories
+                .FirstOrDefault(inv => inv.ProductUnitID == productUnit.ID);
+
+            if (inventory == null)
+            {
+                inventory = new Inventory()
+                {
+                    ProductUnitID = productUnit.ID,
+                    Quantity = int.TryParse(soLuongStr, out var qty) ? qty : 0,
+                };
+                repositoryProvider.GetRepository<Inventory>().Add(inventory);
+            }
+            else
+            {
+                // Cập nhật số lượng nếu Inventory đã tồn tại
+                inventory.Quantity = int.TryParse(soLuongStr, out var qty) ? qty : inventory.Quantity;
+                repositoryProvider.GetRepository<Inventory>().Update(inventory);
+            }
+
+            // Lưu tất cả các thay đổi vào DB một lần hoặc theo từng bước nếu có logic phức tạp hơn
+            // Tuy nhiên, nếu dùng SaveChanges() sau mỗi Add/Update thì cần cấu hình phù hợp với DbContext lifespan.
+            // Tốt nhất là chỉ gọi SaveChanges() một lần ở cuối phương thức ImportProduct nếu muốn tất cả thay đổi được commit cùng lúc.
+            // repositoryProvider.SaveChanges(); // Hoặc context.SaveChanges();
         }
 
         private string SafeGet(DataRow row, string columnName)

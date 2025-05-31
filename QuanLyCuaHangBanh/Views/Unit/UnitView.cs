@@ -54,6 +54,12 @@ namespace QuanLyCuaHangBanh.Views.Unit
             dgv_UnitList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_UnitList.Refresh();
+            dgv_UnitList.ClearSelection();
+        }
+
         private void btn_Add_Click(object sender, EventArgs e)
         {
             AddNewEvent?.Invoke(sender, e);

@@ -60,6 +60,13 @@ namespace QuanLyCuaHangBanh.Views.Order
             dgv_OrderList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_OrderList.Refresh();
+            dgv_OrderList.ClearSelection();
+            _selectedItem = null;
+        }
+
         private void tsbtn_Import_Click(object sender, EventArgs e)
         {
             ImportEvent?.Invoke(this, EventArgs.Empty);

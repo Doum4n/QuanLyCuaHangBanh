@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using QuanLyCuaHangBanh.Data;
 
 namespace QuanLyCuaHangBanh.Base
@@ -9,14 +10,27 @@ namespace QuanLyCuaHangBanh.Base
 
         public virtual void Add(TEntity entity)
         {
-            context.Set<TEntity>().Add(entity);
-            context.SaveChanges();
+            try
+            {
+                context.Set<TEntity>().Add(entity);
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
-
         public virtual void Delete(TEntity entity)
         {
-            context.Set<TEntity>().Remove(entity);
-            context.SaveChanges();
+            try
+            {
+                context.Set<TEntity>().Remove(entity);
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public virtual void Update(TEntity entity)
@@ -46,24 +60,47 @@ namespace QuanLyCuaHangBanh.Base
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                throw new Exception(e.Message);
             }
             
         }
 
-        public virtual TEntity? GetByValue(object value)
+        public virtual async Task<TEntity?> GetByValue(object value)
         {
-            return context.Set<TEntity>().Find(value);
+            try
+            {
+                return await context.Set<TEntity>().FindAsync(value);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public virtual IList<TEntity> GetAll()
+        public virtual Task<IList<TEntity>> GetAll()
         {
-            return context.Set<TEntity>().ToList();
+            try
+            {
+                return Task.FromResult<IList<TEntity>>(context.Set<TEntity>().ToList());
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
-        public virtual IList<TDto> GetAllAsDto<TDto>(Func<TEntity, TDto> converter)
+        public virtual async Task<IList<TDto>> GetAllAsDto<TDto>(Expression<Func<TEntity, TDto>> selector)
         {
-            throw new NotImplementedException();
+            try{
+                   return await context.Set<TEntity>()
+                         .AsNoTracking() // Thường dùng cho các truy vấn chỉ đọc
+                         .Select(selector) // Áp dụng phép chiếu (projection) ở đây
+                         .ToListAsync();  // Rồi mới lấy dữ liệu
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

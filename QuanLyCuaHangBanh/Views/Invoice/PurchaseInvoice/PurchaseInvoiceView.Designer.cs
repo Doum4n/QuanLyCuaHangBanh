@@ -31,11 +31,6 @@
             miniToolStrip = new ToolStrip();
             groupBox1 = new GroupBox();
             dgv_PurchaseInvoiceList = new DataGridView();
-            ID = new DataGridViewTextBoxColumn();
-            CreatorName = new DataGridViewTextBoxColumn();
-            CreatedDate = new DataGridViewTextBoxColumn();
-            Status = new DataGridViewTextBoxColumn();
-            Note = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btn_PrintInvoice = new MaterialSkin.Controls.MaterialButton();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
@@ -47,6 +42,15 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tsbtn_Import = new ToolStripButton();
             tsbnt_Export = new ToolStripButton();
+            ID = new DataGridViewTextBoxColumn();
+            EmployeeName = new DataGridViewTextBoxColumn();
+            CreatedDate = new DataGridViewTextBoxColumn();
+            SupplierName = new DataGridViewTextBoxColumn();
+            Status = new DataGridViewTextBoxColumn();
+            Note = new DataGridViewTextBoxColumn();
+            TotalAmount = new DataGridViewTextBoxColumn();
+            TotalUnpaid = new DataGridViewTextBoxColumn();
+            CreditPeriod = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_PurchaseInvoiceList).BeginInit();
             panel1.SuspendLayout();
@@ -75,7 +79,7 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(955, 464);
+            groupBox1.Size = new Size(1228, 464);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Danh sách hóa đơn bán hàng";
@@ -88,7 +92,7 @@
             dgv_PurchaseInvoiceList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_PurchaseInvoiceList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_PurchaseInvoiceList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_PurchaseInvoiceList.Columns.AddRange(new DataGridViewColumn[] { ID, CreatorName, CreatedDate, Status, Note });
+            dgv_PurchaseInvoiceList.Columns.AddRange(new DataGridViewColumn[] { ID, EmployeeName, CreatedDate, SupplierName, Status, Note, TotalAmount, TotalUnpaid, CreditPeriod });
             dgv_PurchaseInvoiceList.Cursor = Cursors.Hand;
             dgv_PurchaseInvoiceList.Dock = DockStyle.Fill;
             dgv_PurchaseInvoiceList.Location = new Point(3, 50);
@@ -98,45 +102,9 @@
             dgv_PurchaseInvoiceList.RowTemplate.Height = 30;
             dgv_PurchaseInvoiceList.RowTemplate.ReadOnly = true;
             dgv_PurchaseInvoiceList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_PurchaseInvoiceList.Size = new Size(949, 325);
+            dgv_PurchaseInvoiceList.Size = new Size(1222, 325);
             dgv_PurchaseInvoiceList.TabIndex = 2;
             dgv_PurchaseInvoiceList.SelectionChanged += dgv_PurchaseInvoiceList_SelectionChanged;
-            // 
-            // ID
-            // 
-            ID.DataPropertyName = "ID";
-            ID.FillWeight = 14.771512F;
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            // 
-            // CreatorName
-            // 
-            CreatorName.DataPropertyName = "CreatorName";
-            CreatorName.HeaderText = "Người lập";
-            CreatorName.MinimumWidth = 6;
-            CreatorName.Name = "CreatorName";
-            // 
-            // CreatedDate
-            // 
-            CreatedDate.DataPropertyName = "CreatedDate";
-            CreatedDate.HeaderText = "Ngày lập";
-            CreatedDate.MinimumWidth = 6;
-            CreatedDate.Name = "CreatedDate";
-            // 
-            // Status
-            // 
-            Status.DataPropertyName = "Status";
-            Status.HeaderText = "Trạng thái";
-            Status.MinimumWidth = 6;
-            Status.Name = "Status";
-            // 
-            // Note
-            // 
-            Note.DataPropertyName = "Note";
-            Note.HeaderText = "Ghi chú";
-            Note.MinimumWidth = 6;
-            Note.Name = "Note";
             // 
             // panel1
             // 
@@ -147,7 +115,7 @@
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(3, 375);
             panel1.Name = "panel1";
-            panel1.Size = new Size(949, 86);
+            panel1.Size = new Size(1222, 86);
             panel1.TabIndex = 3;
             // 
             // btn_PrintInvoice
@@ -158,7 +126,7 @@
             btn_PrintInvoice.Depth = 0;
             btn_PrintInvoice.HighEmphasis = true;
             btn_PrintInvoice.Icon = null;
-            btn_PrintInvoice.Location = new Point(206, 25);
+            btn_PrintInvoice.Location = new Point(409, 25);
             btn_PrintInvoice.Margin = new Padding(4, 6, 4, 6);
             btn_PrintInvoice.MouseState = MaterialSkin.MouseState.HOVER;
             btn_PrintInvoice.Name = "btn_PrintInvoice";
@@ -178,7 +146,7 @@
             btn_Delete.Depth = 0;
             btn_Delete.HighEmphasis = true;
             btn_Delete.Icon = null;
-            btn_Delete.Location = new Point(546, 26);
+            btn_Delete.Location = new Point(749, 26);
             btn_Delete.Margin = new Padding(4, 6, 4, 6);
             btn_Delete.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Delete.Name = "btn_Delete";
@@ -198,7 +166,7 @@
             btn_Edit.Depth = 0;
             btn_Edit.HighEmphasis = true;
             btn_Edit.Icon = null;
-            btn_Edit.Location = new Point(447, 26);
+            btn_Edit.Location = new Point(650, 26);
             btn_Edit.Margin = new Padding(4, 6, 4, 6);
             btn_Edit.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Edit.Name = "btn_Edit";
@@ -218,7 +186,7 @@
             btn_Add.Depth = 0;
             btn_Add.HighEmphasis = true;
             btn_Add.Icon = null;
-            btn_Add.Location = new Point(338, 25);
+            btn_Add.Location = new Point(541, 25);
             btn_Add.Margin = new Padding(4, 6, 4, 6);
             btn_Add.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Add.Name = "btn_Add";
@@ -237,7 +205,7 @@
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripTextBox1, tsbtn_Search, toolStripSeparator1, tsbtn_Import, tsbnt_Export });
             toolStrip1.Location = new Point(3, 23);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(949, 27);
+            toolStrip1.Size = new Size(1222, 27);
             toolStrip1.TabIndex = 1;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -245,6 +213,7 @@
             // 
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new Size(100, 27);
+            toolStripTextBox1.KeyDown += toolStripTextBox1_KeyDown;
             // 
             // tsbtn_Search
             // 
@@ -252,6 +221,7 @@
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(74, 24);
             tsbtn_Search.Text = "Tìm kiếm";
+            tsbtn_Search.Click += tsbtn_Search_Click;
             // 
             // toolStripSeparator1
             // 
@@ -274,13 +244,76 @@
             tsbnt_Export.Text = "Xuất...";
             tsbnt_Export.Click += tsbnt_Export_Click;
             // 
+            // ID
+            // 
+            ID.DataPropertyName = "ID";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 6;
+            ID.Name = "ID";
+            // 
+            // EmployeeName
+            // 
+            EmployeeName.DataPropertyName = "EmployeeName";
+            EmployeeName.HeaderText = "Người lập";
+            EmployeeName.MinimumWidth = 6;
+            EmployeeName.Name = "EmployeeName";
+            // 
+            // CreatedDate
+            // 
+            CreatedDate.DataPropertyName = "CreatedDate";
+            CreatedDate.HeaderText = "Ngày lập";
+            CreatedDate.MinimumWidth = 6;
+            CreatedDate.Name = "CreatedDate";
+            // 
+            // SupplierName
+            // 
+            SupplierName.DataPropertyName = "SupplierName";
+            SupplierName.HeaderText = "Nhà cung cấp";
+            SupplierName.MinimumWidth = 6;
+            SupplierName.Name = "SupplierName";
+            // 
+            // Status
+            // 
+            Status.DataPropertyName = "Status";
+            Status.HeaderText = "Trạng thái";
+            Status.MinimumWidth = 6;
+            Status.Name = "Status";
+            // 
+            // Note
+            // 
+            Note.DataPropertyName = "Note";
+            Note.HeaderText = "Ghi chú";
+            Note.MinimumWidth = 6;
+            Note.Name = "Note";
+            // 
+            // TotalAmount
+            // 
+            TotalAmount.DataPropertyName = "TotalAmount";
+            TotalAmount.HeaderText = "Tổng thành tiền";
+            TotalAmount.MinimumWidth = 6;
+            TotalAmount.Name = "TotalAmount";
+            // 
+            // TotalUnpaid
+            // 
+            TotalUnpaid.DataPropertyName = "TotalUnpaid";
+            TotalUnpaid.HeaderText = "Tổng chưa trả";
+            TotalUnpaid.MinimumWidth = 6;
+            TotalUnpaid.Name = "TotalUnpaid";
+            // 
+            // CreditPeriod
+            // 
+            CreditPeriod.DataPropertyName = "CreditPeriod";
+            CreditPeriod.HeaderText = "Thời hạn tín dụng";
+            CreditPeriod.MinimumWidth = 6;
+            CreditPeriod.Name = "CreditPeriod";
+            // 
             // PurchaseInvoiceView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(groupBox1);
             Name = "PurchaseInvoiceView";
-            Size = new Size(955, 464);
+            Size = new Size(1228, 464);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_PurchaseInvoiceList).EndInit();
@@ -296,11 +329,6 @@
         private ToolStrip miniToolStrip;
         private GroupBox groupBox1;
         private DataGridView dgv_PurchaseInvoiceList;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn CreatorName;
-        private DataGridViewTextBoxColumn CreatedDate;
-        private DataGridViewTextBoxColumn Status;
-        private DataGridViewTextBoxColumn Note;
         private Panel panel1;
         private MaterialSkin.Controls.MaterialButton btn_Delete;
         private MaterialSkin.Controls.MaterialButton btn_Edit;
@@ -312,5 +340,14 @@
         private ToolStripButton tsbtn_Import;
         private ToolStripButton tsbnt_Export;
         private MaterialSkin.Controls.MaterialButton btn_PrintInvoice;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn EmployeeName;
+        private DataGridViewTextBoxColumn CreatedDate;
+        private DataGridViewTextBoxColumn SupplierName;
+        private DataGridViewTextBoxColumn Status;
+        private DataGridViewTextBoxColumn Note;
+        private DataGridViewTextBoxColumn TotalAmount;
+        private DataGridViewTextBoxColumn TotalUnpaid;
+        private DataGridViewTextBoxColumn CreditPeriod;
     }
 }

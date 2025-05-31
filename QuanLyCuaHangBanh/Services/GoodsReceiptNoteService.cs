@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
@@ -20,9 +21,9 @@ namespace QuanLyCuaHangBanh.Services
             _provider = provider;
         }
 
-        public IEnumerable<GoodsReceiptNoteDTO> GetAllGoodsReceiptNotesAsDto()
+        public async Task<IEnumerable<GoodsReceiptNoteDTO>> GetAllGoodsReceiptNotesAsDto()
         {
-            return _provider.GetRepository<GoodsReceiptNote>().GetAllAsDto(
+            return await _provider.GetRepository<GoodsReceiptNote>().GetAllAsDto(
                 o => new GoodsReceiptNoteDTO(
                     o.ID,
                     o.SupplierId,
@@ -71,9 +72,9 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
-        public void DeleteGoodsReceiptNote(int id)
+        public async Task DeleteGoodsReceiptNote(int id)
         {
-            var goodsReceiptNote = _provider.GetRepository<GoodsReceiptNote>().GetByValue(id);
+            var goodsReceiptNote = await _provider.GetRepository<GoodsReceiptNote>().GetByValue(id);
             if (goodsReceiptNote != null)
             {
                 _provider.GetRepository<GoodsReceiptNote>().Delete(goodsReceiptNote);

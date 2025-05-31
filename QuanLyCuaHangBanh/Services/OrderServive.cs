@@ -7,21 +7,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
-    public class OrderService : IService
+    public class OrderService(IRepositoryProvider provider) : IService
     {
-        private readonly IRepositoryProvider _provider;
+        private readonly IRepositoryProvider _provider = provider;
 
-        public OrderService(IRepositoryProvider provider)
+        public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsDto()
         {
-            _provider = provider;
-        }
-
-        public IEnumerable<OrderDTO> GetAllOrdersAsDto()
-        {
-            return _provider.GetRepository<Order>().GetAllAsDto<OrderDTO>(
+            return await _provider.GetRepository<Order>().GetAllAsDto<OrderDTO>(
                 o => new OrderDTO
                 (
                     o.ID,
@@ -32,7 +28,7 @@ namespace QuanLyCuaHangBanh.Services
                     o.Status,
                     o.PaymentMethod,
                     o.DeliveryAddress
-                )).ToList();
+                ));
         }
 
         public void AddOrder(Order order, BindingList<ProductOrderDTO> products)
@@ -52,7 +48,7 @@ namespace QuanLyCuaHangBanh.Services
             _provider.GetRepository<Order>().Update(order);
 
             // Xóa các chi tiết đơn hàng cũ
-            var existingDetails = _provider.GetRepository<Order_Detail>().GetAll().Where(od => od.OrderId == order.ID).ToList();
+            var existingDetails = _provider.GetRepository<Order_Detail>().GetAll().Result.Where(od => od.OrderId == order.ID).ToList();
             foreach (var detail in existingDetails)
             {
                 _provider.GetRepository<Order_Detail>().Delete(detail);
@@ -76,16 +72,16 @@ namespace QuanLyCuaHangBanh.Services
         }
 
 
-        public void DeleteOrder(int orderId)
+        public async Task DeleteOrder(int orderId)
         {
-            var order = _provider.GetRepository<Order>().GetByValue(orderId);
+            var order = await _provider.GetRepository<Order>().GetByValue(orderId);
             if (order != null)
             {
                 _provider.GetRepository<Order>().Delete(order);
             }
         }
 
-        public (DataTable, DataTable) ExportOrdersToDataTables(IEnumerable<OrderDTO> orderDtos)
+        public async Task<(DataTable, DataTable)> ExportOrdersToDataTables(IEnumerable<OrderDTO> orderDtos)
         {
             DataTable orderTable1 = new DataTable("Orders");
             orderTable1.Columns.Add("Mã đơn hàng", typeof(int));
@@ -112,7 +108,7 @@ namespace QuanLyCuaHangBanh.Services
 
             foreach (var orderDTO in orderDtos)
             {
-                var order = _provider.GetRepository<Order>().GetByValue(orderDTO.ID);
+                var order = await _provider.GetRepository<Order>().GetByValue(orderDTO.ID);
                 if (order != null)
                 {
                     orderTable1.Rows.Add(

@@ -6,15 +6,16 @@ using QuanLyCuaHangBanh.Views.Unit;
 using System;
 using System.Data;
 using System.Linq; // Để sử dụng Where
+using System.Threading.Tasks;
 using System.Windows.Forms; // Thêm namespace này để sử dụng DialogResult và MessageBox
 
 namespace QuanLyCuaHangBanh.Presenters
 {
     public class UnitPresenter(IUnitView view, UnitService unitService) : PresenterBase<Unit>(view, unitService)
     {
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = ((UnitService)Service).GetAllUnits();
+            BindingSource.DataSource = await ((UnitService)Service).GetAllUnits();
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -26,7 +27,7 @@ namespace QuanLyCuaHangBanh.Presenters
         public override void OnImport(object? sender, EventArgs e)
         {
             ExcelHandler.ImportExcel(((UnitService)Service).ImportUnitFromDataRow);
-            LoadData();
+            InitializeAsync();
         }
 
         public override void OnEdit(object? sender, EventArgs e)
@@ -40,7 +41,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         ((UnitService)Service).UpdateUnit(updatedUnit);
                         View.Message = "Cập nhật đơn vị thành công!";
-                        LoadData();
+                        InitializeAsync();
                     }
                 }
             }
@@ -59,7 +60,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((UnitService)Service).AddUnit(newUnit);
                     View.Message = "Thêm đơn vị thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -73,7 +74,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((UnitService)Service).DeleteUnit(unit);
                     View.Message = "Xóa đơn vị thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
             else
@@ -86,7 +87,7 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             if (string.IsNullOrWhiteSpace(View.SearchValue))
             {
-                LoadData(); // Reload all data if search text is empty
+                InitializeAsync(); // Reload all data if search text is empty
             }
             else
             {

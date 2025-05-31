@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmployeeView));
             dgv_EmployeeList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
@@ -99,8 +99,8 @@
             // PhoneNumber
             // 
             PhoneNumber.DataPropertyName = "PhoneNumber";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle1;
             PhoneNumber.HeaderText = "Số điện thoại";
             PhoneNumber.MinimumWidth = 6;
             PhoneNumber.Name = "PhoneNumber";
@@ -259,6 +259,7 @@
             ClientSize = new Size(1103, 607);
             Controls.Add(groupBox1);
             Text = "EmployeeView";
+            Load += EmployeeView_Load;
             ((System.ComponentModel.ISupportInitialize)dgv_EmployeeList).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

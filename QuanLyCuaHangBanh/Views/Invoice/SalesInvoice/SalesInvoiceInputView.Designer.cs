@@ -30,12 +30,6 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel2 = new Panel();
-            llb_AddUnit = new LinkLabel();
-            llb_AddCategory = new LinkLabel();
-            llb_AddProducer = new LinkLabel();
-            btn_DeleteProduct = new MaterialSkin.Controls.MaterialButton();
-            btn_UpdateProduct = new MaterialSkin.Controls.MaterialButton();
-            tb_Id = new TextBox();
             dgv_ProductList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             ProductName = new DataGridViewTextBoxColumn();
@@ -67,7 +61,6 @@
             label3 = new Label();
             nmr_Price = new NumericUpDown();
             nmr_ConversionRate = new NumericUpDown();
-            btn_AddProduct = new MaterialSkin.Controls.MaterialButton();
             cbb_Products = new ComboBox();
             label9 = new Label();
             rtb_ProductNote = new RichTextBox();
@@ -79,10 +72,25 @@
             cbb_Categories = new ComboBox();
             label4 = new Label();
             textbox34 = new Label();
-            label2 = new Label();
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             panel3 = new Panel();
-            panel4 = new Panel();
+            pane_Payment = new Panel();
+            dtp_PaymentDate = new DateTimePicker();
+            materialLabel8 = new MaterialSkin.Controls.MaterialLabel();
+            nmr_TotalPaymentRequired = new NumericUpDown();
+            label11 = new Label();
+            nmr_TotalPaid = new NumericUpDown();
+            dtp_DueDate = new DateTimePicker();
+            nmr_TotalAmountOwed = new NumericUpDown();
+            materialLabel7 = new MaterialSkin.Controls.MaterialLabel();
+            dtp_TransactionDate = new DateTimePicker();
+            materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
+            label10 = new Label();
+            label7 = new Label();
+            btn_AddProduct = new Button();
+            btn_UpdateProduct = new Button();
+            btn_DeleteProduct = new Button();
+            btn_Cancel = new Button();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             groupBox2.SuspendLayout();
@@ -93,98 +101,21 @@
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
             panel3.SuspendLayout();
+            pane_Payment.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).BeginInit();
             SuspendLayout();
             // 
             // panel2
             // 
-            panel2.Controls.Add(llb_AddUnit);
-            panel2.Controls.Add(llb_AddCategory);
-            panel2.Controls.Add(llb_AddProducer);
+            panel2.Controls.Add(label7);
+            panel2.Controls.Add(nmr_TotalPaymentRequired);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(0, 804);
+            panel2.Location = new Point(0, 830);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1228, 50);
+            panel2.Size = new Size(1294, 50);
             panel2.TabIndex = 35;
-            // 
-            // llb_AddUnit
-            // 
-            llb_AddUnit.AutoSize = true;
-            llb_AddUnit.Location = new Point(401, 15);
-            llb_AddUnit.Name = "llb_AddUnit";
-            llb_AddUnit.Size = new Size(120, 20);
-            llb_AddUnit.TabIndex = 10;
-            llb_AddUnit.TabStop = true;
-            llb_AddUnit.Text = "Thêm đơn vị tính";
-            // 
-            // llb_AddCategory
-            // 
-            llb_AddCategory.AutoSize = true;
-            llb_AddCategory.Location = new Point(562, 15);
-            llb_AddCategory.Name = "llb_AddCategory";
-            llb_AddCategory.Size = new Size(143, 20);
-            llb_AddCategory.TabIndex = 11;
-            llb_AddCategory.TabStop = true;
-            llb_AddCategory.Text = "Thêm loại sản phẩm";
-            // 
-            // llb_AddProducer
-            // 
-            llb_AddProducer.AutoSize = true;
-            llb_AddProducer.Location = new Point(746, 15);
-            llb_AddProducer.Name = "llb_AddProducer";
-            llb_AddProducer.Size = new Size(132, 20);
-            llb_AddProducer.TabIndex = 12;
-            llb_AddProducer.TabStop = true;
-            llb_AddProducer.Text = "Thêm nhà sản xuất";
-            // 
-            // btn_DeleteProduct
-            // 
-            btn_DeleteProduct.AutoSize = false;
-            btn_DeleteProduct.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_DeleteProduct.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_DeleteProduct.Depth = 0;
-            btn_DeleteProduct.HighEmphasis = true;
-            btn_DeleteProduct.Icon = null;
-            btn_DeleteProduct.Location = new Point(1116, 94);
-            btn_DeleteProduct.Margin = new Padding(4, 6, 4, 6);
-            btn_DeleteProduct.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_DeleteProduct.Name = "btn_DeleteProduct";
-            btn_DeleteProduct.NoAccentTextColor = Color.Empty;
-            btn_DeleteProduct.Size = new Size(79, 32);
-            btn_DeleteProduct.TabIndex = 23;
-            btn_DeleteProduct.Text = "Xóa";
-            btn_DeleteProduct.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_DeleteProduct.UseAccentColor = false;
-            btn_DeleteProduct.UseVisualStyleBackColor = true;
-            btn_DeleteProduct.Click += btn_DeleteProduct_Click;
-            // 
-            // btn_UpdateProduct
-            // 
-            btn_UpdateProduct.AutoSize = false;
-            btn_UpdateProduct.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_UpdateProduct.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_UpdateProduct.Depth = 0;
-            btn_UpdateProduct.HighEmphasis = true;
-            btn_UpdateProduct.Icon = null;
-            btn_UpdateProduct.Location = new Point(1116, 50);
-            btn_UpdateProduct.Margin = new Padding(4, 6, 4, 6);
-            btn_UpdateProduct.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_UpdateProduct.Name = "btn_UpdateProduct";
-            btn_UpdateProduct.NoAccentTextColor = Color.Empty;
-            btn_UpdateProduct.Size = new Size(79, 32);
-            btn_UpdateProduct.TabIndex = 22;
-            btn_UpdateProduct.Text = "Sửa";
-            btn_UpdateProduct.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_UpdateProduct.UseAccentColor = false;
-            btn_UpdateProduct.UseVisualStyleBackColor = true;
-            btn_UpdateProduct.Click += btn_UpdateProduct_Click;
-            // 
-            // tb_Id
-            // 
-            tb_Id.Enabled = false;
-            tb_Id.Location = new Point(19, 32);
-            tb_Id.Name = "tb_Id";
-            tb_Id.Size = new Size(125, 27);
-            tb_Id.TabIndex = 1;
             // 
             // dgv_ProductList
             // 
@@ -199,7 +130,7 @@
             dgv_ProductList.ReadOnly = true;
             dgv_ProductList.RowHeadersWidth = 51;
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1222, 253);
+            dgv_ProductList.Size = new Size(1288, 305);
             dgv_ProductList.TabIndex = 0;
             // 
             // ID
@@ -273,9 +204,9 @@
             // 
             groupBox2.Controls.Add(dgv_ProductList);
             groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new Point(0, 450);
+            groupBox2.Location = new Point(0, 499);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1228, 279);
+            groupBox2.Size = new Size(1294, 331);
             groupBox2.TabIndex = 34;
             groupBox2.TabStop = false;
             groupBox2.Text = " Danh sách sản phẩm";
@@ -298,7 +229,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1228, 210);
+            groupBox1.Size = new Size(1294, 210);
             groupBox1.TabIndex = 33;
             groupBox1.TabStop = false;
             groupBox1.Text = "Hóa đơn";
@@ -310,6 +241,7 @@
             cbb_PaymentMethod.Name = "cbb_PaymentMethod";
             cbb_PaymentMethod.Size = new Size(250, 28);
             cbb_PaymentMethod.TabIndex = 38;
+            cbb_PaymentMethod.SelectedIndexChanged += cbb_PaymentMethod_SelectedIndexChanged;
             // 
             // materialLabel4
             // 
@@ -330,6 +262,7 @@
             cbb_Customers.Name = "cbb_Customers";
             cbb_Customers.Size = new Size(250, 28);
             cbb_Customers.TabIndex = 36;
+            cbb_Customers.SelectedIndexChanged += cbb_Customers_SelectedIndexChanged;
             // 
             // materialLabel3
             // 
@@ -375,6 +308,7 @@
             rbtn_Order.TabStop = true;
             rbtn_Order.Text = "Đơn hàng";
             rbtn_Order.UseVisualStyleBackColor = true;
+            rbtn_Order.CheckedChanged += rbtn_Order_CheckedChanged;
             // 
             // cbb_Status
             // 
@@ -456,12 +390,13 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(label3);
-            panel1.Controls.Add(nmr_Price);
+            panel1.Controls.Add(btn_Cancel);
             panel1.Controls.Add(btn_DeleteProduct);
             panel1.Controls.Add(btn_UpdateProduct);
-            panel1.Controls.Add(nmr_ConversionRate);
             panel1.Controls.Add(btn_AddProduct);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(nmr_Price);
+            panel1.Controls.Add(nmr_ConversionRate);
             panel1.Controls.Add(cbb_Products);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(rtb_ProductNote);
@@ -473,18 +408,16 @@
             panel1.Controls.Add(cbb_Categories);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(textbox34);
-            panel1.Controls.Add(tb_Id);
-            panel1.Controls.Add(label2);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 210);
+            panel1.Location = new Point(0, 318);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1228, 181);
+            panel1.Size = new Size(1294, 181);
             panel1.TabIndex = 37;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(464, 118);
+            label3.Location = new Point(307, 125);
             label3.Name = "label3";
             label3.Size = new Size(60, 20);
             label3.TabIndex = 25;
@@ -492,9 +425,8 @@
             // 
             // nmr_Price
             // 
-            nmr_Price.Location = new Point(464, 141);
-            nmr_Price.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-            nmr_Price.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nmr_Price.Location = new Point(307, 148);
+            nmr_Price.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             nmr_Price.Name = "nmr_Price";
             nmr_Price.Size = new Size(150, 27);
             nmr_Price.TabIndex = 24;
@@ -502,36 +434,18 @@
             // 
             // nmr_ConversionRate
             // 
-            nmr_ConversionRate.Location = new Point(464, 33);
+            nmr_ConversionRate.Location = new Point(307, 40);
+            nmr_ConversionRate.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            nmr_ConversionRate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
             nmr_ConversionRate.TabIndex = 21;
-            // 
-            // btn_AddProduct
-            // 
-            btn_AddProduct.AutoSize = false;
-            btn_AddProduct.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_AddProduct.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_AddProduct.Depth = 0;
-            btn_AddProduct.HighEmphasis = true;
-            btn_AddProduct.Icon = null;
-            btn_AddProduct.Location = new Point(1116, 9);
-            btn_AddProduct.Margin = new Padding(4, 6, 4, 6);
-            btn_AddProduct.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_AddProduct.Name = "btn_AddProduct";
-            btn_AddProduct.NoAccentTextColor = Color.Empty;
-            btn_AddProduct.Size = new Size(79, 32);
-            btn_AddProduct.TabIndex = 18;
-            btn_AddProduct.Text = "Thêm";
-            btn_AddProduct.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_AddProduct.UseAccentColor = false;
-            btn_AddProduct.UseVisualStyleBackColor = true;
-            btn_AddProduct.Click += btn_AddProduct_Click;
+            nmr_ConversionRate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // cbb_Products
             // 
             cbb_Products.FormattingEnabled = true;
-            cbb_Products.Location = new Point(204, 31);
+            cbb_Products.Location = new Point(47, 38);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
             cbb_Products.TabIndex = 20;
@@ -540,7 +454,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(674, 6);
+            label9.Location = new Point(517, 13);
             label9.Name = "label9";
             label9.Size = new Size(58, 20);
             label9.TabIndex = 15;
@@ -549,7 +463,7 @@
             // rtb_ProductNote
             // 
             rtb_ProductNote.BorderStyle = BorderStyle.None;
-            rtb_ProductNote.Location = new Point(674, 30);
+            rtb_ProductNote.Location = new Point(517, 37);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(387, 138);
             rtb_ProductNote.TabIndex = 14;
@@ -558,7 +472,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(464, 64);
+            label8.Location = new Point(307, 71);
             label8.Name = "label8";
             label8.Size = new Size(69, 20);
             label8.TabIndex = 13;
@@ -566,7 +480,7 @@
             // 
             // nmr_Quantity
             // 
-            nmr_Quantity.Location = new Point(464, 87);
+            nmr_Quantity.Location = new Point(307, 94);
             nmr_Quantity.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
@@ -577,7 +491,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(464, 8);
+            label6.Location = new Point(307, 15);
             label6.Name = "label6";
             label6.Size = new Size(116, 20);
             label6.TabIndex = 8;
@@ -586,7 +500,7 @@
             // cbb_Units
             // 
             cbb_Units.FormattingEnabled = true;
-            cbb_Units.Location = new Point(204, 140);
+            cbb_Units.Location = new Point(47, 147);
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
             cbb_Units.TabIndex = 7;
@@ -595,7 +509,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(204, 118);
+            label5.Location = new Point(47, 125);
             label5.Name = "label5";
             label5.Size = new Size(106, 20);
             label5.TabIndex = 6;
@@ -604,7 +518,7 @@
             // cbb_Categories
             // 
             cbb_Categories.FormattingEnabled = true;
-            cbb_Categories.Location = new Point(204, 86);
+            cbb_Categories.Location = new Point(47, 93);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
             cbb_Categories.TabIndex = 5;
@@ -612,7 +526,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(204, 64);
+            label4.Location = new Point(47, 71);
             label4.Name = "label4";
             label4.Size = new Size(101, 20);
             label4.TabIndex = 4;
@@ -621,20 +535,11 @@
             // textbox34
             // 
             textbox34.AutoSize = true;
-            textbox34.Location = new Point(204, 8);
+            textbox34.Location = new Point(47, 15);
             textbox34.Name = "textbox34";
             textbox34.Size = new Size(100, 20);
             textbox34.TabIndex = 2;
             textbox34.Text = "Tên sản phẩm";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(19, 9);
-            label2.Name = "label2";
-            label2.Size = new Size(30, 20);
-            label2.TabIndex = 0;
-            label2.Text = "Mã";
             // 
             // btn_Save
             // 
@@ -661,30 +566,203 @@
             // 
             panel3.Controls.Add(btn_Save);
             panel3.Dock = DockStyle.Bottom;
-            panel3.Location = new Point(0, 729);
+            panel3.Location = new Point(0, 880);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1228, 75);
+            panel3.Size = new Size(1294, 75);
             panel3.TabIndex = 36;
             // 
-            // panel4
+            // pane_Payment
             // 
-            panel4.Dock = DockStyle.Top;
-            panel4.Location = new Point(0, 391);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(1228, 59);
-            panel4.TabIndex = 38;
+            pane_Payment.Controls.Add(dtp_PaymentDate);
+            pane_Payment.Controls.Add(materialLabel8);
+            pane_Payment.Controls.Add(label11);
+            pane_Payment.Controls.Add(nmr_TotalPaid);
+            pane_Payment.Controls.Add(dtp_DueDate);
+            pane_Payment.Controls.Add(nmr_TotalAmountOwed);
+            pane_Payment.Controls.Add(materialLabel7);
+            pane_Payment.Controls.Add(dtp_TransactionDate);
+            pane_Payment.Controls.Add(materialLabel6);
+            pane_Payment.Controls.Add(label10);
+            pane_Payment.Dock = DockStyle.Top;
+            pane_Payment.Location = new Point(0, 210);
+            pane_Payment.Name = "pane_Payment";
+            pane_Payment.Size = new Size(1294, 108);
+            pane_Payment.TabIndex = 38;
+            // 
+            // dtp_PaymentDate
+            // 
+            dtp_PaymentDate.CustomFormat = "dd/MM/yyyy";
+            dtp_PaymentDate.Enabled = false;
+            dtp_PaymentDate.Format = DateTimePickerFormat.Custom;
+            dtp_PaymentDate.Location = new Point(1072, 46);
+            dtp_PaymentDate.Name = "dtp_PaymentDate";
+            dtp_PaymentDate.Size = new Size(175, 27);
+            dtp_PaymentDate.TabIndex = 61;
+            // 
+            // materialLabel8
+            // 
+            materialLabel8.AutoSize = true;
+            materialLabel8.Depth = 0;
+            materialLabel8.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel8.Location = new Point(1072, 24);
+            materialLabel8.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel8.Name = "materialLabel8";
+            materialLabel8.Size = new Size(119, 19);
+            materialLabel8.TabIndex = 60;
+            materialLabel8.Text = "Ngày thanh toán";
+            // 
+            // nmr_TotalPaymentRequired
+            // 
+            nmr_TotalPaymentRequired.Enabled = false;
+            nmr_TotalPaymentRequired.Location = new Point(1129, 11);
+            nmr_TotalPaymentRequired.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalPaymentRequired.Name = "nmr_TotalPaymentRequired";
+            nmr_TotalPaymentRequired.Size = new Size(197, 27);
+            nmr_TotalPaymentRequired.TabIndex = 59;
+            nmr_TotalPaymentRequired.ThousandsSeparator = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(307, 24);
+            label11.Name = "label11";
+            label11.Size = new Size(121, 20);
+            label11.TabIndex = 58;
+            label11.Text = "Tổng tiền còn nợ";
+            // 
+            // nmr_TotalPaid
+            // 
+            nmr_TotalPaid.Increment = new decimal(new int[] { 1000, 0, 0, 0 });
+            nmr_TotalPaid.Location = new Point(47, 46);
+            nmr_TotalPaid.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalPaid.Name = "nmr_TotalPaid";
+            nmr_TotalPaid.Size = new Size(175, 27);
+            nmr_TotalPaid.TabIndex = 51;
+            nmr_TotalPaid.ThousandsSeparator = true;
+            // 
+            // dtp_DueDate
+            // 
+            dtp_DueDate.CustomFormat = "dd/MM/yyyy";
+            dtp_DueDate.Enabled = false;
+            dtp_DueDate.Format = DateTimePickerFormat.Custom;
+            dtp_DueDate.Location = new Point(825, 46);
+            dtp_DueDate.Name = "dtp_DueDate";
+            dtp_DueDate.Size = new Size(175, 27);
+            dtp_DueDate.TabIndex = 56;
+            // 
+            // nmr_TotalAmountOwed
+            // 
+            nmr_TotalAmountOwed.Enabled = false;
+            nmr_TotalAmountOwed.Location = new Point(307, 46);
+            nmr_TotalAmountOwed.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalAmountOwed.Name = "nmr_TotalAmountOwed";
+            nmr_TotalAmountOwed.Size = new Size(175, 27);
+            nmr_TotalAmountOwed.TabIndex = 57;
+            nmr_TotalAmountOwed.ThousandsSeparator = true;
+            // 
+            // materialLabel7
+            // 
+            materialLabel7.AutoSize = true;
+            materialLabel7.Depth = 0;
+            materialLabel7.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel7.Location = new Point(825, 24);
+            materialLabel7.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel7.Name = "materialLabel7";
+            materialLabel7.Size = new Size(101, 19);
+            materialLabel7.TabIndex = 55;
+            materialLabel7.Text = "Ngày đáo hạn";
+            // 
+            // dtp_TransactionDate
+            // 
+            dtp_TransactionDate.CustomFormat = "dd/MM/yyyy";
+            dtp_TransactionDate.Enabled = false;
+            dtp_TransactionDate.Format = DateTimePickerFormat.Custom;
+            dtp_TransactionDate.Location = new Point(571, 46);
+            dtp_TransactionDate.Name = "dtp_TransactionDate";
+            dtp_TransactionDate.Size = new Size(175, 27);
+            dtp_TransactionDate.TabIndex = 53;
+            // 
+            // materialLabel6
+            // 
+            materialLabel6.AutoSize = true;
+            materialLabel6.Depth = 0;
+            materialLabel6.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel6.Location = new Point(571, 24);
+            materialLabel6.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel6.Name = "materialLabel6";
+            materialLabel6.Size = new Size(107, 19);
+            materialLabel6.TabIndex = 52;
+            materialLabel6.Text = "Ngày giao dịch";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(41, 24);
+            label10.Name = "label10";
+            label10.Size = new Size(168, 20);
+            label10.TabIndex = 54;
+            label10.Text = "Tổng tiền đã thanh toán";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(941, 15);
+            label7.Name = "label7";
+            label7.Size = new Size(177, 20);
+            label7.TabIndex = 50;
+            label7.Text = "Tổng tiền cần thanh toán:";
+            // 
+            // btn_AddProduct
+            // 
+            btn_AddProduct.Location = new Point(1006, 56);
+            btn_AddProduct.Name = "btn_AddProduct";
+            btn_AddProduct.Size = new Size(94, 29);
+            btn_AddProduct.TabIndex = 26;
+            btn_AddProduct.Text = "Thêm";
+            btn_AddProduct.UseVisualStyleBackColor = true;
+            btn_AddProduct.Click += btn_AddProduct_Click;
+            // 
+            // btn_UpdateProduct
+            // 
+            btn_UpdateProduct.Location = new Point(1006, 106);
+            btn_UpdateProduct.Name = "btn_UpdateProduct";
+            btn_UpdateProduct.Size = new Size(94, 29);
+            btn_UpdateProduct.TabIndex = 27;
+            btn_UpdateProduct.Text = "Sửa";
+            btn_UpdateProduct.UseVisualStyleBackColor = true;
+            btn_UpdateProduct.Click += btn_UpdateProduct_Click;
+            // 
+            // btn_DeleteProduct
+            // 
+            btn_DeleteProduct.Location = new Point(1129, 56);
+            btn_DeleteProduct.Name = "btn_DeleteProduct";
+            btn_DeleteProduct.Size = new Size(94, 29);
+            btn_DeleteProduct.TabIndex = 28;
+            btn_DeleteProduct.Text = "Xóa";
+            btn_DeleteProduct.UseVisualStyleBackColor = true;
+            btn_DeleteProduct.Click += btn_DeleteProduct_Click;
+            // 
+            // btn_Cancel
+            // 
+            btn_Cancel.Location = new Point(1129, 106);
+            btn_Cancel.Name = "btn_Cancel";
+            btn_Cancel.Size = new Size(94, 29);
+            btn_Cancel.TabIndex = 29;
+            btn_Cancel.Text = "Hủy";
+            btn_Cancel.UseVisualStyleBackColor = true;
+            btn_Cancel.Click += btn_Cancel_Click;
             // 
             // SalesInvoiceInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1228, 854);
+            ClientSize = new Size(1294, 955);
             Controls.Add(groupBox2);
-            Controls.Add(panel3);
-            Controls.Add(panel2);
-            Controls.Add(panel4);
             Controls.Add(panel1);
+            Controls.Add(pane_Payment);
             Controls.Add(groupBox1);
+            Controls.Add(panel2);
+            Controls.Add(panel3);
             Name = "SalesInvoiceInputView";
             Text = "InvoiceInputView";
             Load += InvoiceInputView_Load;
@@ -702,18 +780,17 @@
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).EndInit();
             panel3.ResumeLayout(false);
+            pane_Payment.ResumeLayout(false);
+            pane_Payment.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel2;
-        private LinkLabel llb_AddUnit;
-        private LinkLabel llb_AddCategory;
-        private LinkLabel llb_AddProducer;
-        private MaterialSkin.Controls.MaterialButton btn_DeleteProduct;
-        private MaterialSkin.Controls.MaterialButton btn_UpdateProduct;
-        private TextBox tb_Id;
         private DataGridView dgv_ProductList;
         private GroupBox groupBox2;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
@@ -731,7 +808,6 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel5;
         private Panel panel1;
         private NumericUpDown nmr_ConversionRate;
-        private MaterialSkin.Controls.MaterialButton btn_AddProduct;
         private ComboBox cbb_Products;
         private Label label9;
         private RichTextBox rtb_ProductNote;
@@ -743,7 +819,6 @@
         private ComboBox cbb_Categories;
         private Label label4;
         private Label textbox34;
-        private Label label2;
         private MaterialSkin.Controls.MaterialButton btn_Save;
         private Panel panel3;
         private ComboBox cbb_Customers;
@@ -760,6 +835,22 @@
         private DataGridViewTextBoxColumn Price;
         private DataGridViewTextBoxColumn Quantity;
         private DataGridViewTextBoxColumn Note;
-        private Panel panel4;
+        private Panel pane_Payment;
+        private NumericUpDown nmr_TotalPaymentRequired;
+        private Label label11;
+        private NumericUpDown nmr_TotalAmountOwed;
+        private NumericUpDown nmr_TotalPaid;
+        private DateTimePicker dtp_DueDate;
+        private MaterialSkin.Controls.MaterialLabel materialLabel7;
+        private DateTimePicker dtp_TransactionDate;
+        private MaterialSkin.Controls.MaterialLabel materialLabel6;
+        private Label label10;
+        private Label label7;
+        private DateTimePicker dtp_PaymentDate;
+        private MaterialSkin.Controls.MaterialLabel materialLabel8;
+        private Button btn_DeleteProduct;
+        private Button btn_UpdateProduct;
+        private Button btn_AddProduct;
+        private Button btn_Cancel;
     }
 }

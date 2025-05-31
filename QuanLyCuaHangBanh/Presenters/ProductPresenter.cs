@@ -22,6 +22,14 @@ using QuanLyCuaHangBanh.Services; // Thêm namespace của Service
 
 namespace QuanLyCuaHangBanh.Presenters
 {
+    public class ProductViewEventArgs : EventArgs
+    {
+        public ProductViewEventArgs(bool isEdit)
+        {
+            IsEdit = isEdit;
+        }   
+        public bool IsEdit { get; }
+    }
     public class ProductPresenter : PresenterBase<Product>
     {
         private IList<ProductDTO> products = new List<ProductDTO>();
@@ -40,21 +48,21 @@ namespace QuanLyCuaHangBanh.Presenters
                 if (comboBox.SelectedValue is int selectedUnitId)
                 {
                     ((ProductService)Service).UpdateProductUnitPriceAndQuantity(product, selectedUnitId);
-                    BindingSource?.ResetBindings(false); // Cập nhật lại tất cả dữ liệu trong DataGridView
+                    BindingSource?.ResetBindings(false);
                 }
             }
         }
 
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
             try
             {
-                products = ((ProductService)Service).GetAllProductsAsDto();
+                products = await ((ProductService)Service).GetAllProductsAsDto();
                 BindingSource.DataSource = products;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu sản phẩm: " + ex.Message);
+                ShowMessage($"Lỗi khi tải dữ liệu sản phẩm: {ex.Message}", "Lỗi", MessageBoxIcon.Error);
             }
         }
 
@@ -66,17 +74,28 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnImport(object? sender, EventArgs e)
         {
-            ExcelHandler.ImportExcel((DataRow row) =>
+            ExcelHandler.ImportExcel(async (DataRow row) =>
             {
                 ((ProductService)Service).ImportProduct(row);
-                LoadData();
-                this.View.Message = "Nhập dữ liệu thành công!";
+                await InitializeAsync();
+                ShowMessage("Nhập sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
             });
         }
 
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
-            ProductInputView productInputView = new ProductInputView((ProductDTO)this.View.SelectedItem);
+            ProductInputView productInputView = new ProductInputView();
+            if(e is ProductViewEventArgs productViewEventArgs)
+            {
+                if(productViewEventArgs.IsEdit == false){
+                    productInputView = new ProductInputView(productDto: (ProductDTO)this.View.SelectedItem, isEdit: false);
+                    MessageBox.Show("Không thể sửa sản phẩm", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }else
+            {
+                productInputView = new ProductInputView((ProductDTO)this.View.SelectedItem);
+            }
+            
             productInputView.SelectImage += SelectImage;
             if (productInputView.ShowDialog() == DialogResult.OK)
             {
@@ -85,13 +104,13 @@ namespace QuanLyCuaHangBanh.Presenters
                     product.ID = ((ProductDTO)this.View.SelectedItem).ProductId;
                     ((ProductService)Service).UpdateProduct(product, productInputView.Product_UnitDTOs);
 
-                    View.Message = "Cập nhật sản phẩm thành công";
-                    LoadData();
+                    ShowMessage("Cập nhật sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
+                    await InitializeAsync();
                 }
             }
         }
 
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             ProductInputView productInputView = new ProductInputView();
             productInputView.SelectImage += SelectImage;
@@ -100,8 +119,8 @@ namespace QuanLyCuaHangBanh.Presenters
                 if (productInputView.Tag is Product product)
                 {
                     ((ProductService)Service).AddNewProduct(product, productInputView.Product_UnitDTOs);
-                    this.View.Message = "Thêm sản phẩm thành công";
-                    LoadData();
+                    ShowMessage("Thêm sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
+                    await InitializeAsync();
                 }
             }
         }
@@ -120,23 +139,23 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
             if (this.View.SelectedItem is ProductDTO selectedProduct)
             {
                 ((ProductService)Service).DeleteProduct(selectedProduct);
-                this.View.Message = "Xóa sản phẩm thành công!";
-                LoadData();
+                ShowMessage("Xóa sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
+                await InitializeAsync();
             }
         }
 
-        public override void OnSearch(object? sender, EventArgs e)
+        public override async void OnSearch(object? sender, EventArgs e)
         {
             string searchValue = this.View.SearchValue?.Trim() ?? string.Empty;
 
             if (string.IsNullOrEmpty(searchValue))
             {
-                LoadData();
+                await InitializeAsync();
             }
             else
             {

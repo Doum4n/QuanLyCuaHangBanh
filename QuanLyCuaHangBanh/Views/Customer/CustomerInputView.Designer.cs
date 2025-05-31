@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            tb_CustomerName = new MaterialSkin.Controls.MaterialTextBox();
-            tb_PhoneNumer = new MaterialSkin.Controls.MaterialTextBox();
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
-            mttb_Address = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             btn_Save = new MaterialSkin.Controls.MaterialButton();
+            tb_CustomerName = new TextBox();
+            tb_PhoneNumer = new TextBox();
+            mttb_Address = new RichTextBox();
+            cbb_CustomerTypes = new ComboBox();
+            materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
             SuspendLayout();
             // 
             // materialLabel1
@@ -49,46 +51,12 @@
             materialLabel1.TabIndex = 0;
             materialLabel1.Text = "Họ và tên";
             // 
-            // tb_CustomerName
-            // 
-            tb_CustomerName.AnimateReadOnly = false;
-            tb_CustomerName.BorderStyle = BorderStyle.None;
-            tb_CustomerName.Depth = 0;
-            tb_CustomerName.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            tb_CustomerName.LeadingIcon = null;
-            tb_CustomerName.Location = new Point(45, 78);
-            tb_CustomerName.MaxLength = 50;
-            tb_CustomerName.MouseState = MaterialSkin.MouseState.OUT;
-            tb_CustomerName.Multiline = false;
-            tb_CustomerName.Name = "tb_CustomerName";
-            tb_CustomerName.Size = new Size(303, 50);
-            tb_CustomerName.TabIndex = 1;
-            tb_CustomerName.Text = "";
-            tb_CustomerName.TrailingIcon = null;
-            // 
-            // tb_PhoneNumer
-            // 
-            tb_PhoneNumer.AnimateReadOnly = false;
-            tb_PhoneNumer.BorderStyle = BorderStyle.None;
-            tb_PhoneNumer.Depth = 0;
-            tb_PhoneNumer.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            tb_PhoneNumer.LeadingIcon = null;
-            tb_PhoneNumer.Location = new Point(45, 185);
-            tb_PhoneNumer.MaxLength = 50;
-            tb_PhoneNumer.MouseState = MaterialSkin.MouseState.OUT;
-            tb_PhoneNumer.Multiline = false;
-            tb_PhoneNumer.Name = "tb_PhoneNumer";
-            tb_PhoneNumer.Size = new Size(303, 50);
-            tb_PhoneNumer.TabIndex = 3;
-            tb_PhoneNumer.Text = "";
-            tb_PhoneNumer.TrailingIcon = null;
-            // 
             // materialLabel2
             // 
             materialLabel2.AutoSize = true;
             materialLabel2.Depth = 0;
             materialLabel2.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel2.Location = new Point(45, 149);
+            materialLabel2.Location = new Point(45, 125);
             materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             materialLabel2.Name = "materialLabel2";
             materialLabel2.Size = new Size(94, 19);
@@ -100,46 +68,22 @@
             materialLabel3.AutoSize = true;
             materialLabel3.Depth = 0;
             materialLabel3.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel3.Location = new Point(421, 41);
+            materialLabel3.Location = new Point(303, 34);
             materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             materialLabel3.Name = "materialLabel3";
             materialLabel3.Size = new Size(50, 19);
             materialLabel3.TabIndex = 4;
             materialLabel3.Text = "Địa chỉ";
             // 
-            // mttb_Address
-            // 
-            mttb_Address.AnimateReadOnly = false;
-            mttb_Address.BackgroundImageLayout = ImageLayout.None;
-            mttb_Address.CharacterCasing = CharacterCasing.Normal;
-            mttb_Address.Depth = 0;
-            mttb_Address.HideSelection = true;
-            mttb_Address.Location = new Point(421, 78);
-            mttb_Address.MaxLength = 32767;
-            mttb_Address.MouseState = MaterialSkin.MouseState.OUT;
-            mttb_Address.Name = "mttb_Address";
-            mttb_Address.PasswordChar = '\0';
-            mttb_Address.ReadOnly = false;
-            mttb_Address.ScrollBars = ScrollBars.None;
-            mttb_Address.SelectedText = "";
-            mttb_Address.SelectionLength = 0;
-            mttb_Address.SelectionStart = 0;
-            mttb_Address.ShortcutsEnabled = true;
-            mttb_Address.Size = new Size(318, 157);
-            mttb_Address.TabIndex = 5;
-            mttb_Address.TabStop = false;
-            mttb_Address.TextAlign = HorizontalAlignment.Left;
-            mttb_Address.UseSystemPasswordChar = false;
-            mttb_Address.KeyDown += mttb_Address_KeyDown;
-            // 
             // btn_Save
             // 
+            btn_Save.AutoSize = false;
             btn_Save.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn_Save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             btn_Save.Depth = 0;
             btn_Save.HighEmphasis = true;
             btn_Save.Icon = null;
-            btn_Save.Location = new Point(304, 277);
+            btn_Save.Location = new Point(195, 336);
             btn_Save.Margin = new Padding(4, 6, 4, 6);
             btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Save.Name = "btn_Save";
@@ -152,17 +96,64 @@
             btn_Save.UseVisualStyleBackColor = true;
             btn_Save.Click += btn_Save_Click;
             // 
+            // tb_CustomerName
+            // 
+            tb_CustomerName.BorderStyle = BorderStyle.None;
+            tb_CustomerName.Location = new Point(45, 78);
+            tb_CustomerName.Name = "tb_CustomerName";
+            tb_CustomerName.Size = new Size(194, 20);
+            tb_CustomerName.TabIndex = 7;
+            // 
+            // tb_PhoneNumer
+            // 
+            tb_PhoneNumer.BorderStyle = BorderStyle.None;
+            tb_PhoneNumer.Location = new Point(45, 159);
+            tb_PhoneNumer.Name = "tb_PhoneNumer";
+            tb_PhoneNumer.Size = new Size(194, 20);
+            tb_PhoneNumer.TabIndex = 8;
+            // 
+            // mttb_Address
+            // 
+            mttb_Address.BorderStyle = BorderStyle.None;
+            mttb_Address.Location = new Point(304, 78);
+            mttb_Address.Name = "mttb_Address";
+            mttb_Address.Size = new Size(250, 187);
+            mttb_Address.TabIndex = 9;
+            mttb_Address.Text = "";
+            // 
+            // cbb_CustomerTypes
+            // 
+            cbb_CustomerTypes.FormattingEnabled = true;
+            cbb_CustomerTypes.Location = new Point(45, 237);
+            cbb_CustomerTypes.Name = "cbb_CustomerTypes";
+            cbb_CustomerTypes.Size = new Size(194, 28);
+            cbb_CustomerTypes.TabIndex = 10;
+            // 
+            // materialLabel4
+            // 
+            materialLabel4.AutoSize = true;
+            materialLabel4.Depth = 0;
+            materialLabel4.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel4.Location = new Point(45, 202);
+            materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel4.Name = "materialLabel4";
+            materialLabel4.Size = new Size(119, 19);
+            materialLabel4.TabIndex = 11;
+            materialLabel4.Text = "Loại khách hàng";
+            // 
             // CustomerInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 355);
-            Controls.Add(btn_Save);
+            ClientSize = new Size(609, 410);
+            Controls.Add(materialLabel4);
+            Controls.Add(cbb_CustomerTypes);
             Controls.Add(mttb_Address);
-            Controls.Add(materialLabel3);
             Controls.Add(tb_PhoneNumer);
-            Controls.Add(materialLabel2);
             Controls.Add(tb_CustomerName);
+            Controls.Add(btn_Save);
+            Controls.Add(materialLabel3);
+            Controls.Add(materialLabel2);
             Controls.Add(materialLabel1);
             Name = "CustomerInputView";
             Text = "Thêm khách hàng";
@@ -174,11 +165,13 @@
         #endregion
 
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialTextBox tb_CustomerName;
-        private MaterialSkin.Controls.MaterialTextBox tb_PhoneNumer;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
-        private MaterialSkin.Controls.MaterialMultiLineTextBox2 mttb_Address;
         private MaterialSkin.Controls.MaterialButton btn_Save;
+        private TextBox tb_CustomerName;
+        private TextBox tb_PhoneNumer;
+        private RichTextBox mttb_Address;
+        private ComboBox cbb_CustomerTypes;
+        private MaterialSkin.Controls.MaterialLabel materialLabel4;
     }
 }

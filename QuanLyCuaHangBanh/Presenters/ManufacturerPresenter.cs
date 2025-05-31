@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows.Forms; // Thêm để sử dụng DialogResult và MessageBox
+using System.Windows.Forms;
+using System.Threading.Tasks; // Thêm để sử dụng DialogResult và MessageBox
 
 namespace QuanLyCuaHangBanh.Presenters
 {
@@ -19,9 +20,9 @@ namespace QuanLyCuaHangBanh.Presenters
         {
         }
 
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = ((ManufacturerService)Service).GetAllManufacturers();
+            BindingSource.DataSource = await ((ManufacturerService)Service).GetAllManufacturers();
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -33,7 +34,7 @@ namespace QuanLyCuaHangBanh.Presenters
         public override void OnImport(object? sender, EventArgs e)
         {
             ExcelHandler.ImportExcel(((ManufacturerService)Service).ImportManufacturerFromDataRow);
-            LoadData(); // Load lại dữ liệu sau khi import
+            InitializeAsync(); // Load lại dữ liệu sau khi import
         }
 
         public override void OnEdit(object? sender, EventArgs e)
@@ -48,7 +49,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         ((ManufacturerService)Service).UpdateManufacturer(manufacturer);
                         View.Message = "Cập nhật nhà sản xuất thành công!";
-                        LoadData();
+                        InitializeAsync();
                     }
                 }
             }
@@ -68,7 +69,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((ManufacturerService)Service).AddManufacturer(manufacturer);
                     View.Message = "Thêm nhà sản xuất thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -82,7 +83,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((ManufacturerService)Service).DeleteManufacturer(manufacturer);
                     View.Message = "Xóa nhà sản xuất thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
             else
@@ -95,7 +96,7 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             if (string.IsNullOrWhiteSpace(View.SearchValue))
             {
-                LoadData(); // Reload all data if search text is empty
+                InitializeAsync(); // Reload all data if search text is empty
             }
             else
             {

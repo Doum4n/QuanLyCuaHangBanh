@@ -16,7 +16,5 @@ namespace QuanLyCuaHangBanh.Models
         public string Status { get; set; } // e.g., "Paid", "Unpaid", "Refunded"
 
         public virtual Customer Customer { get; set; }
-        // ✅ Ánh xạ navigation từ Invoice_Detail (kế thừa)
-        public ICollection<Invoice_Detail> InvoiceDetails { get; set; }
     }
 }

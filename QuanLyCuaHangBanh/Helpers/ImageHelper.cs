@@ -8,14 +8,14 @@ namespace QuanLyCuaHangBanh.Helpers
 {
     class ImageHelper
     {
-        public static Image LoadImageFromUrl(string imageUrl)
+        public static async Task<Image> LoadImageFromUrl(string imageUrl)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
                     // Tải stream hình ảnh từ URL
-                    var stream = client.GetStreamAsync(imageUrl).Result;
+                    var stream = await client.GetStreamAsync(imageUrl);
 
                     // Chuyển stream thành Image
                     return Image.FromStream(stream);

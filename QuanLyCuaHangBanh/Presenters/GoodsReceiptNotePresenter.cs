@@ -19,9 +19,9 @@ namespace QuanLyCuaHangBanh.Presenters
 {
     class GoodsReceiptNotePresenter(IGoodsReceiptNoteView view, GoodsReceiptNoteService goodsReceiptNoteService) : PresenterBase<GoodsReceiptNote>(view, (IService)goodsReceiptNoteService)
     {
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = ((GoodsReceiptNoteService)Service).GetAllGoodsReceiptNotesAsDto();
+            BindingSource.DataSource = await ((GoodsReceiptNoteService)Service).GetAllGoodsReceiptNotesAsDto();
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 ((GoodsReceiptNoteService)Service).ImportGoodsReceiptNote,
                 ((GoodsReceiptNoteService)Service).ImportGoodsReceiptNoteDetail
             );
-            LoadData();
+            InitializeAsync();
         }
 
         public override void OnAddNew(object? sender, EventArgs e)
@@ -48,7 +48,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((GoodsReceiptNoteService)Service).AddGoodsReceiptNote(goodsReceiptNote, inputView.ProductList);
                     View.Message = "Thêm phiếu nhập thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((GoodsReceiptNoteService)Service).DeleteGoodsReceiptNote(goodsReceiptNoteDTO.ID);
                     View.Message = "Xóa phiếu nhập thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -83,7 +83,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((GoodsReceiptNoteService)Service).UpdateGoodsReceiptNote(goodsReceiptNote, inputView.ProductList);
                     View.Message = "Cập nhật phiếu nhập thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }

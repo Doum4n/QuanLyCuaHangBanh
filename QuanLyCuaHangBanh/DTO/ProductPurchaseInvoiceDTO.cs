@@ -15,7 +15,6 @@ namespace QuanLyCuaHangBanh.DTO
         public int InvoiceID { get; set; }
         public decimal Price { get; set; }
 
-
         public ProductPurchaseInvoiceDTO(int iD, int invoiceId, string productName, int categoryId, string categoryName, string unitName, int productUnitId, decimal conversionRate, int quantity, string note, decimal price) : 
             base(iD, productName, categoryId, categoryName, unitName, productUnitId, conversionRate, quantity, note)
         {
@@ -32,7 +31,8 @@ namespace QuanLyCuaHangBanh.DTO
                 Quantity = Quantity,
                 UnitCost = Price,
                 Note = Note,
-                InvoiceID = InvoiceID
+                InvoiceID = InvoiceID,
+                
             };
         }
     }

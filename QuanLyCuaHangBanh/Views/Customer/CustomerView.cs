@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Helpers;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Views.Customer;
@@ -17,7 +18,7 @@ namespace QuanLyCuaHangBanh.Views
     public partial class CustomerView : Form, ICustomerView
     {
         private string searchValue;
-        private Models.Customer selectedCustomer;
+        private CustomerDTO selectedCustomer;
         private string message;
 
         public CustomerView()
@@ -31,7 +32,7 @@ namespace QuanLyCuaHangBanh.Views
         {
             if (dgv_CustomerList.SelectedRows.Count > 0)
             {
-                selectedCustomer = (Models.Customer)dgv_CustomerList.SelectedRows[0].DataBoundItem;
+                selectedCustomer = (CustomerDTO)dgv_CustomerList.SelectedRows[0].DataBoundItem;
                 RowSelected?.Invoke(sender, e);
             }
         }
@@ -77,11 +78,16 @@ namespace QuanLyCuaHangBanh.Views
         public event EventHandler ImportEvent;
         public event EventHandler ExportEvent;
 
-        object IView.SelectedItem { get => selectedCustomer; set => selectedCustomer = (Models.Customer)value; }
+        object IView.SelectedItem { get => selectedCustomer; set => selectedCustomer = (CustomerDTO)value; }
 
         public void SetBindingSource(BindingSource bindingSource)
         {
             dgv_CustomerList.DataSource = bindingSource;
+        }
+
+        public void RefreshData()
+        {
+            dgv_CustomerList.Refresh();
         }
 
         private void tstb_Search_TextChanged(object sender, EventArgs e)

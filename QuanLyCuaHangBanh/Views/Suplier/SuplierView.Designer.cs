@@ -48,6 +48,7 @@
             Email = new DataGridViewTextBoxColumn();
             Address = new DataGridViewTextBoxColumn();
             Description = new DataGridViewTextBoxColumn();
+            Limit = new DataGridViewTextBoxColumn();
             TotalAccountPayable = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgv_ProducerList).BeginInit();
             toolStrip1.SuspendLayout();
@@ -61,7 +62,7 @@
             dgv_ProducerList.AllowUserToDeleteRows = false;
             dgv_ProducerList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProducerList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProducerList.Columns.AddRange(new DataGridViewColumn[] { ID, Name, PhoneNumber, Email, Address, Description, TotalAccountPayable });
+            dgv_ProducerList.Columns.AddRange(new DataGridViewColumn[] { ID, Name, PhoneNumber, Email, Address, Description, Limit, TotalAccountPayable });
             dgv_ProducerList.Dock = DockStyle.Fill;
             dgv_ProducerList.Location = new Point(3, 50);
             dgv_ProducerList.MultiSelect = false;
@@ -251,6 +252,14 @@
             Description.Name = "Description";
             Description.ReadOnly = true;
             // 
+            // Limit
+            // 
+            Limit.DataPropertyName = "Limit";
+            Limit.HeaderText = "Hạn mức công nợ";
+            Limit.MinimumWidth = 6;
+            Limit.Name = "Limit";
+            Limit.ReadOnly = true;
+            // 
             // TotalAccountPayable
             // 
             TotalAccountPayable.DataPropertyName = "TotalAccountPayable";
@@ -296,6 +305,7 @@
         private DataGridViewTextBoxColumn Email;
         private DataGridViewTextBoxColumn Address;
         private DataGridViewTextBoxColumn Description;
+        private DataGridViewTextBoxColumn Limit;
         private DataGridViewTextBoxColumn TotalAccountPayable;
     }
 }

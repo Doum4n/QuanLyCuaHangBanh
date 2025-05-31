@@ -84,6 +84,13 @@ namespace QuanLyCuaHangBanh.Views.Manufacturer
             dgv_ManufacturerList.DataSource = bindingSource;
         }
 
+        public void RefreshData()
+        {
+            dgv_ManufacturerList.Refresh();
+            dgv_ManufacturerList.ClearSelection();
+            _selectedItem = null;
+        }
+
         private void dgv_ManufacturerList_SelectionChanged(object sender, EventArgs e)
         {
             if (dgv_ManufacturerList.SelectedRows.Count > 0)

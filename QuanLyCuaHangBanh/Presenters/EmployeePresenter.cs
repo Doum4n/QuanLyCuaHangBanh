@@ -5,61 +5,63 @@ using QuanLyCuaHangBanh.Services; // Thêm namespace của service
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms; // Để sử dụng DialogResult
+using System.Windows.Forms;
+using System.Threading.Tasks;
+using QuanLyCuaHangBanh.DTO; // Để sử dụng DialogResult
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    public class EmployeePresenter : PresenterBase<Employee>
+    public class EmployeePresenter(IEmployeeView view, EmployeeService service) :PresenterBase<Employee>(view, service)
     {
+        private IList<EmployeeDTO> employees = new List<EmployeeDTO>();
 
-        public EmployeePresenter(IEmployeeView view, EmployeeService employeeService)
-            : base(view, (IService)employeeService) // Truyền service vào PresenterBase
+        public override async Task InitializeAsync()
         {
+            employees = await ((EmployeeService)Service).GetAllEmployees();
+            BindingSource.DataSource = employees;
         }
 
-        public override void LoadData()
+        public override async void OnExport(object? sender, EventArgs e)
         {
-            BindingSource.DataSource = ((EmployeeService)Service).GetAllEmployees();
-            // View.SetBindingSource(BindingSource); // Dòng này có thể không cần thiết nếu đã được gọi trong PresenterBase
-        }
-
-        public override void OnExport(object? sender, EventArgs e)
-        {
-            // Triển khai logic export tại đây, có thể gọi _employeeService.Export...
-            throw new NotImplementedException();
+            if (BindingSource.List is IList<Employee> employees)
+            {
+                await ((EmployeeService)Service).ExportEmployees(employees);
+            }
         }
 
         public override void OnImport(object? sender, EventArgs e)
         {
-            // Triển khai logic import tại đây, có thể gọi _employeeService.Import...
-            throw new NotImplementedException();
+            ((EmployeeService)Service).ImportEmployees();
+            InitializeAsync(); // Reload data after import
         }
 
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             EmployeeInputView inputView = new EmployeeInputView();
             if (inputView.ShowDialog() == DialogResult.OK)
             {
-                Employee newEmployee = inputView.Tag as Employee;
-                if (newEmployee != null)
+                if (inputView.Tag is Employee newEmployeeDTO)
                 {
-                    ((EmployeeService)Service).AddEmployee(newEmployee);
-                    View.Message = "Thêm nhân viên thành công!";
-                    LoadData();
+                    if (newEmployeeDTO != null)
+                    {
+                        ((EmployeeService)Service).AddEmployee(newEmployeeDTO);
+                        View.Message = "Thêm nhân viên thành công!";
+                        await InitializeAsync();
+                    }
                 }
             }
         }
 
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
-            if (View.SelectedItem is Employee employeeToDelete)
+            if (View.SelectedItem is EmployeeDTO employeeToDelete)
             {
                 var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn xóa nhân viên này?", "Xác nhận xóa", MessageBoxButtons.YesNo);
                 if (confirmResult == DialogResult.Yes)
                 {
-                    ((EmployeeService)Service).DeleteEmployee(employeeToDelete);
+                    ((EmployeeService)Service).DeleteEmployee(employeeToDelete.ToEntity());
                     View.Message = "Xóa nhân viên thành công!";
-                    LoadData(); // Load lại dữ liệu sau khi xóa
+                    await InitializeAsync(); // Load lại dữ liệu sau khi xóa
                 }
             }
             else
@@ -68,20 +70,18 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
-            if (View.SelectedItem is Employee selectedEmployee)
+            if (View.SelectedItem is EmployeeDTO selectedEmployee)
             {
                 EmployeeInputView inputView = new EmployeeInputView(selectedEmployee);
                 if (inputView.ShowDialog() == DialogResult.OK)
                 {
-                    Employee updatedEmployee = inputView.Tag as Employee;
-                    if (updatedEmployee != null)
+                    if (inputView.Tag is Employee updatedEmployee)
                     {
-                        // updatedEmployee.ID = ((Employee)View.SelectedItem).ID; // ID đã được gán qua constructor của inputView
                         ((EmployeeService)Service).UpdateEmployee(updatedEmployee);
                         View.Message = "Cập nhật nhân viên thành công!";
-                        LoadData();
+                        await InitializeAsync();
                     }
                 }
             }
@@ -93,9 +93,12 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnSearch(object? sender, EventArgs e)
         {
-            // Triển khai logic search tại đây, có thể gọi _employeeService.Search...
-            // Ví dụ: BindingSource.DataSource = _employeeService.SearchEmployees(View.SearchValue);
-            throw new NotImplementedException();
+            if(employees.Count > 0)
+            {
+                var filteredEmployees = employees.Where(e => e.MatchesSearch(View.SearchValue)).ToList();
+                BindingSource.DataSource = filteredEmployees;
+                BindingSource.ResetBindings(false);
+            }
         }
     }
 }

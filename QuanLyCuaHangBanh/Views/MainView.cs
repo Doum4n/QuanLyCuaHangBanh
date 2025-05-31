@@ -17,6 +17,9 @@ using QuanLyCuaHangBanh.Views.Product;
 using QuanLyCuaHangBanh.Views.ReceiptNote;
 using QuanLyCuaHangBanh.Views.ReleaseNote;
 using QuanLyCuaHangBanh.Views.Unit;
+using System.Threading.Tasks;
+using QuanLyCuaHangBanh.Views.Suplier;
+using CloudinaryDotNet.Core;
 
 namespace QuanLyCuaHangBanh
 {
@@ -29,9 +32,9 @@ namespace QuanLyCuaHangBanh
         private GoodsReceiptNoteView? purchaseReceiptView;
         private ReleaseNoteView? warehouseReleaseNoteView;
         private EmployeeView? employeeView;
-        private OrderView? OrderView;
+        private OrderView? orderView;
         private InvoiceView? invoiceView;
-        private PurchaseInvoiceView? PurchaseInvoiceView;
+        //private PurchaseInvoiceView? purchaseInvoiceView;
         private UnitView? unitView;
         private ManufacturerView? manufacturerView;
 
@@ -75,31 +78,73 @@ namespace QuanLyCuaHangBanh
         }
 
 
-        private void tsmi_Products_Click(object sender, EventArgs e)
+        private async void tsmi_Products_Click(object sender, EventArgs e)
         {
+            // Kiểm tra nếu Form đã được tạo và chưa bị Dispose
             if (productView == null || productView.IsDisposed)
             {
-                productView = _serviceProvider.GetRequiredService<IProductView>() as ProductView;
-                _serviceProvider.GetRequiredService<ProductPresenter>();
+                IServiceScope scope = null; // Khởi tạo null để đảm bảo có thể dispose nếu lỗi
 
-                productView.MdiParent = this;
-                productView.FormClosed += (_, __) => productView = null;
-                productView.Show();
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+
+                    productView = scope.ServiceProvider.GetRequiredService<IProductView>() as ProductView;
+                    _productPresenter = scope.ServiceProvider.GetRequiredService<ProductPresenter>();
+
+                    // Gắn scope vào Tag của Form con để có thể Dispose sau
+                    productView.Tag = scope;
+
+                    // Đăng ký sự kiện FormClosed để Dispose scope khi Form đóng
+                    productView.FormClosed += ProductView_FormClosed;
+
+                    productView.MdiParent = this;
+                    productView.Show();
+
+                    await _productPresenter.InitializeAsync(); // Gọi phương thức khởi tạo dữ liệu
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form sản phẩm: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null)
+                    {
+                        scope.Dispose();
+                    }
+                    productView = null; // Đặt lại về null để có thể thử mở lại
+                    _productPresenter = null;
+                }
             }
             else
             {
+                // Nếu Form đã mở, chỉ cần kích hoạt nó
                 productView.Activate();
             }
         }
 
-        private void tsmi_Catogories_Click(object sender, EventArgs e)
+        private async void tsmi_Catogories_Click(object sender, EventArgs e)
         {
             if (categoryView == null || categoryView.IsDisposed)
             {
-                categoryView = _serviceProvider.GetRequiredService<ICategoryView>() as CategoryView;
-                _categoryPresenter = _serviceProvider.GetRequiredService<CategoryPresenter>();
-                categoryView.MdiParent = this;
-                categoryView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    categoryView = scope.ServiceProvider.GetRequiredService<ICategoryView>() as CategoryView;
+                    _categoryPresenter = scope.ServiceProvider.GetRequiredService<CategoryPresenter>();
+                    categoryView.Tag = scope;
+                    categoryView.FormClosed += CategoryView_FormClosed;
+                    categoryView.MdiParent = this;
+                    categoryView.Show();
+                    await _categoryPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form danh mục: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    categoryView = null;
+                    _categoryPresenter = null;
+                }
             }
             else
             {
@@ -107,14 +152,29 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_Producers_Click(object sender, EventArgs e)
+        private async void tsmi_Producers_Click(object sender, EventArgs e)
         {
             if (producerView == null || producerView.IsDisposed)
             {
-                producerView = new SuplierView();
-                new ProducerPresenter(producerView);
-                producerView.MdiParent = this;
-                producerView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    producerView = scope.ServiceProvider.GetRequiredService<ISuplierView>() as SuplierView; // producerView là SuplierView
+                    _producerPresenter = scope.ServiceProvider.GetRequiredService<ProducerPresenter>();
+                    producerView.Tag = scope;
+                    producerView.FormClosed += ProducerView_FormClosed;
+                    producerView.MdiParent = this;
+                    producerView.Show();
+                    await _producerPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form nhà cung cấp: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    producerView = null;
+                    _producerPresenter = null;
+                }
             }
             else
             {
@@ -122,14 +182,29 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_Customers_Click(object sender, EventArgs e)
+        private async void tsmi_Customers_Click(object sender, EventArgs e)
         {
             if (customerView == null || customerView.IsDisposed)
             {
-                customerView = _serviceProvider.GetRequiredService<ICustomerView>() as CustomerView;
-                _customerPresenter = _serviceProvider.GetRequiredService<CustomerPresenter>();
-                customerView.MdiParent = this;
-                customerView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    customerView = scope.ServiceProvider.GetRequiredService<ICustomerView>() as CustomerView;
+                    _customerPresenter = scope.ServiceProvider.GetRequiredService<CustomerPresenter>();
+                    customerView.Tag = scope;
+                    customerView.FormClosed += CustomerView_FormClosed;
+                    customerView.MdiParent = this;
+                    customerView.Show();
+                    await _customerPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form khách hàng: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    customerView = null;
+                    _customerPresenter = null;
+                }
             }
             else
             {
@@ -137,14 +212,29 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_PurchaseReceipts_Click(object sender, EventArgs e)
+        private async void tsmi_PurchaseReceipts_Click(object sender, EventArgs e)
         {
             if (purchaseReceiptView == null || purchaseReceiptView.IsDisposed)
             {
-                purchaseReceiptView = _serviceProvider.GetRequiredService<IGoodsReceiptNoteView>() as GoodsReceiptNoteView;
-                _purchaseReceiptPresenter = _serviceProvider.GetRequiredService<GoodsReceiptNotePresenter>();
-                purchaseReceiptView.MdiParent = this;
-                purchaseReceiptView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    purchaseReceiptView = scope.ServiceProvider.GetRequiredService<IGoodsReceiptNoteView>() as GoodsReceiptNoteView;
+                    _purchaseReceiptPresenter = scope.ServiceProvider.GetRequiredService<GoodsReceiptNotePresenter>();
+                    purchaseReceiptView.Tag = scope;
+                    purchaseReceiptView.FormClosed += PurchaseReceiptView_FormClosed;
+                    purchaseReceiptView.MdiParent = this;
+                    purchaseReceiptView.Show();
+                    await _purchaseReceiptPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form phiếu nhập: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    purchaseReceiptView = null;
+                    _purchaseReceiptPresenter = null;
+                }
             }
             else
             {
@@ -152,14 +242,31 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_WarehouseNotes_Click(object sender, EventArgs e)
+        private async void tsmi_WarehouseNotes_Click(object sender, EventArgs e)
         {
             if (warehouseReleaseNoteView == null || warehouseReleaseNoteView.IsDisposed)
             {
-                warehouseReleaseNoteView = _serviceProvider.GetRequiredService<IWareHouseReleaseNoteView>() as ReleaseNoteView;
-                _warehouseReleaseNotePresenter = _serviceProvider.GetRequiredService<WarehouseReleaseNotePresenter>();
-                warehouseReleaseNoteView.MdiParent = this;
-                warehouseReleaseNoteView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    warehouseReleaseNoteView = scope.ServiceProvider.GetRequiredService<IWareHouseReleaseNoteView>() as ReleaseNoteView;
+                    _warehouseReleaseNotePresenter = scope.ServiceProvider.GetRequiredService<WarehouseReleaseNotePresenter>();
+                    warehouseReleaseNoteView.Tag = scope;
+
+                    warehouseReleaseNoteView.FormClosed += WarehouseReleaseNoteView_FormClosed;
+                    warehouseReleaseNoteView.MdiParent = this;
+
+                    warehouseReleaseNoteView.Show();
+                    await _warehouseReleaseNotePresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form phiếu xuất: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    warehouseReleaseNoteView = null;
+                    _warehouseReleaseNotePresenter = null;
+                }
             }
             else
             {
@@ -167,14 +274,29 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_Employees_Click(object sender, EventArgs e)
+        private async void tsmi_Employees_Click(object sender, EventArgs e)
         {
             if (employeeView == null || employeeView.IsDisposed)
             {
-                employeeView = _serviceProvider.GetRequiredService<IEmployeeView>() as EmployeeView;
-                _employeePresenter = _serviceProvider.GetRequiredService<EmployeePresenter>();
-                employeeView.MdiParent = this;
-                employeeView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    employeeView = scope.ServiceProvider.GetRequiredService<IEmployeeView>() as EmployeeView;
+                    _employeePresenter = scope.ServiceProvider.GetRequiredService<EmployeePresenter>();
+                    employeeView.Tag = scope;
+                    employeeView.FormClosed += EmployeeView_FormClosed;
+                    employeeView.MdiParent = this;
+                    employeeView.Show();
+                    await _employeePresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form nhân viên: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    employeeView = null;
+                    _employeePresenter = null;
+                }
             }
             else
             {
@@ -182,34 +304,69 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void tsmi_Order_Click(object sender, EventArgs e)
+        private async void tsmi_Order_Click(object sender, EventArgs e)
         {
-            if (OrderView == null || OrderView.IsDisposed)
+            if (orderView == null || orderView.IsDisposed)
             {
-                OrderView = _serviceProvider.GetRequiredService<IOrderView>() as OrderView;
-                _orderPresenter = _serviceProvider.GetRequiredService<OrderPresenter>();
-                OrderView.MdiParent = this;
-                OrderView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    orderView = scope.ServiceProvider.GetRequiredService<IOrderView>() as OrderView;
+                    _orderPresenter = scope.ServiceProvider.GetRequiredService<OrderPresenter>();
+                    orderView.Tag = scope;
+                    orderView.FormClosed += OrderView_FormClosed;
+                    orderView.MdiParent = this;
+                    orderView.Show();
+                    await _orderPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form đơn đặt hàng: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    orderView = null;
+                    _orderPresenter = null;
+                }
             }
             else
             {
-                OrderView.Activate();
+                orderView.Activate();
             }
         }
 
-        private void tsmi_Invoices_Click(object sender, EventArgs e)
+        private async void tsmi_Invoices_Click(object sender, EventArgs e)
         {
             if (invoiceView == null || invoiceView.IsDisposed)
             {
+                IServiceScope salesScope = null;
+                IServiceScope purchaseScope = null;
+                try
+                {
+                    salesScope = _serviceProvider.CreateScope();
+                    invoiceView = salesScope.ServiceProvider.GetRequiredService<ISalesInvoiceView>() as InvoiceView;
 
-                invoiceView = _serviceProvider.GetRequiredService<ISalesInvoiceView>() as InvoiceView;
-                _invoicePresenter = _serviceProvider.GetRequiredService<SalesInvoicePresenter>();
+                    _invoicePresenter = salesScope.ServiceProvider.GetRequiredService<SalesInvoicePresenter>();
+                    _purchasePresenter = salesScope.ServiceProvider.GetRequiredService<PurchasePresenter>();
 
-                PurchaseInvoiceView = _serviceProvider.GetRequiredService<IPurchaseView>() as PurchaseInvoiceView;
-                _purchasePresenter = _serviceProvider.GetRequiredService<PurchasePresenter>();
+                    invoiceView.Tag = salesScope;
+                    invoiceView.FormClosed += InvoiceView_FormClosed; // Sử dụng FormClosed cho SalesInvoiceView
 
-                invoiceView.MdiParent = this;
-                invoiceView.Show();
+                    invoiceView.MdiParent = this;
+                    invoiceView.Show();
+
+                    await _invoicePresenter.InitializeAsync(); // Gọi phương thức khởi tạo dữ liệu
+                    await _purchasePresenter.InitializeAsync(); // Khởi tạo dữ liệu cho PurchaseInvoiceView nếu cần thiết
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form hóa đơn: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (salesScope != null) salesScope.Dispose();
+                    if (purchaseScope != null) purchaseScope.Dispose();
+                    invoiceView = null;
+                    _invoicePresenter = null;
+                    _purchasePresenter = null;
+                }
             }
             else
             {
@@ -222,13 +379,6 @@ namespace QuanLyCuaHangBanh
             ReportProductView reportProductView = new ReportProductView();
             reportProductView.MdiParent = this;
             reportProductView.Show();
-        }
-
-        private void tsmi_ReportSalesInvoice_Click(object sender, EventArgs e)
-        {
-            //ReportSalesInvoiceView reportSalesInvoiceView = new ReportSalesInvoiceView();
-            //reportSalesInvoiceView.MdiParent = this;
-            //reportSalesInvoiceView.Show();
         }
 
         private void tsmi_RevenueStatistics_Click(object sender, EventArgs e)
@@ -252,14 +402,29 @@ namespace QuanLyCuaHangBanh
             reportReleaseView.Show();
         }
 
-        private void tsmi_Units_Click(object sender, EventArgs e)
+        private async void tsmi_Units_Click(object sender, EventArgs e)
         {
             if (unitView == null || unitView.IsDisposed)
             {
-                unitView = _serviceProvider.GetRequiredService<IUnitView>() as UnitView;
-                _unitPresenter = _serviceProvider.GetRequiredService<UnitPresenter>();
-                unitView.MdiParent = this;
-                unitView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    unitView = scope.ServiceProvider.GetRequiredService<IUnitView>() as UnitView;
+                    _unitPresenter = scope.ServiceProvider.GetRequiredService<UnitPresenter>();
+                    unitView.Tag = scope;
+                    unitView.FormClosed += UnitView_FormClosed;
+                    unitView.MdiParent = this;
+                    unitView.Show();
+                    await _unitPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form đơn vị: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    unitView = null;
+                    _unitPresenter = null;
+                }
             }
             else
             {
@@ -344,14 +509,29 @@ namespace QuanLyCuaHangBanh
             }
         }
 
-        private void stmi_Manufacturers_Click(object sender, EventArgs e)
+        private async void stmi_Manufacturers_Click(object sender, EventArgs e)
         {
             if (manufacturerView == null || manufacturerView.IsDisposed)
             {
-                manufacturerView = _serviceProvider.GetRequiredService<IManufacturerView>() as ManufacturerView;
-                _manufacturerPresenter = _serviceProvider.GetRequiredService<ManufacturerPresenter>();
-                manufacturerView.MdiParent = this;
-                manufacturerView.Show();
+                IServiceScope scope = null;
+                try
+                {
+                    scope = _serviceProvider.CreateScope();
+                    manufacturerView = scope.ServiceProvider.GetRequiredService<IManufacturerView>() as ManufacturerView;
+                    _manufacturerPresenter = scope.ServiceProvider.GetRequiredService<ManufacturerPresenter>();
+                    manufacturerView.Tag = scope;
+                    manufacturerView.FormClosed += ManufacturerView_FormClosed;
+                    manufacturerView.MdiParent = this;
+                    manufacturerView.Show();
+                    await _manufacturerPresenter.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi mở form nhà sản xuất: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (scope != null) scope.Dispose();
+                    manufacturerView = null;
+                    _manufacturerPresenter = null;
+                }
             }
             else
             {
@@ -382,6 +562,231 @@ namespace QuanLyCuaHangBanh
             ReportInventoryView reportInventoryView = new ReportInventoryView();
             reportInventoryView.MdiParent = this;
             reportInventoryView.Show();
+        }
+
+        /// <summary>
+        /// HANDEL FORM CLOSED EVENT TO DISPOSE SCOPE
+        /// </summary>
+        private void ProductView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose(); // Dispose scope khi Form đóng
+                    closedForm.Tag = null; // Xóa tham chiếu
+                }
+                // Xóa tham chiếu đến ProductView nếu là ProductView
+                if (closedForm == productView)
+                {
+                    productView = null;
+                    _productPresenter = null;
+                }
+            }
+        }
+
+        private void CategoryView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == categoryView)
+                {
+                    categoryView = null;
+                    _categoryPresenter = null;
+                }
+            }
+        }
+
+        private void ProducerView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == producerView)
+                {
+                    producerView = null;
+                    _producerPresenter = null;
+                }
+            }
+        }
+
+        private void CustomerView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == customerView)
+                {
+                    customerView = null;
+                    _customerPresenter = null;
+                }
+            }
+        }
+
+        private void PurchaseReceiptView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == purchaseReceiptView)
+                {
+                    purchaseReceiptView = null;
+                    _purchaseReceiptPresenter = null;
+                }
+            }
+        }
+
+        private void WarehouseReleaseNoteView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == warehouseReleaseNoteView)
+                {
+                    warehouseReleaseNoteView = null;
+                    _warehouseReleaseNotePresenter = null;
+                }
+            }
+        }
+
+        private void EmployeeView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == employeeView)
+                {
+                    employeeView = null;
+                    _employeePresenter = null;
+                }
+            }
+        }
+
+        private void OrderView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == orderView)
+                {
+                    orderView = null;
+                    _orderPresenter = null;
+                }
+            }
+        }
+
+        private void InvoiceView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == invoiceView)
+                {
+                    invoiceView = null;
+                    _invoicePresenter = null;
+                }
+            }
+        }
+
+        private void UnitView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == unitView)
+                {
+                    unitView = null;
+                    _unitPresenter = null;
+                }
+            }
+        }
+
+        private void ManufacturerView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose();
+                    closedForm.Tag = null;
+                }
+                if (closedForm == manufacturerView)
+                {
+                    manufacturerView = null;
+                    _manufacturerPresenter = null;
+                }
+            }
+        }
+
+        private void MainView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                // Kiểm tra xem Form có chứa scope trong Tag không
+                if (closedForm.Tag is IServiceScope scopeToDispose)
+                {
+                    scopeToDispose.Dispose(); // Dispose scope khi Form đóng
+                    closedForm.Tag = null;    // Xóa tham chiếu để tránh lỗi
+                }
+
+                // Xóa tham chiếu đến Form và Presenter để cho phép Garbage Collector giải phóng bộ nhớ
+                if (closedForm == productView)
+                {
+                    productView = null;
+                    _productPresenter = null;
+                }
+            }
+        }
+
+        private void tsmi_AccountsPayable_Click(object sender, EventArgs e)
+        {
+            ReportAccountsPayable accountsPayableView = new ReportAccountsPayable();
+            accountsPayableView.MdiParent = this;
+            accountsPayableView.Show();
+        }
+
+        private void tsmi_AccountsReceiable_Click(object sender, EventArgs e)
+        {
+            ReportAccountsReceivableView accountsReceiableView = new ReportAccountsReceivableView();
+            accountsReceiableView.MdiParent = this;
+            accountsReceiableView.Show();
         }
     }
 }

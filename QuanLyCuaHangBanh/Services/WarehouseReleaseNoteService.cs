@@ -11,6 +11,7 @@ using System.ComponentModel; // For BindingList
 using System.Data; // For DataTable
 using System.Linq;
 using QuanLyCuaHangBanh.Base;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
@@ -19,10 +20,10 @@ namespace QuanLyCuaHangBanh.Services
     {
         // For direct EF Core operations like Includes
 
-        public IList<WarehouseReleaseNoteDTO> GetAllReleaseNotesAsDto()
+        public async Task<IList<WarehouseReleaseNoteDTO>> GetAllReleaseNotesAsDto()
         {
             // Direct transfer of logic from LoadData
-            return repositoryProvider.GetRepository<WarehouseReleaseNote>().GetAllAsDto<WarehouseReleaseNoteDTO>(
+            return await repositoryProvider.GetRepository<WarehouseReleaseNote>().GetAllAsDto<WarehouseReleaseNoteDTO>(
                 o => new WarehouseReleaseNoteDTO(
                     o.ID,
                     //o.CreatedById, // commented out in original, so keeping it commented
@@ -178,7 +179,7 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
-        public void DeleteReleaseNote(int releaseNoteId)
+        public async Task DeleteReleaseNote(int releaseNoteId)
         {
             // Delete details first to avoid foreign key constraint errors
             var detailsToDelete = context.WarehouseReleaseNoteDetails
@@ -190,7 +191,7 @@ namespace QuanLyCuaHangBanh.Services
             }
 
             // Then delete the main note
-            var warehouseReleaseNote = repositoryProvider.GetRepository<WarehouseReleaseNote>().GetByValue(releaseNoteId);
+            var warehouseReleaseNote = await repositoryProvider.GetRepository<WarehouseReleaseNote>().GetByValue(releaseNoteId);
             if (warehouseReleaseNote != null)
             {
                 repositoryProvider.GetRepository<WarehouseReleaseNote>().Delete(warehouseReleaseNote);

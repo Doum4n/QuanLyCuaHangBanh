@@ -249,7 +249,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox4</rd:DefaultName>
@@ -275,7 +277,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Product Name</Value>
+                                  <Value>Tên sản phẩm</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -305,7 +307,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Supplier Name</Value>
+                                  <Value>Nhà cung cấp</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -335,7 +337,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Category Name</Value>
+                                  <Value>Loại</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -365,7 +367,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Manu Facturer Name</Value>
+                                  <Value>Hãng sản xuất</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -395,7 +397,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Unit Name</Value>
+                                  <Value>ĐVT</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -425,7 +427,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Production Date</Value>
+                                  <Value>NSX</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -455,7 +457,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Expiration Date</Value>
+                                  <Value>HSD</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -485,7 +487,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Conversion Rate</Value>
+                                  <Value>Chuyển dổi</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -515,7 +517,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Quantity</Value>
+                                  <Value>Số lượng</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -554,7 +556,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox5</rd:DefaultName>
@@ -794,7 +798,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>ConversionRate</rd:DefaultName>
@@ -824,7 +830,9 @@
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Quantity</rd:DefaultName>

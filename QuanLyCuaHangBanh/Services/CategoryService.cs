@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
     public class CategoryService(IRepositoryProvider provider) : IService
     {
 
-        public IEnumerable<Category> GetAllCategories()
+        public async Task<IEnumerable<Category>> GetAllCategories()
         {
-            return provider.GetRepository<Category>().GetAll();
+            return await provider.GetRepository<Category>().GetAll();
         }
 
         public void AddCategory(Category category)
@@ -54,11 +55,13 @@ namespace QuanLyCuaHangBanh.Services
             provider.GetRepository<Category>().Add(category);
         }
 
-        public IEnumerable<Category> SearchCategories(string searchValue)
+        public async Task<IEnumerable<Category>> SearchCategories(string searchValue)
         {
             string searchLower = searchValue.ToLower();
-            return provider.GetRepository<Category>()
-                .GetAll()
+
+            IList<Category> allCategories = await provider.GetRepository<Category>().GetAll();
+
+            return allCategories
                 .Where(category => category.Name.ToLower().Contains(searchLower))
                 .ToList();
         }

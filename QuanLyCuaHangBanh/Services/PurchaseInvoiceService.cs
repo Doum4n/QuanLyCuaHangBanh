@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using QuanLyCuaHangBanh.DTO.Base;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
@@ -16,9 +17,9 @@ namespace QuanLyCuaHangBanh.Services
     {
         private int _purchaseInvoiceId = 0;
 
-        public IList<PurchaseInvoiceDTO> GetAllPurchaseInvoices()
+        public async Task<IList<PurchaseInvoiceDTO>> GetAllPurchaseInvoices()
         {
-            return provider.GetRepository<PurchaseInvoice>().GetAllAsDto<PurchaseInvoiceDTO>(
+            return await provider.GetRepository<PurchaseInvoice>().GetAllAsDto<PurchaseInvoiceDTO>(
                 i => new PurchaseInvoiceDTO
                 (
                     i.ID,
@@ -26,13 +27,16 @@ namespace QuanLyCuaHangBanh.Services
                     i.Supplier.ID,
                     i.Supplier.Name,
                     i.Date,
-                    i.InvoiceDetails.Sum(o => o.Quantity * o.Product_Unit.UnitPrice),
-                    i.Status
+                    i.InvoiceDetails.OfType<PurchaseInvoice_Detail>().Sum(o => o.Quantity * o.Product_Unit.UnitPrice),
+                    i.Status,
+                    i.Supplier.CreditPeriod,
+                    i.Accounts.OfType<AccountsPayable>().Sum(o => o.Amount),
+                    i.Note
                 )
             );
         }
 
-        public (DataTable purchaseInvoiceTable, DataTable purchaseInvoiceDetailTable) PrepareExportData(IList<PurchaseInvoiceDTO> purchaseInvoiceDTOs)
+        public async Task<(DataTable purchaseInvoiceTable, DataTable purchaseInvoiceDetailTable)> PrepareExportData(IList<PurchaseInvoiceDTO> purchaseInvoiceDTOs)
         {
             DataTable dataTable = new DataTable("PurchaseInvoice");
             dataTable.Columns.Add("Mã hóa đơn", typeof(int));
@@ -53,7 +57,7 @@ namespace QuanLyCuaHangBanh.Services
 
             foreach (var item in purchaseInvoiceDTOs)
             {
-                var purchaseInvoice = provider.GetRepository<PurchaseInvoice>().GetByValue(item.ID);
+                var purchaseInvoice = await provider.GetRepository<PurchaseInvoice>().GetByValue(item.ID);
                 IList<PurchaseInvoice_Detail> purchaseInvoiceDetail = ((PurchaseInvoiceDetailRepo)provider.GetRepository<PurchaseInvoice_Detail>()).GetByPurchaseInvoiceId(item.ID);
 
                 if (purchaseInvoice != null)
@@ -83,9 +87,9 @@ namespace QuanLyCuaHangBanh.Services
             return (dataTable, dataTableDetail);
         }
 
-        public void ExportPurchaseInvoices(IList<PurchaseInvoiceDTO> purchaseInvoiceDTOs)
+        public async Task ExportPurchaseInvoices(IList<PurchaseInvoiceDTO> purchaseInvoiceDTOs)
         {
-            var (purchaseInvoiceTable, purchaseInvoiceDetailTable) = PrepareExportData(purchaseInvoiceDTOs);
+            var (purchaseInvoiceTable, purchaseInvoiceDetailTable) = await PrepareExportData(purchaseInvoiceDTOs);
             ExcelHandler.ExportExcel("Hóa đơn nhập", "Hóa đơn nhập", "Chi tiết hóa đơn nhập", purchaseInvoiceTable, purchaseInvoiceDetailTable);
         }
 
@@ -130,6 +134,7 @@ namespace QuanLyCuaHangBanh.Services
 
         public void AddPurchaseInvoice(PurchaseInvoice purchaseInvoice, AccountsPayable accountsPayable, IEnumerable<ProductPurchaseInvoiceDTO> products)
         {
+            purchaseInvoice.ID = 0; // Invoice chưa được tạo
             provider.GetRepository<PurchaseInvoice>().Add(purchaseInvoice);
 
             accountsPayable.InvoiceID = purchaseInvoice.ID;
@@ -138,6 +143,7 @@ namespace QuanLyCuaHangBanh.Services
             foreach (var item in products)
             {
                 item.InvoiceID = purchaseInvoice.ID;
+                item.ID = 0; // Detail chưa được tạo
                 provider.GetRepository<PurchaseInvoice_Detail>().Add(item.ToPurchaseInvoice_Detail());
             }
         }
@@ -171,6 +177,11 @@ namespace QuanLyCuaHangBanh.Services
         public IList<GoodsReceiptNote_Detail> GetGoodsReceiptNoteDetails(int goodsReceiptNoteId)
         {
             return ((GoodsReceiptNoteDetailRepo)provider.GetRepository<GoodsReceiptNote_Detail>()).GetReceiptNote_Details(goodsReceiptNoteId);
+        }
+
+        internal void DeletePurchaseInvoice(PurchaseInvoiceDTO selectedPurchaseInvoice)
+        {
+            provider.GetRepository<PurchaseInvoice>().Delete(selectedPurchaseInvoice.ToEntity());
         }
     }
 }

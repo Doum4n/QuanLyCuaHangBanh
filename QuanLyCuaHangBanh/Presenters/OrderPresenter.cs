@@ -9,20 +9,21 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows.Forms; // Thêm để sử dụng DialogResult
+using System.Windows.Forms;
+using System.Threading.Tasks; // Thêm để sử dụng DialogResult
 
 namespace QuanLyCuaHangBanh.Presenters
 {
     public class OrderPresenter(IOrderView view, OrderService orderService) : PresenterBase<Order>(view, (IService)orderService)
     {
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = ((OrderService)Service).GetAllOrdersAsDto();
+            BindingSource.DataSource = await ((OrderService)Service).GetAllOrdersAsDto();
         }
 
-        public override void OnExport(object? sender, EventArgs e)
+        public override async void OnExport(object? sender, EventArgs e)
         {
-            var (orderTable1, orderTable2) = ((OrderService)Service).ExportOrdersToDataTables((IEnumerable<OrderDTO>)BindingSource.List);
+            var (orderTable1, orderTable2) = await ((OrderService)Service).ExportOrdersToDataTables((IEnumerable<OrderDTO>)BindingSource.List);
             ExcelHandler.ExportExcel("Đơn hàng", "Đơn hàng", "Chi tiết đơn hàng", orderTable1, orderTable2);
         }
 
@@ -32,7 +33,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 ((OrderService)Service).ImportOrder,
                 ((OrderService)Service).ImportOrderDetail
             );
-            LoadData(); // Load lại dữ liệu sau khi import
+            InitializeAsync(); // Load lại dữ liệu sau khi import
         }
 
         public override void OnEdit(object? sender, EventArgs e)
@@ -44,7 +45,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((OrderService)Service).UpdateOrder(order, orderInputView.Products);
                     View.Message = "Cập nhật đơn hàng thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -58,7 +59,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((OrderService)Service).AddOrder(order, orderInputView.Products);
                     View.Message = "Thêm đơn hàng thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -69,7 +70,7 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 ((OrderService)Service).DeleteOrder(orderDTO.ID);
                 View.Message = "Xóa đơn hàng thành công!";
-                LoadData();
+                InitializeAsync();
             }
         }
 

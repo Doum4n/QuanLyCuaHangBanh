@@ -339,7 +339,6 @@
             nmr_Quantity.Enabled = false;
             nmr_Quantity.Location = new Point(546, 53);
             nmr_Quantity.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
-            nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
             nmr_Quantity.TabIndex = 21;

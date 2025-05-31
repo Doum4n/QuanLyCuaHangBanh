@@ -12,11 +12,6 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class PurchaseInvoiceDetailRepo(QLCHB_DBContext context) : RepositoryBase<PurchaseInvoice_Detail>(context)
     {
-        public override PurchaseInvoice_Detail? GetByValue(object value)
-        {
-            return context.PurchaseInvoiceDetails
-                .FirstOrDefault(i => i.ID == (int)value);
-        }
 
         public void DeleteById(int Id)
         {

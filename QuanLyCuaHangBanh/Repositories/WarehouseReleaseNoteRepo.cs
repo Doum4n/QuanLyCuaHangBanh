@@ -12,20 +12,6 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class WarehouseReleaseNoteRepo(QLCHB_DBContext context) : RepositoryBase<WarehouseReleaseNote>(context)
     {
-        public override IList<TDto> GetAllAsDto<TDto>(Func<WarehouseReleaseNote, TDto> converter)
-        {
-            return context.WarehouseReleaseNotes
-                .Include(g => g.WarehouseReleaseNoteDetails) // Load dữ liệu WarehouseReleaseNoteDetails
-                .ThenInclude(prd => prd.Product_Unit).ThenInclude(o => o.Product) // Load dữ liệu Product trong WarehouseReleaseNoteDetails
-                .Include(p => p.WarehouseReleaseNoteDetails)
-                .Select(converter)
-                .ToList();
-        }
 
-        public override WarehouseReleaseNote? GetByValue(object value)
-        {
-            return context.WarehouseReleaseNotes
-                .FirstOrDefault(o => o.ID.Equals(value));
-        }
     }
 }

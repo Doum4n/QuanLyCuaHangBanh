@@ -1,16 +1,7 @@
 ﻿using QuanLyCuaHangBanh.Data;
 using QuanLyCuaHangBanh.DTO;
-using QuanLyCuaHangBanh.DTO.Base;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using QuanLyCuaHangBanh.DTO.Base;
 using QuanLyCuaHangBanh.Models;
 
 namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
@@ -31,6 +22,10 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 
         private int accountPayableId;
 
+        private decimal limitAmount = 0; // Assuming you will set this later
+
+        private decimal totalPaymentRequired = 0;
+
         public PurchaseInvoiceInputView(PurchaseInvoiceDTO? purchaseInvoiceDTO = null)
         {
             InitializeComponent();
@@ -40,7 +35,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         private void btn_AddProduct_Click(object sender, EventArgs e)
         {
             var product = new ProductPurchaseInvoiceDTO(
-                bs.Count + 1,
+                0,
                 0,
                 cbb_Products.Text,
                 (int)cbb_Categories.SelectedValue,
@@ -57,8 +52,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 
             _product.Add(product);
 
-            nmr_TotalPaymentRequired.Value = _product.Sum(p => p.Quantity * p.Price);
-
+            UpdateTotalPaymentRequired();
             bs.ResetBindings(false);
         }
 
@@ -70,6 +64,13 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         public void AddProduct(ProductPurchaseInvoiceDTO productPurchaseInvoiceDTO)
         {
             bs.Add(productPurchaseInvoiceDTO);
+            UpdateTotalPaymentRequired();
+        }
+
+        private void UpdateTotalPaymentRequired()
+        {
+            totalPaymentRequired = _product.Sum(p => p.Quantity * p.Price);
+            nmr_TotalPaymentRequired.Value = totalPaymentRequired;
         }
 
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
@@ -86,6 +87,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 selectedProduct.Price = (int)nmr_Price.Value;
 
                 selectedProduct.Status = DTO.Base.Status.Modified;
+                UpdateTotalPaymentRequired();
 
                 bs.ResetCurrentItem();
             }
@@ -103,6 +105,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                     bs.DataSource = new BindingList<ProductPurchaseInvoiceDTO>(
                         _product.Where(p => p.Status != DTO.Base.Status.Deleted).ToList()
                     );
+
+                    UpdateTotalPaymentRequired();
 
                     bs.ResetBindings(false);
                 }
@@ -142,17 +146,22 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
             List<String> paymentMethod = new List<string>() {
                 "Tiền mặt",
                 "Chuyển khoản",
-                "Thẻ tín dụng",
-                "Ví điện tử"
+                "Ghi nợ"
             };
 
             cbb_PaymentMethod.DataSource = paymentMethod;
+
+            limitAmount = context.Suppliers
+                .Where(s => s.ID == (int)cbb_Suppliers.SelectedValue)
+                .Select(s => s.Limit)
+                .FirstOrDefault();
 
             if (_purchaseInvoiceDTO != null)
             {
                 cbb_Suppliers.SelectedValue = _purchaseInvoiceDTO.SupplierID;
                 cbb_Status.SelectedItem = _purchaseInvoiceDTO.Status;
                 dateTimePicker.Value = _purchaseInvoiceDTO.CreatedDate;
+                rtb_Note.Text = _purchaseInvoiceDTO.Note ?? string.Empty;
 
                 _product = new BindingList<ProductPurchaseInvoiceDTO>(context.PurchaseInvoiceDetails
                     .Where(p => p.InvoiceID == _purchaseInvoiceDTO.ID)
@@ -166,7 +175,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                         p.Product_Unit.ID,
                         p.Product_Unit.ConversionRate,
                         p.Quantity,
-                        p.Note,
+                        p.Note ?? string.Empty,
                         p.UnitCost
                     )
                     {
@@ -177,18 +186,28 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 bs.DataSource = _product;
                 dgv_ProductList.DataSource = bs;
 
+                nmr_TotalPaymentRequired.Value = _product.Sum(p => p.Quantity * p.Price);
+
                 var accountPayable = context.AccountsPayables.FirstOrDefault(a => a.InvoiceID == _purchaseInvoiceDTO.ID);
 
                 if (accountPayable != null)
                 {
                     accountPayableId = accountPayable.ID;
-                    //cbb_PaymentMethod.SelectedItem = accountPayable.PaymentMethod;
-                    nmr_TotalPaymentRequired.Value = _product.Sum(p => p.Quantity * p.Price);
                     nmr_TotalAmountOwed.Value = accountPayable.Amount;
                     nmr_TotalPaid.Maximum = nmr_TotalPaymentRequired.Value;
                     nmr_TotalPaid.Value = nmr_TotalPaymentRequired.Value - nmr_TotalAmountOwed.Value;
-                    dtp_DueDate.Value = accountPayable.DueDate;
-                    dtp_PaymentDate.Value = accountPayable.PaidDate ?? DateTime.Now;
+                    dtp_TransactionDate.Value = accountPayable.TransactionDate;
+                    dtp_DueDate.Value = dtp_TransactionDate.Value.AddDays(_purchaseInvoiceDTO.CreditPeriod);
+
+                    if (accountPayable.PaidDate != null)
+                    {
+                        dtp_PaymentDate.Value = accountPayable.PaidDate.Value;
+                    }
+                    else
+                    {
+                        dtp_PaymentDate.Format = DateTimePickerFormat.Custom;
+                        dtp_PaymentDate.CustomFormat = " "; // Hiển thị rỗng
+                    }
                 }
             }
             else
@@ -198,13 +217,13 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 dgv_ProductList.DataSource = bs;
             }
 
-            cbb_Products.DataBindings.Add("Text", bs, "ProductName", true, DataSourceUpdateMode.OnPropertyChanged);
-            cbb_Categories.DataBindings.Add("Text", bs, "CategoryName", true, DataSourceUpdateMode.OnPropertyChanged);
-            cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.OnPropertyChanged);
-            nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
-            rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.OnPropertyChanged);
-            nmr_ConversionRate.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.OnPropertyChanged);
-            nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.OnPropertyChanged);
+            cbb_Products.DataBindings.Add("Text", bs, "ProductName", true, DataSourceUpdateMode.Never);
+            cbb_Categories.DataBindings.Add("Text", bs, "CategoryName", true, DataSourceUpdateMode.Never);
+            cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.Never);
+            nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.Never);
+            rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
+            nmr_ConversionRate.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.Never);
+            nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.Never);
 
         }
 
@@ -234,10 +253,12 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         {
             Models.PurchaseInvoice purchaseInvoice = new Models.PurchaseInvoice()
             {
+                ID = 0, // Invoice chưa được tạo
                 EmployeeID = 1, // Assuming you will set this later
                 SupplierID = (int)cbb_Suppliers.SelectedValue,
                 Date = dateTimePicker.Value.ToUniversalTime(),
                 Status = cbb_Status.Text,
+                Note = rtb_Note.Text,
             };
 
             if (_purchaseInvoiceDTO != null)
@@ -245,20 +266,32 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 purchaseInvoice.ID = _purchaseInvoiceDTO.ID;
             }
 
+            var amount = nmr_TotalPaymentRequired.Value - nmr_TotalPaid.Value;
+            if (amount < 0 && nmr_TotalPaid.Value > nmr_TotalPaymentRequired.Value)
+            {
+                MessageBox.Show("Số tiền đã thanh toán không thể lớn hơn tổng số tiền cần thanh toán.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (amount < 0)
+            {
+                MessageBox.Show("Số tiền đã thanh toán không thể lớn hơn tổng số tiền cần thanh toán.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             AccountsPayable accountsPayable = new AccountsPayable()
+
             {
                 SupplierID = (int)cbb_Suppliers.SelectedValue,
-                Amount = nmr_TotalPaymentRequired.Value - nmr_TotalPaid.Value, // Calculating the amount owed
-                TransactionDate = dateTimePicker.Value.ToUniversalTime(),
+                Amount = amount, // Calculating the amount owed
+                TransactionDate = dtp_TransactionDate.Value.ToUniversalTime(),
                 DueDate = dtp_DueDate.Value.ToUniversalTime(),
                 IsPaid = nmr_TotalPaid.Value >= nmr_TotalPaymentRequired.Value, // Assuming payment is made if total paid is greater than or equal to total required
-                PaidDate = dtp_PaymentDate.Value.ToUniversalTime(),
-                //Note = rtb_Note.Text,
+                // Note = rtb_Note.Text,
             };
 
             if (accountsPayable.IsPaid)
             {
-                accountsPayable.PaidDate = dtp_PaymentDate.Value.ToUniversalTime();
+                accountsPayable.PaidDate = DateTime.Now.ToUniversalTime();
             }
             else
             {
@@ -287,6 +320,47 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 cbb_Products.DataSource = context.Products.Where(p => p.CategoryID == selectedCategory.ID).ToList();
                 cbb_Products.DisplayMember = "Name";
                 cbb_Products.ValueMember = "ID";
+            }
+        }
+
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+            cbb_Products.Text = string.Empty;
+            cbb_Categories.Text = string.Empty;
+            cbb_Units.Text = string.Empty;
+            nmr_Quantity.Value = 0;
+            rtb_ProductNote.Text = string.Empty;
+            nmr_ConversionRate.Value = 1;
+            nmr_Price.Value = 0;
+            nmr_TotalPaymentRequired.Value = 0;
+            nmr_TotalAmountOwed.Value = 0;
+            nmr_TotalPaid.Value = 0;
+            dtp_TransactionDate.Value = DateTime.Now;
+            dtp_DueDate.Value = DateTime.Now;
+            dtp_PaymentDate.Value = DateTime.Now;
+            cbb_Status.SelectedItem = "Chờ xác nhận";
+            cbb_PaymentMethod.SelectedItem = "Tiền mặt";
+            cbb_Suppliers.SelectedItem = null;
+            _product.Clear();
+            bs.ResetBindings(false);
+            bs.DataSource = _product;
+            dgv_ProductList.DataSource = bs;
+        }
+
+        private void nmr_Quantity_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbb_PaymentMethod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_PaymentMethod.Text == "Ghi nợ")
+            {
+                pane_Payment.Visible = true;
+            }
+            else
+            {
+                pane_Payment.Visible = false;
             }
         }
     }

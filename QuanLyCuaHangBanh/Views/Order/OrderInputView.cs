@@ -17,6 +17,8 @@ namespace QuanLyCuaHangBanh.Views.Order
 
         private int selectedProductUnitId = 0;
 
+        private decimal totalPaymentRequired = 0;
+
         public OrderInputView(OrderDTO? orderDTO = null)
         {
             InitializeComponent();
@@ -58,25 +60,9 @@ namespace QuanLyCuaHangBanh.Views.Order
             cbb_Categories.DisplayMember = "Name";
             cbb_Categories.ValueMember = "ID";
 
-            List<string> statusList = new List<string>()
-            {
-                "Chờ xác nhận",
-                "Đang giao hàng",
-                "Đã giao hàng",
-                "Đã hủy"
-            };
+            AdjustStatus();
 
-            cbb_Status.DataSource = statusList;
-
-            List<string> paymentMethod = new List<string>()
-            {
-                "Tiền mặt",
-                "Chuyển khoản",
-                "Thẻ tín dụng",
-                "Ghi nợ"
-            };
-
-            cbb_PaymentMethods.DataSource = paymentMethod;
+            AdjustPaymentMethods();
 
             if (orderDTO != null)
             {
@@ -114,6 +100,8 @@ namespace QuanLyCuaHangBanh.Views.Order
                 bs.DataSource = _products;
                 dgv_ProductList.DataSource = bs;
 
+                UpdateTotalPaymentRequired();
+
                 cbb_Categories.DataBindings.Add("Text", bs, "CategoryName", true, DataSourceUpdateMode.OnPropertyChanged);
                 cbb_Products.DataBindings.Add("Text", bs, "ProductName", true, DataSourceUpdateMode.OnPropertyChanged);
                 cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -128,6 +116,18 @@ namespace QuanLyCuaHangBanh.Views.Order
                 bs.DataSource = _products;
                 dgv_ProductList.DataSource = bs;
             }
+        }
+
+        private void AdjustPaymentMethods()
+        {
+            List<string> paymentMethod = new List<string>()
+            {
+                "Tiền mặt",
+                "Chuyển khoản",
+                "Thẻ tín dụng",
+            };
+
+            cbb_PaymentMethods.DataSource = paymentMethod;
         }
 
         private void btn_AddProduct_Click(object sender, EventArgs e)
@@ -151,6 +151,46 @@ namespace QuanLyCuaHangBanh.Views.Order
             bs.Add(product);
         }
 
+        private void AdjustStatus()
+        {
+            if (cbb_Customer.SelectedItem is Models.Customer selectedCustomer)
+            {
+                List<string> allStatuses = new List<string>
+                {
+                    "Chờ xác nhận",
+                    "Đã xác nhận",
+                    "Đang chuẩn bị",
+                    "Đã chuẩn bị xong",
+                    "Đang giao hàng",
+                    "Đã giao hàng",
+                    "Đã nhận hàng",
+                    "Đã hủy"
+                };
+
+                // Find the index of the current status
+                int currentIndex = allStatuses.IndexOf(cbb_Status.Text);
+
+                if (currentIndex != -1)
+                {
+                    // Create a new list containing statuses from the current one onwards
+                    List<string> availableStatuses = allStatuses.Skip(currentIndex).ToList();
+                    cbb_Status.DataSource = availableStatuses;
+                }
+                else
+                {
+                    // If the current status text isn't found in the list,
+                    // perhaps set the data source to the full list or handle as an error
+                    cbb_Status.DataSource = allStatuses;
+                }
+            }
+        }
+
+        private void UpdateTotalPaymentRequired()
+        {
+            totalPaymentRequired = _products.Sum(p => p.Quantity * p.Price);
+            nmr_TotalPaymentRequired.Value = totalPaymentRequired;
+        }
+
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
         {
             if (dgv_ProductList.CurrentRow != null && dgv_ProductList.CurrentRow.DataBoundItem is ProductOrderDTO productOrderDTO)
@@ -165,6 +205,7 @@ namespace QuanLyCuaHangBanh.Views.Order
                 productOrderDTO.Price = nmr_Price.Value;
                 productOrderDTO.Status = DTO.Base.Status.Modified;
                 bs.ResetBindings(false);
+                UpdateTotalPaymentRequired();
             }
         }
 
@@ -182,6 +223,7 @@ namespace QuanLyCuaHangBanh.Views.Order
                     bs.DataSource = _products.Where(p => p.Status != DTO.Base.Status.Deleted).ToList();
                     bs.ResetBindings(false);
                     dgv_ProductList.DataSource = bs;
+                    UpdateTotalPaymentRequired();
                 }
             }
         }
@@ -192,7 +234,7 @@ namespace QuanLyCuaHangBanh.Views.Order
             {
                 selectedProductUnitId = selectedUnit.ID;
 
-                
+
             }
         }
 
@@ -236,6 +278,24 @@ namespace QuanLyCuaHangBanh.Views.Order
                 cbb_Products.ValueMember = "ID";
 
             }
+        }
+
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbb_Customer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Customer.SelectedItem is Models.Customer selectedCustomer)
+            {
+                tb_PhoneNumber.Text = selectedCustomer.PhoneNumber;
+            }
+        }
+
+        private void cbb_Status_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AdjustStatus();
         }
     }
 }

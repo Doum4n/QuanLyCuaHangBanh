@@ -20,7 +20,7 @@ using QuanLyCuaHangBanh.Services; // Add this namespace
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    public class WarehouseReleaseNotePresenter : PresenterBase<WarehouseReleaseNote> // Change generic type to Model
+    public class WarehouseReleaseNotePresenter(IWareHouseReleaseNoteView view, WarehouseReleaseNoteService service) : PresenterBase<WarehouseReleaseNote>(view, service) // Change generic type to Model
     {
         // Declare the service as a readonly field
 
@@ -29,19 +29,10 @@ namespace QuanLyCuaHangBanh.Presenters
 
         private ProductReleaseDTO productReleaseDTO; // Retaining this as it was in original code
 
-        // Update the constructor to accept the new service via DI
-        public WarehouseReleaseNotePresenter(IWareHouseReleaseNoteView view, WarehouseReleaseNoteService service)
-            : base(view, service) // Pass view and provider to the base class
-        {
-            // Initialize BindingSource here to prevent NullReferenceException
-            BindingSource = new BindingSource();
-        }
-
-        public override void LoadData()
+        public override async Task InitializeAsync()
         {
             // Use the service to get data
-            BindingSource.DataSource = ((WarehouseReleaseNoteService)Service).GetAllReleaseNotesAsDto();
-            View.SetBindingSource(BindingSource);
+            BindingSource.DataSource = await ((WarehouseReleaseNoteService)Service).GetAllReleaseNotesAsDto();
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -88,7 +79,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     ((WarehouseReleaseNoteService)Service).AddNewReleaseNote(warehouseReleaseNote, inputView.Products);
 
                     View.Message = "Thêm phiếu xuất thành công!";
-                    LoadData(); // Reload data after add
+                    InitializeAsync(); // Reload data after add
                 }
             }
         }
@@ -177,7 +168,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 // Use the service to delete the release note
                 ((WarehouseReleaseNoteService)Service).DeleteReleaseNote(selectedItem.ID);
                 View.Message = "Xóa phiếu xuất thành công!";
-                LoadData(); // Reload data after delete
+                InitializeAsync(); // Reload data after delete
             }
             else
             {
@@ -212,7 +203,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     ((WarehouseReleaseNoteService)Service).UpdateReleaseNote(warehouseReleaseNote, inputView.Products);
 
                     View.Message = "Cập nhật phiếu xuất thành công!";
-                    LoadData(); // Reload data after update
+                    InitializeAsync(); // Reload data after update
                 }
             }
         }

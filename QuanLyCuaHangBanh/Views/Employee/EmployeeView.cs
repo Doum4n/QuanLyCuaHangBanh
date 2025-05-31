@@ -1,4 +1,5 @@
 ﻿using QuanLyCuaHangBanh.Base;
+using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Views.Employee;
 
@@ -8,7 +9,7 @@ namespace QuanLyCuaHangBanh.Views
     {
         private string messsage;
         private string searchvalue;
-        private Models.Employee selectedEmployee;
+        private EmployeeDTO selectedEmployee;
 
         string IView.SearchValue
         {
@@ -35,7 +36,7 @@ namespace QuanLyCuaHangBanh.Views
         object IView.SelectedItem
         {
             get => selectedEmployee;
-            set => selectedEmployee = (Models.Employee)selectedEmployee;
+            set => selectedEmployee = (EmployeeDTO)value;
         }
 
         public EmployeeView()
@@ -62,12 +63,24 @@ namespace QuanLyCuaHangBanh.Views
         public void SetBindingSource(BindingSource bindingSource)
         {
             dgv_EmployeeList.DataSource = bindingSource;
+
+            // Đợi một chút để binding hoàn tất
+            this.BeginInvoke(new Action(() =>
+            {
+                if (dgv_EmployeeList.Columns.Contains("Password"))
+                {
+                    dgv_EmployeeList.Columns["Password"].Visible = false;
+                }
+            }));
         }
 
         private void dgv_EmployeeList_SelectionChanged(object sender, EventArgs e)
         {
-            selectedEmployee = (Models.Employee)dgv_EmployeeList.CurrentRow?.DataBoundItem;
-            RowSelected?.Invoke(sender, e);
+            if (dgv_EmployeeList.CurrentRow?.DataBoundItem is EmployeeDTO employeeDTO)
+            {
+                selectedEmployee = employeeDTO;
+                RowSelected?.Invoke(sender, e);
+            }
         }
 
         private void tsbtn_Import_Click(object sender, EventArgs e)
@@ -78,6 +91,11 @@ namespace QuanLyCuaHangBanh.Views
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(sender, e);
+        }
+
+        private void EmployeeView_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

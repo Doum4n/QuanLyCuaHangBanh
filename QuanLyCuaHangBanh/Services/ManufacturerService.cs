@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
@@ -12,9 +13,9 @@ namespace QuanLyCuaHangBanh.Services
     {
         private readonly IRepositoryProvider _provider = provider;
 
-        public IEnumerable<Manufacturer> GetAllManufacturers()
+        public async Task<IEnumerable<Manufacturer>> GetAllManufacturers()
         {
-            return _provider.GetRepository<Manufacturer>().GetAll();
+            return await _provider.GetRepository<Manufacturer>().GetAll();
         }
 
         public void AddManufacturer(Manufacturer manufacturer)
@@ -36,7 +37,7 @@ namespace QuanLyCuaHangBanh.Services
         {
             var searchText = searchValue.Trim().ToLower();
             return _provider.GetRepository<Manufacturer>()
-                .GetAll()
+                .GetAll().Result
                 .Where(m => m.Name.ToLower().Contains(searchText) || m.Description.ToLower().Contains(searchText))
                 .ToList();
         }

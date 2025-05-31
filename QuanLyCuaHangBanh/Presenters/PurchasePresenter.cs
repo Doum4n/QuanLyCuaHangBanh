@@ -19,27 +19,28 @@ namespace QuanLyCuaHangBanh.Presenters
 {
     public class PurchasePresenter(IPurchaseView view, PurchaseService service) : PresenterBase<PurchaseInvoice>(view, service)
     {
-        public override void LoadData()
+        private IList<PurchaseInvoiceDTO> purchaseInvoices = new List<PurchaseInvoiceDTO>();
+        public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = ((PurchaseService)Service).GetAllPurchaseInvoices();
-            View.SetBindingSource(BindingSource);
+            purchaseInvoices = await ((PurchaseService)Service).GetAllPurchaseInvoices();
+            BindingSource.DataSource = purchaseInvoices;
         }
 
-        public override void OnExport(object? sender, EventArgs e)
+        public override async void OnExport(object? sender, EventArgs e)
         {
             if (BindingSource.List is IList<PurchaseInvoiceDTO> purchaseInvoiceDTOs)
             {
-                ((PurchaseService)Service).ExportPurchaseInvoices(purchaseInvoiceDTOs);
+                await ((PurchaseService)Service).ExportPurchaseInvoices(purchaseInvoiceDTOs);
             }
         }
 
-        public override void OnImport(object? sender, EventArgs e)
+        public override async void OnImport(object? sender, EventArgs e)
         {
             ((PurchaseService)Service).ImportPurchaseInvoices();
-            LoadData(); // Reload data after import
+            await InitializeAsync(); // Reload data after import
         }
 
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
             PurchaseInvoiceInputView purchaseInvoiceInputView = new PurchaseInvoiceInputView((PurchaseInvoiceDTO)View.SelectedItem);
 
@@ -55,7 +56,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 if (purchaseInvoiceInputView.Tag is (PurchaseInvoice purchaseInvoice, AccountsPayable accountsPayable))
                 {
                     ((PurchaseService)Service).UpdatePurchaseInvoice(purchaseInvoice, accountsPayable, purchaseInvoiceInputView.Products);
-                    LoadData();
+                    await InitializeAsync();
                 }
             }
         }
@@ -73,11 +74,13 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         foreach (var item in goodsReceiptNoteDetails)
                         {
-                            foreach (var unit in item.Product.ProductUnits)
+                            if (item.Product != null)
                             {
-                                var product = new ProductPurchaseInvoiceDTO(
+                                foreach (var unit in item.Product.ProductUnits)
+                                {
+                                    var product = new ProductPurchaseInvoiceDTO(
                                     item.ID,
-                                    0,
+                                    0, // Invoice chưa được tạo
                                     item.Product.Name,
                                     item.Product.CategoryID,
                                     item.Product.Category.Name,
@@ -85,21 +88,23 @@ namespace QuanLyCuaHangBanh.Presenters
                                     unit.ID,
                                     unit.ConversionRate,
                                     item.Quantity,
-                                    item.Note,
+                                    item.Note ?? string.Empty,
                                     item.PurchasePrice
-                                );
-                                purchaseInvoiceInputView.InvokeAddProductEvent(product);
+                                    );
+
+                                    product.Status = Status.New; // Gán status là mới
+                                    purchaseInvoiceInputView.InvokeAddProductEvent(product);
+                                }
                             }
                         }
                     }
-                    MessageBox.Show(goodsReceiptNoteId.ToString());
                     return goodsReceiptNoteId;
                 }
             }
             return 0;
         }
 
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             PurchaseInvoiceInputView purchaseInvoiceInputView = new PurchaseInvoiceInputView();
 
@@ -115,19 +120,32 @@ namespace QuanLyCuaHangBanh.Presenters
                 if (purchaseInvoiceInputView.Tag is (PurchaseInvoice purchaseInvoice, AccountsPayable accountsPayable))
                 {
                     ((PurchaseService)Service).AddPurchaseInvoice(purchaseInvoice, accountsPayable, purchaseInvoiceInputView.Products);
-                    LoadData();
+                    await InitializeAsync();
                 }
             }
         }
 
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (View.SelectedItem is PurchaseInvoiceDTO selectedPurchaseInvoice)
+            {
+                ((PurchaseService)Service).DeletePurchaseInvoice(selectedPurchaseInvoice);
+                await InitializeAsync();
+            }
         }
 
-        public override void OnSearch(object? sender, EventArgs e)
+        public override async void OnSearch(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            string searchValue = this.View.SearchValue?.Trim() ?? string.Empty;
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                await InitializeAsync();
+            }
+            else
+            {
+                purchaseInvoices = purchaseInvoices.Where(p => p.MatchesSearch(searchValue)).ToList();
+                BindingSource.DataSource = purchaseInvoices;
+            }
         }
     }
 }

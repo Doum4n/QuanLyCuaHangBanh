@@ -28,16 +28,43 @@ namespace QuanLyCuaHangBanh.Views
         public BindingList<Product_UnitDTO> Product_UnitDTOs => product_Units;
         public BindingList<Product_UnitDTO> product_Units = new BindingList<Product_UnitDTO>();
 
-
-        public ProductInputView(ProductDTO? productDto = null)
+        private bool _isEdit;
+        public ProductInputView(ProductDTO? productDto = null, bool isEdit = true)
         {
             InitializeComponent();
             _productDto = productDto;
+            _isEdit = isEdit;
             tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
         }
 
         private void ProductInputView_Load(object sender, EventArgs e)
         {
+            if(!_isEdit)
+            {
+                cbb_Units.Enabled = false;
+                cbb_Units.SelectedIndex = -1;
+                cbb_Units.Text = "";
+                nmr_Conversion.Value = 1;
+                nmr_UnitPrice.Value = 0;
+                nmr_Quantity.Value = 0;
+                btn_EditUnit.Enabled = false;
+                btn_DeleteUnit.Enabled = false;
+                btn_AddUnit.Enabled = false;
+                btn_Cancel.Enabled = false;
+                btn_Save.Enabled = false;
+                nmr_Quantity.Enabled = false;
+                nmr_TotalQuantity.Enabled = false;
+                nmr_UnitPrice.Enabled = false;
+                cbb_Categories.Enabled = false;
+                cbb_Producers.Enabled = false;
+                cbb_Manufacturers.Enabled = false;
+                mttb_Description.Enabled = false;
+                pictureBox.Enabled = false;
+
+                dgv_ProductUnitList.Columns["UnitName"].ReadOnly = true;
+                
+            }
+
             cbb_Manufacturers.DataSource = context.Manufacturers.AsNoTracking().ToList();
             cbb_Manufacturers.DisplayMember = "Name";
             cbb_Manufacturers.ValueMember = "ID";
@@ -69,8 +96,8 @@ namespace QuanLyCuaHangBanh.Views
                 mttb_Description.Text = _productDto.Description;
                 cbb_Categories.SelectedValue = _productDto.CategoryId;
                 cbb_Producers.SelectedValue = _productDto.ProducerId;
-                nmr_UnitPrice.Value = _productDto.Price;
-                cbb_Manufacturers.SelectedValue = _productDto.ManufactureId;
+                nmr_UnitPrice.Value = _productDto.UnitPrice;
+                cbb_Manufacturers.SelectedValue = _productDto.ManufacturerId;
                 //dtp_ProductionDate.Value = _productDto.ProductionDate.ToDateTime(new TimeOnly(0, 0, 0));
                 //dtp_ExpirationDate.Value = _productDto.ExpirationDate.ToDateTime(new TimeOnly(0, 0, 0));
                 pictureBox.ImageLocation = _productDto.ImagePath;
@@ -206,6 +233,7 @@ namespace QuanLyCuaHangBanh.Views
             {
                 // Lấy ô checkbox hiện tại
                 DataGridViewCheckBoxCell checkBoxCell = (DataGridViewCheckBoxCell)dgv_ProductUnitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
                 // Đảo ngược giá trị của ô checkbox
                 bool currentValue = checkBoxCell.Value != null && (bool)checkBoxCell.Value;
                 checkBoxCell.Value = !currentValue;
@@ -373,7 +401,7 @@ namespace QuanLyCuaHangBanh.Views
         private void ClearProductUnitInputControls()
         {
             cbb_Units.SelectedIndex = -1; // Chọn không có gì
-            nmr_Conversion.Value = 0;
+            nmr_Conversion.Value = 1;
             nmr_UnitPrice.Value = 0;
             nmr_Quantity.Value = 0;
             // cbb_Units.Focus(); // Có thể focus hoặc không tùy ý

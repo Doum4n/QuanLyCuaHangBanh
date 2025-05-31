@@ -18,17 +18,11 @@ using QuanLyCuaHangBanh.Services; // Thêm namespace của Service
 
 namespace QuanLyCuaHangBanh.Presenters
 {
-    class CategoryPresenter : PresenterBase<Category>
+    class CategoryPresenter(ICategoryView view, CategoryService categoryService) : PresenterBase<Category>(view, (IService)categoryService)
     {
-        public CategoryPresenter(ICategoryView view, CategoryService categoryService)
-            : base(view, (IService)categoryService) // Truyền service vào PresenterBase
+        public override async Task InitializeAsync()
         {
-        }
-
-        public override void LoadData()
-        {
-            BindingSource.DataSource = ((CategoryService)Service).GetAllCategories().ToList();
-            // View.SetBindingSource(BindingSource); // Dòng này đã được gán trong PresenterBase
+            BindingSource.DataSource = await ((CategoryService)Service).GetAllCategories();
         }
 
         public override void OnEdit(object? sender, EventArgs e)
@@ -44,7 +38,7 @@ namespace QuanLyCuaHangBanh.Presenters
                         Category category = new Category(selectedCategory.ID, categoryName, description);
                         ((CategoryService)Service).UpdateCategory(category);
                         View.Message = "Cập nhật danh mục thành công!";
-                        LoadData();
+                        InitializeAsync();
                     }
                 }
             }
@@ -64,7 +58,7 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             ExcelHandler.ImportExcel(((CategoryService)Service).ImportCategoryFromDataRow);
             View.Message = "Import thành công!";
-            LoadData(); // Load lại dữ liệu sau khi import
+            InitializeAsync(); // Load lại dữ liệu sau khi import
         }
 
         public override void OnAddNew(object? sender, EventArgs e)
@@ -77,7 +71,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     Category newCategory = new Category(categoryName, description);
                     ((CategoryService)Service).AddCategory(newCategory);
                     View.Message = "Thêm danh mục thành công!";
-                    LoadData();
+                    InitializeAsync();
                 }
             }
         }
@@ -91,7 +85,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((CategoryService)Service).DeleteCategory(categoryToDelete);
                     View.Message = "Xóa danh mục thành công!";
-                    LoadData(); // Load lại dữ liệu sau khi xóa
+                    InitializeAsync(); // Load lại dữ liệu sau khi xóa
                 }
             }
             else
@@ -104,7 +98,7 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             if (string.IsNullOrWhiteSpace(View.SearchValue))
             {
-                LoadData(); // Load lại tất cả dữ liệu nếu trường tìm kiếm trống
+                InitializeAsync(); // Load lại tất cả dữ liệu nếu trường tìm kiếm trống
             }
             else
             {

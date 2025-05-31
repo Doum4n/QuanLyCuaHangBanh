@@ -43,6 +43,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             get => selectedPurchaseInvoice;
             set => selectedPurchaseInvoice = (PurchaseInvoiceDTO)value;
         }
+
         public PurchaseInvoiceView()
         {
             InitializeComponent();
@@ -91,6 +92,19 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(sender, e);
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(sender, e);
+        }
+
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(sender, e);
+            }
         }
     }
 }

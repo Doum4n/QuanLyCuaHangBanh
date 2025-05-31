@@ -12,19 +12,6 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     class GoodsReceiptNoteDetailRepo(QLCHB_DBContext context) : RepositoryBase<GoodsReceiptNote_Detail>(context)
     {
-        public override IList<TDto> GetAllAsDto<TDto>(Func<GoodsReceiptNote_Detail, TDto> converter)
-        {
-            return context.GoodsReceiptNoteDetails
-                .Include(g => g.GoodsReceiptNote)
-                .Include(g => g.Product)
-                .Include(g => g.Unit)
-                .Include(o => o.ProductUnit)
-                .Include(g => g.Product)
-                .ThenInclude(p => p.Category)
-                .Select(converter)
-                .ToList();
-        }
-
         public override void Add(GoodsReceiptNote_Detail entity)
         {
 
@@ -40,7 +27,6 @@ namespace QuanLyCuaHangBanh.Repositories
             }
             else
             {
-                MessageBox.Show("it work");
                 // If inventory doesn't exist, create a new one
                 Inventory newInventory = new Inventory
                 {
