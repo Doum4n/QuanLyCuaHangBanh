@@ -12,32 +12,22 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     class GoodsReceiptNoteDetailRepo(QLCHB_DBContext context) : RepositoryBase<GoodsReceiptNote_Detail>(context)
     {
+        private readonly InventoryRepo _inventoryRepo = new(context);
+
         public override void Add(GoodsReceiptNote_Detail entity)
         {
-
-            base.Add(entity);
-
-            // Update the quantity in the inventory
-            var inventory = context.Inventories
-                .FirstOrDefault(i => i.ProductUnitID == entity.ProductUnitId && i.GoodsReceiptNoteDetailID == entity.ID);
-            if (inventory != null)
+            using var transaction = context.Database.BeginTransaction();
+            try
             {
-                inventory.Quantity += entity.Quantity;
-                context.Inventories.Update(inventory);
+                base.Add(entity);
+                _inventoryRepo.UpdateQuantity(entity.ProductUnitId, entity.Quantity, true);
+                transaction.Commit();
             }
-            else
+            catch (Exception)
             {
-                // If inventory doesn't exist, create a new one
-                Inventory newInventory = new Inventory
-                {
-                    ProductUnitID = entity.ProductUnitId,
-                    GoodsReceiptNoteDetailID = entity.ID,
-                    Quantity = entity.Quantity
-                };
-                context.Inventories.Add(newInventory);
+                transaction.Rollback();
+                throw;
             }
-            context.SaveChanges();
-
         }
 
         internal List<GoodsReceiptNote_Detail> GetReceiptNote_Details(int value)

@@ -44,11 +44,6 @@ namespace QuanLyCuaHangBanh.Presenters
         {
             PurchaseInvoiceInputView purchaseInvoiceInputView = new PurchaseInvoiceInputView((PurchaseInvoiceDTO)View.SelectedItem);
 
-            purchaseInvoiceInputView.AddProductEvent += (productReleaseDTO) =>
-            {
-                purchaseInvoiceInputView.AddProduct(productReleaseDTO);
-            };
-
             purchaseInvoiceInputView.ShowSelecteceiptFrom += (s, e) => ShowSelecteceiptFrom(purchaseInvoiceInputView);
 
             if (purchaseInvoiceInputView.ShowDialog() == DialogResult.OK)
@@ -93,7 +88,7 @@ namespace QuanLyCuaHangBanh.Presenters
                                     );
 
                                     product.Status = Status.New; // Gán status là mới
-                                    purchaseInvoiceInputView.InvokeAddProductEvent(product);
+                                    purchaseInvoiceInputView.AddProduct(product);
                                 }
                             }
                         }
@@ -107,11 +102,6 @@ namespace QuanLyCuaHangBanh.Presenters
         public override async void OnAddNew(object? sender, EventArgs e)
         {
             PurchaseInvoiceInputView purchaseInvoiceInputView = new PurchaseInvoiceInputView();
-
-            purchaseInvoiceInputView.AddProductEvent += (productReleaseDTO) =>
-            {
-                purchaseInvoiceInputView.AddProduct(productReleaseDTO);
-            };
 
             purchaseInvoiceInputView.ShowSelecteceiptFrom += (s, e) => ShowSelecteceiptFrom(purchaseInvoiceInputView);
 

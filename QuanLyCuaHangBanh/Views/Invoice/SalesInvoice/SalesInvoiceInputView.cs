@@ -13,6 +13,7 @@ using QuanLyCuaHangBanh.DTO;
 using QuanLyCuaHangBanh.DTO.Base;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Uitls;
+using QuanLyCuaHangBanh.Views.Invoice.SalesInvoice;
 
 namespace QuanLyCuaHangBanh.Views.Invoice
 {
@@ -20,7 +21,6 @@ namespace QuanLyCuaHangBanh.Views.Invoice
     {
         private QLCHB_DBContext context = new QLCHB_DBContext();
         private SaleInvoiceDTO? _invoiceDTO;
-        public event Action<ProductSaleInvoiceDTO> AddProductEvent;
         private BindingSource bs = new BindingSource();
         BindingList<ProductSaleInvoiceDTO> _products = new BindingList<ProductSaleInvoiceDTO>();
         public BindingList<ProductSaleInvoiceDTO> Products => _products;
@@ -43,35 +43,39 @@ namespace QuanLyCuaHangBanh.Views.Invoice
 
         private void btn_Save_Click(object sender, EventArgs e)
         {
-            AccountsReceivable accountsReceivable = new AccountsReceivable();
+            AccountsReceivable? accountsReceivable = null;
             if (cbb_PaymentMethod.Text == "Ghi nợ")
             {
-                accountsReceivable.CustomerID = (int)cbb_Customers.SelectedValue;
-                accountsReceivable.Amount = nmr_TotalPaymentRequired.Value - nmr_TotalPaid.Value;
-                accountsReceivable.TransactionDate = dateTimePicker.Value.ToUniversalTime();
-                accountsReceivable.DueDate = dtp_DueDate.Value.ToUniversalTime();
-                accountsReceivable.IsPaid = nmr_TotalPaid.Value >= nmr_TotalPaymentRequired.Value;
-                accountsReceivable.PaidDate = dtp_TransactionDate.Value.ToUniversalTime();
+                var customerId = cbb_Customers.SelectedValue != null ? (int)cbb_Customers.SelectedValue : throw new InvalidOperationException("Please select a customer");
+                accountsReceivable = new AccountsReceivable
+                {
+                    CustomerID = customerId,
+                    Amount = nmr_TotalPaymentRequired.Value - nmr_TotalPaid.Value,
+                    TransactionDate = dateTimePicker.Value.ToUniversalTime(),
+                    DueDate = dtp_DueDate.Value.ToUniversalTime(),
+                    IsPaid = nmr_TotalPaid.Value >= nmr_TotalPaymentRequired.Value,
+                    PaidDate = dtp_TransactionDate.Value.ToUniversalTime()
+                };
             }
 
             Models.SalesInvoice salesInvoice = new Models.SalesInvoice()
             {
                 Date = dateTimePicker.Value,
                 EmployeeID = 1, // TODO: Get current employee
-                CustomerID = (int)cbb_Customers.SelectedValue,
+                CustomerID = cbb_Customers.SelectedValue != null ? (int)cbb_Customers.SelectedValue : throw new InvalidOperationException("Please select a customer"),
                 PaymentMethod = cbb_PaymentMethod.Text,
                 Status = cbb_Status.Text,
                 Note = rtb_Note.Text,
             };
 
-            if (_invoiceDTO != null)
+            if (_invoiceDTO != null && accountsReceivable != null)
             {
                 // salesInvoice.ID = _invoiceDTO.ID;  // Cập nhật ID từ PresePresenter
                 accountsReceivable.ID = accountsReceivableId;
                 accountsReceivable.InvoiceID = _invoiceDTO.ID;
             }
 
-            this.Tag = (salesInvoice, accountsReceivable);
+            this.Tag = new SalesInvoiceData(salesInvoice, accountsReceivable);  // AccountsReceivable có thể null khi không phải Ghi nợ
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -81,7 +85,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             var productSaleInvoiceDTO = new ProductSaleInvoiceDTO(
                 0,
                 cbb_Products.Text,
-                (int)cbb_Categories.SelectedValue,
+                cbb_Categories.SelectedValue != null ? (int)cbb_Categories.SelectedValue : throw new InvalidOperationException("Please select a category"),
                 cbb_Categories.Text,
                 cbb_Units.Text,
                 selectedProductUnitId,
@@ -103,12 +107,18 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             nmr_TotalPaymentRequired.Value = totalPaymentRequired;
         }
 
+        public void AddProduct(ProductSaleInvoiceDTO productSaleInvoiceDTO)
+        {
+            bs.Add(productSaleInvoiceDTO);
+            UpdateTotalPaymentRequired();
+        }
+
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
         {
             if (dgv_ProductList.CurrentRow != null && dgv_ProductList.CurrentRow.DataBoundItem is ProductSaleInvoiceDTO selectedProduct)
             {
                 selectedProduct.ProductName = cbb_Products.Text;
-                selectedProduct.CategoryId = (int)cbb_Categories.SelectedValue;
+                selectedProduct.CategoryId = cbb_Categories.SelectedValue != null ? (int)cbb_Categories.SelectedValue : throw new InvalidOperationException("Please select a category");
                 selectedProduct.CategoryName = cbb_Categories.Text;
                 selectedProduct.UnitName = cbb_Units.Text;
                 selectedProduct.ProductUnitId = selectedProductUnitId;
@@ -249,21 +259,6 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
             nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.Never);
             // rtb_Note.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
-        }
-
-        public void AddProduct(ProductSaleInvoiceDTO productSaleInvoiceDTO)
-        {
-            _products.Add(productSaleInvoiceDTO);
-            bs.ResetBindings(false);
-            UpdateTotalPaymentRequired();
-        }
-
-        /// <summary>
-        /// Invoke from "SalesInvoicePresenter"
-        /// </summary>
-        public void InvokeAddProductEvent(ProductSaleInvoiceDTO productSaleInvoiceDTO)
-        {
-            AddProductEvent?.Invoke(productSaleInvoiceDTO);
         }
 
         private void cbb_Products_SelectedIndexChanged(object sender, EventArgs e)

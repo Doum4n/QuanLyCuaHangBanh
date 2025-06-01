@@ -58,7 +58,7 @@ namespace QuanLyCuaHangBanh.Presenters
         // private void ImportReleaseNoteDetail(DataRow row) { ... } // REMOVED
 
 
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             ReleaseNoteInputView inputView = new ReleaseNoteInputView();
 
@@ -79,7 +79,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     ((WarehouseReleaseNoteService)Service).AddNewReleaseNote(warehouseReleaseNote, inputView.Products);
 
                     View.Message = "Thêm phiếu xuất thành công!";
-                    InitializeAsync(); // Reload data after add
+                    await InitializeAsync(); // Reload data after add
                 }
             }
         }
@@ -97,24 +97,20 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         foreach (var item in order)
                         {
-                            foreach (var unit in item.Product_Unit.Product.ProductUnits) // This might need careful review if ProductUnits is always loaded
-                            {
                                 var product = new ProductReleaseDTO(
                                     item.Product_Unit.Product.ID,
                                     item.Product_Unit.Product.Name,
                                     item.Product_Unit.Product.CategoryID,
                                     item.Product_Unit.Product.Category.Name,
-                                    unit.Unit.Name,
+                                    item.Product_Unit.Unit.Name,
                                     item.Product_UnitID,
                                     item.Product_Unit.ConversionRate,
                                     item.Quantity,
                                     item.Note
                                 );
                                 inputView.RaiseAddProductEvent(product);
-                            }
                         }
                     }
-                    MessageBox.Show(orderId.ToString());
                     return orderId;
                 }
             }
@@ -138,15 +134,15 @@ namespace QuanLyCuaHangBanh.Presenters
                             // retaining the direct access logic to item.Product.ID, etc.
                             // Ensure 'item.Product' and 'item.Unit' are loaded (e.g., via Include in service)
                             var product = new ProductReleaseDTO(
-                                item.Product.ID,
+                                item.Product!.ID,
                                 item.Product.Name,
                                 item.Product.CategoryID,
                                 item.Product.Category.Name,
-                                item.Unit.Name, // Direct access to item.Unit.Name, assuming it's loaded
+                                item.Unit!.Name, // Direct access to item.Unit.Name, assuming it's loaded
                                 item.ProductUnitId,
-                                item.ProductUnit.ConversionRate,
+                                item.ProductUnit!.ConversionRate,
                                 item.Quantity,
-                                item.Note
+                                item.Note ?? string.Empty
                             );
 
                             MessageBox.Show(product.ProductUnitId.ToString());
@@ -161,14 +157,14 @@ namespace QuanLyCuaHangBanh.Presenters
             return 0;
         }
 
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
             if (View.SelectedItem is WarehouseReleaseNoteDTO selectedItem)
             {
                 // Use the service to delete the release note
-                ((WarehouseReleaseNoteService)Service).DeleteReleaseNote(selectedItem.ID);
+                await ((WarehouseReleaseNoteService)Service).DeleteReleaseNote(selectedItem.ID);
                 View.Message = "Xóa phiếu xuất thành công!";
-                InitializeAsync(); // Reload data after delete
+                await InitializeAsync(); // Reload data after delete
             }
             else
             {
@@ -176,7 +172,7 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
             // Ensure View.SelectedItem is handled safely if it could be null or wrong type
             if (View.SelectedItem is not WarehouseReleaseNoteDTO selectedReleaseNoteDto)
@@ -203,7 +199,7 @@ namespace QuanLyCuaHangBanh.Presenters
                     ((WarehouseReleaseNoteService)Service).UpdateReleaseNote(warehouseReleaseNote, inputView.Products);
 
                     View.Message = "Cập nhật phiếu xuất thành công!";
-                    InitializeAsync(); // Reload data after update
+                    await InitializeAsync(); // Reload data after update
                 }
             }
         }

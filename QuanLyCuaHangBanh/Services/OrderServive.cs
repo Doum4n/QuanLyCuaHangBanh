@@ -37,6 +37,7 @@ namespace QuanLyCuaHangBanh.Services
 
             foreach (var product in products)
             {
+                product.ID = 0; // Đặt ID thành 0 để tạo mới
                 product.OrderId = order.ID;
                 product.ProductUnitId = product.ProductUnitId;
                 _provider.GetRepository<Order_Detail>().Add(product.ToOrderDetail());

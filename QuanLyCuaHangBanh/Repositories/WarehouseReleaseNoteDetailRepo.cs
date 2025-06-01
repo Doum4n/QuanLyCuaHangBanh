@@ -12,26 +12,23 @@ namespace QuanLyCuaHangBanh.Repositories
 {
     public class WarehouseReleaseNoteDetailRepo(QLCHB_DBContext context) : RepositoryBase<WarehouseReleaseNote_Detail>(context)
     {
+        private readonly InventoryRepo _inventoryRepo = new(context);
+
         public override void Add(WarehouseReleaseNote_Detail entity)
         {
-            Product_Unit productUnit = context.ProductUnits.FirstOrDefault(o => o.ID == entity.Product_UnitID);
-
-            if (productUnit != null)
+            using var transaction = context.Database.BeginTransaction();
+            try
             {
-                // Cập nhật số lượng tồn kho khi lập phiếu xuất kho
-                context.Inventories
-                    .Where(i => i.ProductUnitID == productUnit.ID)
-                    .ToList()
-                    .ForEach(i =>
-                    {
-                        i.Quantity -= entity.Quantity;
-                        context.Entry(i).State = EntityState.Modified;
-                    });
-
+                base.Add(entity);
+                _inventoryRepo.UpdateQuantity(entity.Product_UnitID, entity.Quantity, false);
                 context.SaveChanges();
+                transaction.Commit();
             }
-
-            base.Add(entity);
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         public void DeleteByID(int id)
@@ -41,7 +38,20 @@ namespace QuanLyCuaHangBanh.Repositories
 
             if (entity != null)
             {
-                Delete(entity);
+                using var transaction = context.Database.BeginTransaction();
+                try
+                {
+                    // Restore inventory quantity before deleting
+                    _inventoryRepo.UpdateQuantity(entity.Product_UnitID, entity.Quantity, true);
+                    Delete(entity);
+                    context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
     }

@@ -89,7 +89,6 @@ namespace QuanLyCuaHangBanh.Presenters
             {
                 if(productViewEventArgs.IsEdit == false){
                     productInputView = new ProductInputView(productDto: (ProductDTO)this.View.SelectedItem, isEdit: false);
-                    MessageBox.Show("Không thể sửa sản phẩm", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }else
             {

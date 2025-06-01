@@ -17,7 +17,6 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         public BindingSource bs = new BindingSource();
         private int selectedProductUnitId;
 
-        public event Action<ProductPurchaseInvoiceDTO> AddProductEvent;
         public event Func<object, EventArgs, int> ShowSelecteceiptFrom;
 
         private int accountPayableId;
@@ -35,7 +34,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
         private void btn_AddProduct_Click(object sender, EventArgs e)
         {
             var product = new ProductPurchaseInvoiceDTO(
-                0,
+                bs.Count + 1,
                 0,
                 cbb_Products.Text,
                 (int)cbb_Categories.SelectedValue,
@@ -54,11 +53,6 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 
             UpdateTotalPaymentRequired();
             bs.ResetBindings(false);
-        }
-
-        public void InvokeAddProductEvent(ProductPurchaseInvoiceDTO product)
-        {
-            AddProductEvent?.Invoke(product);
         }
 
         public void AddProduct(ProductPurchaseInvoiceDTO productPurchaseInvoiceDTO)

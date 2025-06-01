@@ -42,28 +42,20 @@ namespace QuanLyCuaHangBanh.Presenters
             InitializeAsync(); // Reload data after import
         }
 
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
             if (View.SelectedItem is SaleInvoiceDTO saleInvoiceDTO)
             {
                 SalesInvoiceInputView invoiceInputView = new SalesInvoiceInputView(saleInvoiceDTO);
 
-                invoiceInputView.AddProductEvent += (product) =>
-                {
-                    invoiceInputView.Products.Add(product);
-                };
-
                 invoiceInputView.ShowSelectOrderForm += (sender, e) => ShowSelectOrderForm(invoiceInputView);
-                if (invoiceInputView.ShowDialog() == DialogResult.OK)
+                if (invoiceInputView.ShowDialog() == DialogResult.OK && invoiceInputView.Tag is SalesInvoiceData data)
                 {
-                    if (invoiceInputView.Tag is (SalesInvoice salesInvoice, AccountsReceivable accountsReceivable))
-                    {
-                        // Use the service to update the invoice
-                        salesInvoice.ID = saleInvoiceDTO.ID; // Ensure the ID is set for update
-                        ((SalesInvoiceService)Service).UpdateSalesInvoice(salesInvoice, accountsReceivable, invoiceInputView.Products);
-                        View.Message = "Cập nhật hóa đơn thành công!";
-                        InitializeAsync(); // Reload data after update
-                    }
+                    // Use the service to update the invoice
+                    data.SalesInvoice.ID = saleInvoiceDTO.ID; // Ensure the ID is set for update
+                    await ((SalesInvoiceService)Service).UpdateSalesInvoice(data.SalesInvoice, data.AccountsReceivable, invoiceInputView.Products);
+                    View.Message = "Cập nhật hóa đơn thành công!";
+                    await InitializeAsync(); // Reload data after update
                 }
             }
         }
@@ -80,76 +72,67 @@ namespace QuanLyCuaHangBanh.Presenters
                     {
                         foreach (var item in order)
                         {
-                            foreach (var unit in item.Product_Unit.Product.ProductUnits) // This might need careful review if ProductUnits is always loaded
-                            {
+                            // foreach (var unit in item. Product_Unit.Product.ProductUnits) // This might need careful review if ProductUnits is always loaded
+                            // {
                                 var product = new ProductSaleInvoiceDTO(
                                     item.Product_Unit.Product.ID,
                                     item.Product_Unit.Product.Name,
                                     item.Product_Unit.Product.CategoryID,
                                     item.Product_Unit.Product.Category.Name,
-                                    unit.Unit.Name,
+                                    item.Product_Unit.Unit.Name,
                                     item.Product_UnitID,
                                     item.Product_Unit.ConversionRate,
                                     item.Quantity,
                                     item.Note,
                                     item.Product_Unit.UnitPrice
                                 );
-                                inputView.InvokeAddProductEvent(product);
-                            }
+                                inputView.AddProduct(product);
+                            // }
                         }
                     }
-                    MessageBox.Show(orderId.ToString());
                     return orderId;
                 }
             }
             return 0;
         }
 
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             SalesInvoiceInputView invoiceInputView = new SalesInvoiceInputView();
-
-            invoiceInputView.AddProductEvent += (product) =>
-                {
-                    invoiceInputView.Products.Add(product);
-                }; 
-
 
             invoiceInputView.ShowSelectOrderForm += (sender, e) => ShowSelectOrderForm(invoiceInputView);
 
             if (invoiceInputView.ShowDialog() == DialogResult.OK)
             {
-                if (invoiceInputView.Tag is (SalesInvoice salesInvoice, AccountsReceivable accountsReceivable))
+                if (invoiceInputView.Tag is SalesInvoiceData data)
                 {
                     // Use the service to add the new invoice
-                    ((SalesInvoiceService)Service).AddSalesInvoice(salesInvoice, accountsReceivable, invoiceInputView.Products);
-
-                    MessageBox.Show(salesInvoice.ID.ToString()); // Keep for showing the new ID
+                    ((SalesInvoiceService)Service).AddSalesInvoice(data.SalesInvoice, data.AccountsReceivable, invoiceInputView.Products);
 
                     View.Message = "Thêm hóa đơn thành công!";
-                    InitializeAsync(); // Reload data after add
+                    await InitializeAsync(); // Reload data after add
                 }
             }
         }
 
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
             if (View.SelectedItem is InvoiceDTO invoiceDTO)
             {
                 // Use the service to delete the invoice
-                ((SalesInvoiceService)Service).DeleteSalesInvoice(invoiceDTO.ID);
+                await ((SalesInvoiceService)Service).DeleteSalesInvoice(invoiceDTO.ID);
                 View.Message = "Xóa hóa đơn thành công!";
-                InitializeAsync(); // Reload data after delete
+                await InitializeAsync(); // Reload data after deletes
             }
         }
 
-        public override void OnSearch(object? sender, EventArgs e)
+        public override async void OnSearch(object? sender, EventArgs e)
         {
             string searchValue = this.View.SearchValue?.Trim() ?? string.Empty;
 
             if (string.IsNullOrEmpty(searchValue))
             {
-                InitializeAsync();
+                await InitializeAsync();
             }
             else
             {

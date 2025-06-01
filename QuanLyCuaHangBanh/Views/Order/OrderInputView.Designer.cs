@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            btn_Save = new MaterialSkin.Controls.MaterialButton();
             rtb_DeliverAddress = new RichTextBox();
             tb_PhoneNumber = new TextBox();
             label5 = new Label();
@@ -43,6 +42,16 @@
             panel1 = new Panel();
             label12 = new Label();
             cbb_PaymentMethods = new ComboBox();
+            tabPage1 = new TabPage();
+            dgv_ProductList = new DataGridView();
+            ID = new DataGridViewTextBoxColumn();
+            ProductName = new DataGridViewTextBoxColumn();
+            CategoryName = new DataGridViewTextBoxColumn();
+            UnitName = new DataGridViewTextBoxColumn();
+            ConversionRate = new DataGridViewTextBoxColumn();
+            PurchasePrice = new DataGridViewTextBoxColumn();
+            Quantity = new DataGridViewTextBoxColumn();
+            Note = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
             btn_Cancel = new Button();
             btn_DeleteProduct = new Button();
@@ -62,50 +71,36 @@
             cbb_Categories = new ComboBox();
             label10 = new Label();
             textbox34 = new Label();
-            panel3 = new Panel();
-            dgv_ProductList = new DataGridView();
-            ID = new DataGridViewTextBoxColumn();
-            ProductName = new DataGridViewTextBoxColumn();
-            CategoryName = new DataGridViewTextBoxColumn();
-            UnitName = new DataGridViewTextBoxColumn();
-            ConversionRate = new DataGridViewTextBoxColumn();
-            PurchasePrice = new DataGridViewTextBoxColumn();
-            Quantity = new DataGridViewTextBoxColumn();
-            Note = new DataGridViewTextBoxColumn();
             panel4 = new Panel();
             nmr_TotalPaymentRequired = new NumericUpDown();
             label14 = new Label();
+            panel3 = new Panel();
+            btn_Save = new MaterialSkin.Controls.MaterialButton();
+            tabControl1 = new TabControl();
+            tabPage2 = new TabPage();
+            dgv_ReleaseList = new DataGridView();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            ReleasedProductName = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
+            CreatedBy = new DataGridViewTextBoxColumn();
+            ReleaseDate = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nmr_Price).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
-            panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).BeginInit();
+            panel3.SuspendLayout();
+            tabControl1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_ReleaseList).BeginInit();
             SuspendLayout();
-            // 
-            // btn_Save
-            // 
-            btn_Save.AutoSize = false;
-            btn_Save.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_Save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_Save.Depth = 0;
-            btn_Save.HighEmphasis = true;
-            btn_Save.Icon = null;
-            btn_Save.Location = new Point(546, 18);
-            btn_Save.Margin = new Padding(4, 6, 4, 6);
-            btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_Save.Name = "btn_Save";
-            btn_Save.NoAccentTextColor = Color.Empty;
-            btn_Save.Size = new Size(158, 36);
-            btn_Save.TabIndex = 25;
-            btn_Save.Text = "Lưu";
-            btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_Save.UseAccentColor = false;
-            btn_Save.UseVisualStyleBackColor = true;
-            btn_Save.Click += btn_Save_Click;
             // 
             // rtb_DeliverAddress
             // 
@@ -118,6 +113,7 @@
             // 
             // tb_PhoneNumber
             // 
+            tb_PhoneNumber.Enabled = false;
             tb_PhoneNumber.Location = new Point(16, 134);
             tb_PhoneNumber.Name = "tb_PhoneNumber";
             tb_PhoneNumber.Size = new Size(213, 27);
@@ -233,6 +229,103 @@
             cbb_PaymentMethods.TabIndex = 31;
             cbb_PaymentMethods.SelectedIndexChanged += cbb_PaymentMethods_SelectedIndexChanged;
             // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(dgv_ProductList);
+            tabPage1.Controls.Add(panel2);
+            tabPage1.Controls.Add(panel4);
+            tabPage1.Controls.Add(panel3);
+            tabPage1.Location = new Point(4, 29);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(1243, 514);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Sản phẩm";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // dgv_ProductList
+            // 
+            dgv_ProductList.AllowUserToAddRows = false;
+            dgv_ProductList.AllowUserToDeleteRows = false;
+            dgv_ProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, PurchasePrice, Quantity, Note });
+            dgv_ProductList.Dock = DockStyle.Fill;
+            dgv_ProductList.Location = new Point(3, 186);
+            dgv_ProductList.Name = "dgv_ProductList";
+            dgv_ProductList.ReadOnly = true;
+            dgv_ProductList.RowHeadersWidth = 51;
+            dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_ProductList.Size = new Size(1237, 204);
+            dgv_ProductList.TabIndex = 34;
+            // 
+            // ID
+            // 
+            ID.DataPropertyName = "ID";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 6;
+            ID.Name = "ID";
+            ID.ReadOnly = true;
+            // 
+            // ProductName
+            // 
+            ProductName.DataPropertyName = "ProductName";
+            ProductName.HeaderText = "Tên sản phẩm";
+            ProductName.MinimumWidth = 6;
+            ProductName.Name = "ProductName";
+            ProductName.ReadOnly = true;
+            // 
+            // CategoryName
+            // 
+            CategoryName.DataPropertyName = "CategoryName";
+            CategoryName.HeaderText = "Tên danh mục";
+            CategoryName.MinimumWidth = 6;
+            CategoryName.Name = "CategoryName";
+            CategoryName.ReadOnly = true;
+            // 
+            // UnitName
+            // 
+            UnitName.DataPropertyName = "UnitName";
+            UnitName.HeaderText = "Tên đơn vị tính";
+            UnitName.MinimumWidth = 6;
+            UnitName.Name = "UnitName";
+            UnitName.ReadOnly = true;
+            // 
+            // ConversionRate
+            // 
+            ConversionRate.DataPropertyName = "ConversionRate";
+            ConversionRate.HeaderText = "Tỷ lệ chuyển đổi";
+            ConversionRate.MinimumWidth = 6;
+            ConversionRate.Name = "ConversionRate";
+            ConversionRate.ReadOnly = true;
+            // 
+            // PurchasePrice
+            // 
+            PurchasePrice.DataPropertyName = "PurchasePrice";
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            PurchasePrice.DefaultCellStyle = dataGridViewCellStyle1;
+            PurchasePrice.HeaderText = "Giá tiền";
+            PurchasePrice.MinimumWidth = 6;
+            PurchasePrice.Name = "PurchasePrice";
+            PurchasePrice.ReadOnly = true;
+            // 
+            // Quantity
+            // 
+            Quantity.DataPropertyName = "Quantity";
+            Quantity.HeaderText = "Số lượng";
+            Quantity.MinimumWidth = 6;
+            Quantity.Name = "Quantity";
+            Quantity.ReadOnly = true;
+            // 
+            // Note
+            // 
+            Note.DataPropertyName = "Note";
+            Note.HeaderText = "Ghi chú";
+            Note.MinimumWidth = 6;
+            Note.Name = "Note";
+            Note.ReadOnly = true;
+            // 
             // panel2
             // 
             panel2.Controls.Add(btn_Cancel);
@@ -254,9 +347,9 @@
             panel2.Controls.Add(label10);
             panel2.Controls.Add(textbox34);
             panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 215);
+            panel2.Location = new Point(3, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1251, 183);
+            panel2.Size = new Size(1237, 183);
             panel2.TabIndex = 32;
             // 
             // btn_Cancel
@@ -428,106 +521,14 @@
             textbox34.TabIndex = 26;
             textbox34.Text = "Tên sản phẩm";
             // 
-            // panel3
-            // 
-            panel3.Controls.Add(btn_Save);
-            panel3.Dock = DockStyle.Bottom;
-            panel3.Location = new Point(0, 617);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(1251, 73);
-            panel3.TabIndex = 33;
-            // 
-            // dgv_ProductList
-            // 
-            dgv_ProductList.AllowUserToAddRows = false;
-            dgv_ProductList.AllowUserToDeleteRows = false;
-            dgv_ProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, PurchasePrice, Quantity, Note });
-            dgv_ProductList.Dock = DockStyle.Fill;
-            dgv_ProductList.Location = new Point(0, 398);
-            dgv_ProductList.Name = "dgv_ProductList";
-            dgv_ProductList.ReadOnly = true;
-            dgv_ProductList.RowHeadersWidth = 51;
-            dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1251, 171);
-            dgv_ProductList.TabIndex = 34;
-            // 
-            // ID
-            // 
-            ID.DataPropertyName = "ID";
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            ID.ReadOnly = true;
-            // 
-            // ProductName
-            // 
-            ProductName.DataPropertyName = "ProductName";
-            ProductName.HeaderText = "Tên sản phẩm";
-            ProductName.MinimumWidth = 6;
-            ProductName.Name = "ProductName";
-            ProductName.ReadOnly = true;
-            // 
-            // CategoryName
-            // 
-            CategoryName.DataPropertyName = "CategoryName";
-            CategoryName.HeaderText = "Tên danh mục";
-            CategoryName.MinimumWidth = 6;
-            CategoryName.Name = "CategoryName";
-            CategoryName.ReadOnly = true;
-            // 
-            // UnitName
-            // 
-            UnitName.DataPropertyName = "UnitName";
-            UnitName.HeaderText = "Tên đơn vị tính";
-            UnitName.MinimumWidth = 6;
-            UnitName.Name = "UnitName";
-            UnitName.ReadOnly = true;
-            // 
-            // ConversionRate
-            // 
-            ConversionRate.DataPropertyName = "ConversionRate";
-            ConversionRate.HeaderText = "Tỷ lệ chuyển đổi";
-            ConversionRate.MinimumWidth = 6;
-            ConversionRate.Name = "ConversionRate";
-            ConversionRate.ReadOnly = true;
-            // 
-            // PurchasePrice
-            // 
-            PurchasePrice.DataPropertyName = "PurchasePrice";
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            PurchasePrice.DefaultCellStyle = dataGridViewCellStyle1;
-            PurchasePrice.HeaderText = "Giá tiền";
-            PurchasePrice.MinimumWidth = 6;
-            PurchasePrice.Name = "PurchasePrice";
-            PurchasePrice.ReadOnly = true;
-            // 
-            // Quantity
-            // 
-            Quantity.DataPropertyName = "Quantity";
-            Quantity.HeaderText = "Số lượng";
-            Quantity.MinimumWidth = 6;
-            Quantity.Name = "Quantity";
-            Quantity.ReadOnly = true;
-            // 
-            // Note
-            // 
-            Note.DataPropertyName = "Note";
-            Note.HeaderText = "Ghi chú";
-            Note.MinimumWidth = 6;
-            Note.Name = "Note";
-            Note.ReadOnly = true;
-            // 
             // panel4
             // 
             panel4.Controls.Add(nmr_TotalPaymentRequired);
             panel4.Controls.Add(label14);
             panel4.Dock = DockStyle.Bottom;
-            panel4.Location = new Point(0, 569);
+            panel4.Location = new Point(3, 390);
             panel4.Name = "panel4";
-            panel4.Size = new Size(1251, 48);
+            panel4.Size = new Size(1237, 48);
             panel4.TabIndex = 26;
             // 
             // nmr_TotalPaymentRequired
@@ -549,37 +550,169 @@
             label14.TabIndex = 50;
             label14.Text = "Tổng tiền cần thanh toán:";
             // 
+            // panel3
+            // 
+            panel3.Controls.Add(btn_Save);
+            panel3.Dock = DockStyle.Bottom;
+            panel3.Location = new Point(3, 438);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(1237, 73);
+            panel3.TabIndex = 33;
+            // 
+            // btn_Save
+            // 
+            btn_Save.AutoSize = false;
+            btn_Save.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_Save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_Save.Depth = 0;
+            btn_Save.HighEmphasis = true;
+            btn_Save.Icon = null;
+            btn_Save.Location = new Point(546, 18);
+            btn_Save.Margin = new Padding(4, 6, 4, 6);
+            btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_Save.Name = "btn_Save";
+            btn_Save.NoAccentTextColor = Color.Empty;
+            btn_Save.Size = new Size(158, 36);
+            btn_Save.TabIndex = 25;
+            btn_Save.Text = "Lưu";
+            btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_Save.UseAccentColor = false;
+            btn_Save.UseVisualStyleBackColor = true;
+            btn_Save.Click += btn_Save_Click;
+            // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 215);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(1251, 547);
+            tabControl1.TabIndex = 47;
+            tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(dgv_ReleaseList);
+            tabPage2.Location = new Point(4, 29);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(1243, 514);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Phiếu xuất";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgv_ReleaseList
+            // 
+            dgv_ReleaseList.AllowUserToAddRows = false;
+            dgv_ReleaseList.AllowUserToDeleteRows = false;
+            dgv_ReleaseList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_ReleaseList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_ReleaseList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn6, ReleasedProductName, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn10, CreatedBy, ReleaseDate, dataGridViewTextBoxColumn13 });
+            dgv_ReleaseList.Dock = DockStyle.Fill;
+            dgv_ReleaseList.Location = new Point(3, 3);
+            dgv_ReleaseList.Name = "dgv_ReleaseList";
+            dgv_ReleaseList.ReadOnly = true;
+            dgv_ReleaseList.RowHeadersWidth = 51;
+            dgv_ReleaseList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_ReleaseList.Size = new Size(1237, 508);
+            dgv_ReleaseList.TabIndex = 4;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.DataPropertyName = "ID";
+            dataGridViewTextBoxColumn6.HeaderText = "ID";
+            dataGridViewTextBoxColumn6.MinimumWidth = 6;
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
+            // ReleasedProductName
+            // 
+            ReleasedProductName.DataPropertyName = "ReleasedProductName";
+            ReleasedProductName.HeaderText = "Tên sản phẩm";
+            ReleasedProductName.MinimumWidth = 6;
+            ReleasedProductName.Name = "ReleasedProductName";
+            ReleasedProductName.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            dataGridViewTextBoxColumn7.DataPropertyName = "UnitName";
+            dataGridViewTextBoxColumn7.HeaderText = "Tên đơn vị tính";
+            dataGridViewTextBoxColumn7.MinimumWidth = 6;
+            dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            dataGridViewTextBoxColumn7.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            dataGridViewTextBoxColumn8.DataPropertyName = "ConversionRate";
+            dataGridViewTextBoxColumn8.HeaderText = "Tỷ lệ chuyển đổi";
+            dataGridViewTextBoxColumn8.MinimumWidth = 6;
+            dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            dataGridViewTextBoxColumn8.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn10
+            // 
+            dataGridViewTextBoxColumn10.DataPropertyName = "Quantity";
+            dataGridViewTextBoxColumn10.HeaderText = "Số lượng";
+            dataGridViewTextBoxColumn10.MinimumWidth = 6;
+            dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
+            dataGridViewTextBoxColumn10.ReadOnly = true;
+            // 
+            // CreatedBy
+            // 
+            CreatedBy.DataPropertyName = "CreatedBy";
+            CreatedBy.HeaderText = "Người lập";
+            CreatedBy.MinimumWidth = 6;
+            CreatedBy.Name = "CreatedBy";
+            CreatedBy.ReadOnly = true;
+            // 
+            // ReleaseDate
+            // 
+            ReleaseDate.DataPropertyName = "ReleaseDate";
+            ReleaseDate.HeaderText = "Ngày Xuất";
+            ReleaseDate.MinimumWidth = 6;
+            ReleaseDate.Name = "ReleaseDate";
+            ReleaseDate.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn13
+            // 
+            dataGridViewTextBoxColumn13.DataPropertyName = "Note";
+            dataGridViewTextBoxColumn13.HeaderText = "Ghi chú";
+            dataGridViewTextBoxColumn13.MinimumWidth = 6;
+            dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
+            dataGridViewTextBoxColumn13.ReadOnly = true;
+            // 
             // OrderInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1251, 690);
-            Controls.Add(dgv_ProductList);
-            Controls.Add(panel2);
+            ClientSize = new Size(1251, 762);
+            Controls.Add(tabControl1);
             Controls.Add(panel1);
-            Controls.Add(panel4);
-            Controls.Add(panel3);
             Name = "OrderInputView";
             Text = "Đơn đặt hàng";
             Load += OrderInputView_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_ProductList).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nmr_Price).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).EndInit();
-            panel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgv_ProductList).EndInit();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).EndInit();
+            panel3.ResumeLayout(false);
+            tabControl1.ResumeLayout(false);
+            tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_ReleaseList).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private MaterialSkin.Controls.MaterialButton btn_Save;
         private RichTextBox rtb_DeliverAddress;
         private TextBox tb_PhoneNumber;
         private Label label5;
@@ -591,8 +724,9 @@
         private ComboBox cbb_Status;
         private Label label3;
         private Panel panel1;
-        private Panel panel2;
-        private Panel panel3;
+        private Label label12;
+        private ComboBox cbb_PaymentMethods;
+        private TabPage tabPage1;
         private DataGridView dgv_ProductList;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn ProductName;
@@ -602,6 +736,13 @@
         private DataGridViewTextBoxColumn PurchasePrice;
         private DataGridViewTextBoxColumn Quantity;
         private DataGridViewTextBoxColumn Note;
+        private Panel panel2;
+        private Button btn_Cancel;
+        private Button btn_DeleteProduct;
+        private Button btn_UpdateProduct;
+        private Button btn_AddProduct;
+        private Label label13;
+        private NumericUpDown nmr_Price;
         private NumericUpDown nmr_ConversionRate;
         private ComboBox cbb_Products;
         private Label label9;
@@ -614,16 +755,21 @@
         private ComboBox cbb_Categories;
         private Label label10;
         private Label textbox34;
-        private Label label12;
-        private ComboBox cbb_PaymentMethods;
-        private Label label13;
-        private NumericUpDown nmr_Price;
         private Panel panel4;
         private NumericUpDown nmr_TotalPaymentRequired;
         private Label label14;
-        private Button btn_Cancel;
-        private Button btn_DeleteProduct;
-        private Button btn_UpdateProduct;
-        private Button btn_AddProduct;
+        private Panel panel3;
+        private MaterialSkin.Controls.MaterialButton btn_Save;
+        private TabControl tabControl1;
+        private TabPage tabPage2;
+        private DataGridView dgv_ReleaseList;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private DataGridViewTextBoxColumn ReleasedProductName;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private DataGridViewTextBoxColumn CreatedBy;
+        private DataGridViewTextBoxColumn ReleaseDate;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
     }
 }

@@ -201,7 +201,6 @@ namespace QuanLyCuaHangBanh.Views
 
         private void HandleDataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            // Log lỗi nếu cần
             MessageBox.Show($"DataError: {e.Exception.Message}");
             e.ThrowException = false;
             e.Cancel = true;

@@ -71,7 +71,6 @@ namespace QuanLyCuaHangBanh.Views
 
             if (dTO != null)
             {
-
                 cbb_Status.Text = dTO.Status;
                 dateTimePicker.Value = dTO.CreatedDate.ToDateTime(TimeOnly.MinValue);
                 rtb_Note.Text = dTO.Note;
@@ -101,12 +100,12 @@ namespace QuanLyCuaHangBanh.Views
                 bs.DataSource = _products;
                 dgv_ProductList.DataSource = bs;
 
-                cbb_Categories.DataBindings.Add("SelectedValue", bs, "CategoryID");
-                cbb_Products.DataBindings.Add("Text", bs, "productName");
-                cbb_Units.DataBindings.Add("Text", bs, "unitName");
-                nmr_Quantity.DataBindings.Add("Text", bs, "Quantity");
-                nmr_ConversionRate.DataBindings.Add("Text", bs, "ConversionRate");
-                rtb_ProductNote.DataBindings.Add("Text", bs, "Note");
+                cbb_Categories.DataBindings.Add("SelectedValue", bs, "CategoryID", true, DataSourceUpdateMode.Never);
+                cbb_Products.DataBindings.Add("Text", bs, "productName", true, DataSourceUpdateMode.Never);
+                cbb_Units.DataBindings.Add("Text", bs, "unitName", true, DataSourceUpdateMode.Never);
+                nmr_Quantity.DataBindings.Add("Text", bs, "Quantity", true, DataSourceUpdateMode.Never);
+                nmr_ConversionRate.DataBindings.Add("Text", bs, "ConversionRate", true, DataSourceUpdateMode.Never);
+                rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
             }
             else
             {
@@ -170,16 +169,18 @@ namespace QuanLyCuaHangBanh.Views
         {
             if (rbtn_GoodsReciveNote.Checked)
             {
-                if (ShowSelectGoodsReciveNoteForm.Invoke(sender, e) != 0)
+                var result = ShowSelectGoodsReciveNoteForm.Invoke(sender, e);
+                if (result != 0)
                 {
-                    selectedReleaseNoteId = ShowSelectGoodsReciveNoteForm.Invoke(sender, e);
+                    selectedReleaseNoteId = result;
                 }
             }
             else if (rbtn_Order.Checked)
             {
-                if (ShowSelectOrderForm.Invoke(sender, e) != 0)
+                var result = ShowSelectOrderForm.Invoke(sender, e);
+                if (result != 0)
                 {
-                    selectedReleaseNoteId = ShowSelectOrderForm.Invoke(sender, e);
+                    selectedReleaseNoteId = result;
                 }
             }
         }

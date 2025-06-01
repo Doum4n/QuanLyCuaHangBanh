@@ -147,6 +147,7 @@ namespace QuanLyCuaHangBanh.Services
             foreach (var item in products)
             {
                 // Assign the newly generated ID from the added WarehouseReleaseNote
+                item.ID = 0; // Set ID to 0 to avoid foreign key constraint errors
                 item.WarehouseReleaseNoteId = warehouseReleaseNote.ID;
                 repositoryProvider.GetRepository<WarehouseReleaseNote_Detail>().Add(item.ToWarehouseReleaseNoteDetail());
             }

@@ -65,7 +65,7 @@
             groupBox1.Size = new Size(1272, 469);
             groupBox1.TabIndex = 5;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Danh sách hóa đơn";
+            groupBox1.Text = "Danh sách đơn hàng";
             // 
             // dgv_OrderList
             // 

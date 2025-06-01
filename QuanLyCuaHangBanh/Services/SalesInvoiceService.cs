@@ -46,13 +46,15 @@ namespace QuanLyCuaHangBanh.Services
             return ((OrderDetailRepo)repositoryProvider.GetRepository<Order_Detail>()).GetOrderDetail(orderId);
         }
 
-        public void AddSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
+        public void AddSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable? accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
         {
             salesInvoice.ID = 0; // Invoice chưa được tạo
             repositoryProvider.GetRepository<SalesInvoice>().Add(salesInvoice);
-            accountsReceivable.InvoiceID = salesInvoice.ID;
-            repositoryProvider.GetRepository<AccountsReceivable>().Add(accountsReceivable);
-            // After adding, salesInvoice.ID should be populated by the database
+            if (accountsReceivable != null) // Khi thanh toán bằng hình thức ghi nợ
+            {
+                accountsReceivable.InvoiceID = salesInvoice.ID;
+                repositoryProvider.GetRepository<AccountsReceivable>().Add(accountsReceivable);
+            }
             foreach (var productDto in products)
             {
                 if (productDto != null) // Ensure productDto is not null
@@ -66,11 +68,14 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
-        public async Task UpdateSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
+        public async Task UpdateSalesInvoice(SalesInvoice salesInvoice, AccountsReceivable? accountsReceivable, BindingList<ProductSaleInvoiceDTO> products)
         {
             repositoryProvider.GetRepository<SalesInvoice>().Update(salesInvoice);
-            accountsReceivable.InvoiceID = salesInvoice.ID;
-            repositoryProvider.GetRepository<AccountsReceivable>().Update(accountsReceivable);
+            if (accountsReceivable != null)
+            {
+                accountsReceivable.InvoiceID = salesInvoice.ID;
+                repositoryProvider.GetRepository<AccountsReceivable>().Update(accountsReceivable);
+            }
             foreach (var productDto in products)
             {
                 if (productDto != null)
