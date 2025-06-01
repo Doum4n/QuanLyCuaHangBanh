@@ -13,29 +13,51 @@ using QuanLyCuaHangBanh.Uitls; // Assuming you are using BCrypt for password has
 
 namespace QuanLyCuaHangBanh.Views
 {
+    /// <summary>
+    /// Form đăng nhập vào hệ thống
+    /// Xác thực người dùng và lưu thông tin phiên làm việc
+    /// </summary>
     public partial class LoginView : Form
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
+        #region Fields
+        /// <summary>
+        /// Database context để truy cập dữ liệu
+        /// </summary>
+        private readonly QLCHB_DBContext context = new QLCHB_DBContext();
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// Khởi tạo form đăng nhập
+        /// </summary>
         public LoginView()
         {
             InitializeComponent();
         }
+        #endregion
 
+        #region Event Handlers
+        /// <summary>
+        /// Xử lý sự kiện click nút đăng nhập
+        /// Kiểm tra thông tin đăng nhập và lưu thông tin phiên làm việc
+        /// </summary>
         private void btn_Login_Click(object sender, EventArgs e)
         {
-            // Fix for CS0854: Extract the BCrypt.Verify call into a local variable
             var username = tb_Username.Text;
             var password = tb_password.Text;
 
+            // Kiểm tra thông tin đăng nhập
             bool isValid = context.Employees
                 .Where(u => u.Username == username)
-                .AsEnumerable() // Convert to in-memory collection to allow method calls with optional arguments
+                .AsEnumerable()
                 .Any(u => BCrypt.Net.BCrypt.Verify(password, u.Password));
 
             if (isValid)
             {
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đăng nhập thành công!", "Thông báo", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 
+                // Lưu thông tin người dùng vào Session
                 Session.Role = context.Employees
                     .Where(u => u.Username == username)
                     .Select(u => u.Role)
@@ -56,10 +78,15 @@ namespace QuanLyCuaHangBanh.Views
             }
             else
             {
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Thông báo", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn phím Enter trong ô mật khẩu
+        /// Tự động kích hoạt nút đăng nhập
+        /// </summary>
         private void tb_password_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
@@ -67,5 +94,6 @@ namespace QuanLyCuaHangBanh.Views
                 btn_Login.PerformClick();
             }
         }
+        #endregion
     }
 }

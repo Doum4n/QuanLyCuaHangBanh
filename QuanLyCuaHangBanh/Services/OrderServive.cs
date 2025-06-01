@@ -11,10 +11,18 @@ using System.Threading.Tasks;
 
 namespace QuanLyCuaHangBanh.Services
 {
+    /// <summary>
+    /// Service xử lý nghiệp vụ liên quan đến đơn hàng
+    /// </summary>
+    /// <param name="provider">Provider cung cấp các repository</param>
     public class OrderService(IRepositoryProvider provider) : IService
     {
         private readonly IRepositoryProvider _provider = provider;
 
+        /// <summary>
+        /// Lấy danh sách tất cả đơn hàng dưới dạng DTO
+        /// </summary>
+        /// <returns>Danh sách OrderDTO chứa thông tin đơn hàng</returns>
         public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsDto()
         {
             return await _provider.GetRepository<Order>().GetAllAsDto<OrderDTO>(
@@ -31,6 +39,11 @@ namespace QuanLyCuaHangBanh.Services
                 ));
         }
 
+        /// <summary>
+        /// Thêm đơn hàng mới vào database
+        /// </summary>
+        /// <param name="order">Thông tin đơn hàng cần thêm</param>
+        /// <param name="products">Danh sách sản phẩm trong đơn hàng</param>
         public void AddOrder(Order order, BindingList<ProductOrderDTO> products)
         {
             _provider.GetRepository<Order>().Add(order);
@@ -44,6 +57,11 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
+        /// <summary>
+        /// Cập nhật thông tin đơn hàng
+        /// </summary>
+        /// <param name="order">Thông tin đơn hàng cần cập nhật</param>
+        /// <param name="products">Danh sách sản phẩm mới trong đơn hàng</param>
         public void UpdateOrder(Order order, BindingList<ProductOrderDTO> products)
         {
             _provider.GetRepository<Order>().Update(order);
@@ -72,7 +90,10 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
-
+        /// <summary>
+        /// Xóa đơn hàng khỏi database
+        /// </summary>
+        /// <param name="orderId">ID của đơn hàng cần xóa</param>
         public async Task DeleteOrder(int orderId)
         {
             var order = await _provider.GetRepository<Order>().GetByValue(orderId);
@@ -82,6 +103,11 @@ namespace QuanLyCuaHangBanh.Services
             }
         }
 
+        /// <summary>
+        /// Xuất danh sách đơn hàng ra DataTable
+        /// </summary>
+        /// <param name="orderDtos">Danh sách đơn hàng cần xuất</param>
+        /// <returns>Tuple chứa 2 DataTable: bảng đơn hàng và bảng chi tiết đơn hàng</returns>
         public async Task<(DataTable, DataTable)> ExportOrdersToDataTables(IEnumerable<OrderDTO> orderDtos)
         {
             DataTable orderTable1 = new DataTable("Orders");
@@ -143,6 +169,10 @@ namespace QuanLyCuaHangBanh.Services
             return (orderTable1, orderTable2);
         }
 
+        /// <summary>
+        /// Nhập thông tin đơn hàng từ DataRow
+        /// </summary>
+        /// <param name="row">DataRow chứa thông tin đơn hàng cần nhập</param>
         public void ImportOrder(DataRow row)
         {
             Order order = new Order()
@@ -157,6 +187,10 @@ namespace QuanLyCuaHangBanh.Services
             _provider.GetRepository<Order>().Add(order);
         }
 
+        /// <summary>
+        /// Nhập chi tiết đơn hàng từ DataRow
+        /// </summary>
+        /// <param name="row">DataRow chứa thông tin chi tiết đơn hàng cần nhập</param>
         public void ImportOrderDetail(DataRow row)
         {
             var productId = int.Parse(row["Mã sản phẩm"].ToString());

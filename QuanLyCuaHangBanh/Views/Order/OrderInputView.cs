@@ -8,27 +8,49 @@ namespace QuanLyCuaHangBanh.Views.Order
 {
     /// <summary>
     /// Form nhập liệu cho đơn hàng
+    /// Cho phép thêm mới và chỉnh sửa thông tin đơn hàng, bao gồm:
+    /// - Thông tin khách hàng
+    /// - Danh sách sản phẩm
+    /// - Thông tin thanh toán và giao hàng
     /// </summary>
     public partial class OrderInputView : Form
     {
         #region Fields & Properties
 
-        // Database context
-        private QLCHB_DBContext context = new QLCHB_DBContext();
+        /// <summary>
+        /// Database context để truy cập dữ liệu
+        /// </summary>
+        private readonly QLCHB_DBContext context = new QLCHB_DBContext();
         
-        // DTO chứa thông tin đơn hàng
-        private OrderDTO? orderDTO;
+        /// <summary>
+        /// DTO chứa thông tin đơn hàng cần chỉnh sửa (null nếu thêm mới)
+        /// </summary>
+        private readonly OrderDTO? orderDTO;
 
-        // Binding sources cho danh sách sản phẩm
-        private BindingSource bs = new BindingSource();
+        /// <summary>
+        /// Binding source cho danh sách sản phẩm trong đơn hàng
+        /// </summary>
+        private readonly BindingSource bs = new BindingSource();
+
+        /// <summary>
+        /// Danh sách sản phẩm trong đơn hàng
+        /// </summary>
         private BindingList<ProductOrderDTO> _products = new BindingList<ProductOrderDTO>();
+        
+        /// <summary>
+        /// Property public để truy cập danh sách sản phẩm
+        /// </summary>
         public BindingList<ProductOrderDTO> Products => _products;
 
-        // ID của đơn vị sản phẩm được chọn
-        private int selectedProductUnitId = 0;
+        /// <summary>
+        /// ID của đơn vị sản phẩm được chọn hiện tại
+        /// </summary>
+        private int selectedProductUnitId;
 
-        // Tổng tiền cần thanh toán
-        private decimal totalPaymentRequired = 0;
+        /// <summary>
+        /// Tổng số tiền cần thanh toán cho đơn hàng
+        /// </summary>
+        private decimal totalPaymentRequired;
 
         #endregion
 
@@ -72,7 +94,11 @@ namespace QuanLyCuaHangBanh.Views.Order
         #region Data Loading Methods
 
         /// <summary>
-        /// Nạp dữ liệu cho các combobox
+        /// Nạp dữ liệu cho các combobox từ database
+        /// Bao gồm:
+        /// - Danh sách sản phẩm
+        /// - Danh sách khách hàng
+        /// - Danh sách danh mục
         /// </summary>
         private void LoadComboBoxData()
         {
@@ -90,7 +116,13 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Nạp thông tin đơn hàng hiện có
+        /// Nạp thông tin đơn hàng hiện có khi ở chế độ chỉnh sửa
+        /// Bao gồm:
+        /// - Thông tin khách hàng
+        /// - Địa chỉ giao hàng
+        /// - Ngày đặt hàng
+        /// - Trạng thái đơn hàng
+        /// - Danh sách sản phẩm
         /// </summary>
         private void LoadExistingOrder()
         {
@@ -132,7 +164,7 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Khởi tạo danh sách sản phẩm mới
+        /// Khởi tạo danh sách sản phẩm mới rỗng cho đơn hàng mới
         /// </summary>
         private void InitializeNewProductList()
         {
@@ -142,7 +174,11 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Thiết lập data bindings
+        /// Thiết lập data bindings giữa controls và properties
+        /// Bao gồm:
+        /// - Binding cho các combobox
+        /// - Binding cho các numeric updown
+        /// - Binding cho textbox ghi chú
         /// </summary>
         private void SetupDataBindings()
         {
@@ -160,7 +196,14 @@ namespace QuanLyCuaHangBanh.Views.Order
         #region Product Management
 
         /// <summary>
-        /// Thêm sản phẩm mới vào đơn hàng
+        /// Thêm sản phẩm mới vào đơn hàng với thông tin:
+        /// - Tên sản phẩm
+        /// - Danh mục
+        /// - Đơn vị tính
+        /// - Tỷ lệ quy đổi
+        /// - Số lượng
+        /// - Ghi chú
+        /// - Giá bán
         /// </summary>
         private void btn_AddProduct_Click(object sender, EventArgs e)
         {
@@ -185,7 +228,13 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Cập nhật thông tin sản phẩm
+        /// Cập nhật thông tin sản phẩm đã chọn trong đơn hàng
+        /// Bao gồm cập nhật:
+        /// - Thông tin sản phẩm
+        /// - Số lượng
+        /// - Đơn vị tính
+        /// - Giá bán
+        /// - Ghi chú
         /// </summary>
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
         {
@@ -209,7 +258,8 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Xóa sản phẩm khỏi đơn hàng
+        /// Xóa sản phẩm đã chọn khỏi đơn hàng
+        /// Cập nhật lại tổng tiền sau khi xóa
         /// </summary>
         private void btn_DeleteProduct_Click(object sender, EventArgs e)
         {
@@ -234,6 +284,11 @@ namespace QuanLyCuaHangBanh.Views.Order
 
         #region ComboBox Event Handlers
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi đơn vị tính
+        /// - Cập nhật tỷ lệ quy đổi
+        /// - Cập nhật giá bán theo đơn vị mới
+        /// </summary>
         private void cbb_Units_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
@@ -247,6 +302,12 @@ namespace QuanLyCuaHangBanh.Views.Order
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi sản phẩm
+        /// - Cập nhật danh mục sản phẩm
+        /// - Cập nhật danh sách đơn vị tính
+        /// - Cập nhật giá bán mặc định
+        /// </summary>
         private void cbb_Products_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_Products.SelectedItem is Models.Product selectedProduct)
@@ -267,6 +328,10 @@ namespace QuanLyCuaHangBanh.Views.Order
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi danh mục
+        /// - Lọc danh sách sản phẩm theo danh mục
+        /// </summary>
         private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_Categories.SelectedItem is Models.Category selectedCategory)
@@ -279,6 +344,10 @@ namespace QuanLyCuaHangBanh.Views.Order
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi khách hàng
+        /// - Cập nhật địa chỉ giao hàng mặc định
+        /// </summary>
         private void cbb_Customer_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_Customer.SelectedItem is Models.Customer selectedCustomer)
@@ -287,11 +356,19 @@ namespace QuanLyCuaHangBanh.Views.Order
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi trạng thái đơn hàng
+        /// - Cập nhật các controls liên quan đến trạng thái
+        /// </summary>
         private void cbb_Status_SelectedIndexChanged(object sender, EventArgs e)
         {
             AdjustStatus();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi phương thức thanh toán
+        /// - Cập nhật các controls liên quan đến thanh toán
+        /// </summary>
         private void cbb_PaymentMethods_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_PaymentMethods.SelectedText == "Ghi nợ")
@@ -305,8 +382,12 @@ namespace QuanLyCuaHangBanh.Views.Order
         #region Helper Methods
 
         /// <summary>
-        /// Cập nhật chi tiết đơn vị sản phẩm
+        /// Cập nhật thông tin chi tiết về đơn vị tính của sản phẩm
+        /// - Lấy danh sách đơn vị tính
+        /// - Cập nhật tỷ lệ quy đổi
+        /// - Cập nhật giá bán theo đơn vị
         /// </summary>
+        /// <param name="selectedProduct">Sản phẩm được chọn</param>
         private void UpdateProductUnitDetails(Models.Product selectedProduct)
         {
             var selectedUnitId = Convert.ToInt32(cbb_Units.SelectedValue);
@@ -334,7 +415,9 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Điều chỉnh trạng thái đơn hàng
+        /// Điều chỉnh trạng thái đơn hàng và các controls liên quan
+        /// - Thiết lập danh sách trạng thái có thể chọn
+        /// - Cập nhật trạng thái mặc định
         /// </summary>
         private void AdjustStatus()
         {
@@ -367,7 +450,9 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Thiết lập phương thức thanh toán
+        /// Điều chỉnh phương thức thanh toán và các controls liên quan
+        /// - Thiết lập danh sách phương thức thanh toán
+        /// - Cập nhật phương thức mặc định
         /// </summary>
         private void AdjustPaymentMethods()
         {
@@ -382,7 +467,11 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Cập nhật tổng tiền cần thanh toán
+        /// Cập nhật tổng số tiền cần thanh toán
+        /// Tính toán dựa trên:
+        /// - Giá bán của từng sản phẩm
+        /// - Số lượng sản phẩm
+        /// - Tỷ lệ quy đổi đơn vị
         /// </summary>
         private void UpdateTotalPaymentRequired()
         {
@@ -394,6 +483,12 @@ namespace QuanLyCuaHangBanh.Views.Order
 
         #region Form Events
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút Lưu
+        /// - Kiểm tra dữ liệu hợp lệ
+        /// - Lưu thông tin đơn hàng vào database
+        /// - Đóng form sau khi lưu thành công
+        /// </summary>
         private void btn_Save_Click(object sender, EventArgs e)
         {
             Models.Order addedOrder = new Models.Order()
@@ -415,11 +510,20 @@ namespace QuanLyCuaHangBanh.Views.Order
             this.Close();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút Hủy
+        /// - Đóng form mà không lưu thay đổi
+        /// </summary>
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
             // Xử lý khi nhấn nút hủy
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi chuyển tab
+        /// - Cập nhật dữ liệu cho tab được chọn
+        /// - Tải danh sách phiếu xuất kho nếu cần
+        /// </summary>
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (tabControl1.SelectedIndex)
@@ -436,7 +540,9 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         /// <summary>
-        /// Nạp danh sách phiếu xuất kho
+        /// Tải danh sách phiếu xuất kho liên quan đến đơn hàng
+        /// - Lọc theo ID đơn hàng
+        /// - Hiển thị thông tin chi tiết phiếu xuất
         /// </summary>
         private void LoadReleaseList()
         {

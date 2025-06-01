@@ -1,4 +1,5 @@
-﻿namespace QuanLyCuaHangBanh.Views
+﻿
+namespace QuanLyCuaHangBanh.Views
 {
     partial class ReleaseNoteInputView
     {
@@ -546,7 +547,6 @@
             rbtn_Order.TabStop = true;
             rbtn_Order.Text = "Đơn hàng";
             rbtn_Order.UseVisualStyleBackColor = true;
-            rbtn_Order.CheckedChanged += rbtn_Order_CheckedChanged;
             // 
             // label1
             // 

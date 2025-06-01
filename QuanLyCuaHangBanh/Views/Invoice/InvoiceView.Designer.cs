@@ -42,9 +42,6 @@
             btn_Edit = new MaterialSkin.Controls.MaterialButton();
             groupBox1 = new GroupBox();
             dgv_InvoiceList = new DataGridView();
-            tabControl2 = new TabControl();
-            tabPage_SalesInvoice = new TabPage();
-            tabPane_PurchaseInvoice = new TabPage();
             ID = new DataGridViewTextBoxColumn();
             EmployeeName = new DataGridViewTextBoxColumn();
             CreatedDate = new DataGridViewTextBoxColumn();
@@ -55,6 +52,9 @@
             PaymentMethod = new DataGridViewTextBoxColumn();
             TotalAmount = new DataGridViewTextBoxColumn();
             TotalUnpaid = new DataGridViewTextBoxColumn();
+            tabControl2 = new TabControl();
+            tabPage_SalesInvoice = new TabPage();
+            tabPane_PurchaseInvoice = new TabPage();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -237,39 +237,6 @@
             dgv_InvoiceList.TabIndex = 2;
             dgv_InvoiceList.SelectionChanged += dgv_InvoiceList_SelectionChanged;
             // 
-            // tabControl2
-            // 
-            tabControl2.Controls.Add(tabPage_SalesInvoice);
-            tabControl2.Controls.Add(tabPane_PurchaseInvoice);
-            tabControl2.Dock = DockStyle.Fill;
-            tabControl2.Location = new Point(0, 0);
-            tabControl2.Name = "tabControl2";
-            tabControl2.SelectedIndex = 0;
-            tabControl2.Size = new Size(1280, 474);
-            tabControl2.TabIndex = 5;
-            tabControl2.SelectedIndexChanged += tabControl2_SelectedIndexChanged;
-            // 
-            // tabPage_SalesInvoice
-            // 
-            tabPage_SalesInvoice.Controls.Add(groupBox1);
-            tabPage_SalesInvoice.Location = new Point(4, 29);
-            tabPage_SalesInvoice.Name = "tabPage_SalesInvoice";
-            tabPage_SalesInvoice.Padding = new Padding(3);
-            tabPage_SalesInvoice.Size = new Size(1272, 441);
-            tabPage_SalesInvoice.TabIndex = 0;
-            tabPage_SalesInvoice.Text = "Hóa đơn bán hàng";
-            tabPage_SalesInvoice.UseVisualStyleBackColor = true;
-            // 
-            // tabPane_PurchaseInvoice
-            // 
-            tabPane_PurchaseInvoice.Location = new Point(4, 29);
-            tabPane_PurchaseInvoice.Name = "tabPane_PurchaseInvoice";
-            tabPane_PurchaseInvoice.Padding = new Padding(3);
-            tabPane_PurchaseInvoice.Size = new Size(1272, 441);
-            tabPane_PurchaseInvoice.TabIndex = 1;
-            tabPane_PurchaseInvoice.Text = "Hóa đơn nhập hàng";
-            tabPane_PurchaseInvoice.UseVisualStyleBackColor = true;
-            // 
             // ID
             // 
             ID.DataPropertyName = "ID";
@@ -339,6 +306,39 @@
             TotalUnpaid.HeaderText = "Tổng chưa trả";
             TotalUnpaid.MinimumWidth = 6;
             TotalUnpaid.Name = "TotalUnpaid";
+            // 
+            // tabControl2
+            // 
+            tabControl2.Controls.Add(tabPage_SalesInvoice);
+            tabControl2.Controls.Add(tabPane_PurchaseInvoice);
+            tabControl2.Dock = DockStyle.Fill;
+            tabControl2.Location = new Point(0, 0);
+            tabControl2.Name = "tabControl2";
+            tabControl2.SelectedIndex = 0;
+            tabControl2.Size = new Size(1280, 474);
+            tabControl2.TabIndex = 5;
+            tabControl2.SelectedIndexChanged += this.tabControl2_SelectedIndexChanged;
+            // 
+            // tabPage_SalesInvoice
+            // 
+            tabPage_SalesInvoice.Controls.Add(groupBox1);
+            tabPage_SalesInvoice.Location = new Point(4, 29);
+            tabPage_SalesInvoice.Name = "tabPage_SalesInvoice";
+            tabPage_SalesInvoice.Padding = new Padding(3);
+            tabPage_SalesInvoice.Size = new Size(1272, 441);
+            tabPage_SalesInvoice.TabIndex = 0;
+            tabPage_SalesInvoice.Text = "Hóa đơn bán hàng";
+            tabPage_SalesInvoice.UseVisualStyleBackColor = true;
+            // 
+            // tabPane_PurchaseInvoice
+            // 
+            tabPane_PurchaseInvoice.Location = new Point(4, 29);
+            tabPane_PurchaseInvoice.Name = "tabPane_PurchaseInvoice";
+            tabPane_PurchaseInvoice.Padding = new Padding(3);
+            tabPane_PurchaseInvoice.Size = new Size(1272, 441);
+            tabPane_PurchaseInvoice.TabIndex = 1;
+            tabPane_PurchaseInvoice.Text = "Hóa đơn nhập hàng";
+            tabPane_PurchaseInvoice.UseVisualStyleBackColor = true;
             // 
             // InvoiceView
             // 

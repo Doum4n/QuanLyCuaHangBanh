@@ -7,6 +7,7 @@ using QuanLyCuaHangBanh.Reports;
 using QuanLyCuaHangBanh.Uitls;
 using QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice;
 using QuanLyCuaHangBanh.Views.Invoice.SalesInvoice;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyCuaHangBanh.Views.Invoice
@@ -102,7 +103,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             }
         }
 
-        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        private async void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl2.SelectedIndex == 0)
             {
@@ -115,9 +116,10 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 // LẤY VIEW QUA DI
                 var purchaseView = serviceProvider.GetRequiredService<IPurchaseView>() as PurchaseInvoiceView;
                 var purchasePresenter = serviceProvider.GetRequiredService<PurchasePresenter>();
+                await purchasePresenter.InitializeAsync();
 
                 tabPane_PurchaseInvoice.Controls.Add(purchaseView);
-                if (selectedInvoice != null)
+                if (selectedInvoice != null && purchaseView != null)
                 {
                     purchaseView.Dock = DockStyle.Fill;
                 }

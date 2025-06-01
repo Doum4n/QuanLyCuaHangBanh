@@ -18,10 +18,14 @@ using QuanLyCuaHangBanh.Uitls;
 using System.Data;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System.ComponentModel;
-using QuanLyCuaHangBanh.Services; // Thêm namespace của Service
+using QuanLyCuaHangBanh.Services;
 
 namespace QuanLyCuaHangBanh.Presenters
 {
+    /// <summary>
+    /// Event args cho các sự kiện của ProductView
+    /// </summary>
+    /// <param name="isEdit">True nếu là chỉnh sửa, False nếu là xem chi tiết</param>
     public class ProductViewEventArgs : EventArgs
     {
         public ProductViewEventArgs(bool isEdit)
@@ -30,17 +34,35 @@ namespace QuanLyCuaHangBanh.Presenters
         }   
         public bool IsEdit { get; }
     }
+
+    /// <summary>
+    /// Presenter xử lý logic cho màn hình quản lý sản phẩm
+    /// </summary>
     public class ProductPresenter : PresenterBase<Product>
     {
+        #region Fields
         private IList<ProductDTO> products = new List<ProductDTO>();
-        private QLCHB_DBContext context = new QLCHB_DBContext(); // Khởi tạo DbContext
+        private QLCHB_DBContext context = new QLCHB_DBContext();
+        #endregion
 
+        #region Constructor
+        /// <summary>
+        /// Khởi tạo presenter cho màn hình quản lý sản phẩm
+        /// </summary>
+        /// <param name="view">View interface để tương tác với UI</param>
+        /// <param name="service">Service xử lý business logic cho sản phẩm</param>
         public ProductPresenter(IProductView view, ProductService service) : base(view, service)
         {
             ((IProductView)View).SelectedUnitChanged += OnSelectedUnitChanged;
         }
+        #endregion
 
-        // Sự kiện khi thay đổi đơn vị trong ComboBox
+        #region Event Handlers
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi đơn vị trong ComboBox
+        /// </summary>
+        /// <param name="sender">ComboBox chứa danh sách đơn vị</param>
+        /// <param name="e">Event arguments</param>
         private void OnSelectedUnitChanged(object? sender, EventArgs e)
         {
             if (sender is ComboBox comboBox && comboBox.Tag is ProductDTO product)
@@ -53,6 +75,30 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện chọn ảnh cho sản phẩm
+        /// </summary>
+        /// <param name="sender">Form nhập liệu sản phẩm</param>
+        /// <param name="e">Event arguments</param>
+        private void SelectImage(object? sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string imagePath = openFileDialog.FileName;
+                if (sender is ProductInputView productInputView)
+                {
+                    productInputView.SetImage(imagePath);
+                }   
+            }
+        }
+        #endregion
+
+        #region Override Methods
+        /// <summary>
+        /// Khởi tạo dữ liệu ban đầu cho màn hình
+        /// </summary>
         public override async Task InitializeAsync()
         {
             try
@@ -66,12 +112,22 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Xuất dữ liệu sản phẩm ra Excel
+        /// </summary>
+        /// <param name="sender">Nút xuất Excel</param>
+        /// <param name="e">Event arguments</param>
         public override void OnExport(object? sender, EventArgs e)
         {
             DataTable dataTable = ((ProductService)Service).GetProductDataTableForExport();
             ExcelHandler.ExportExcel("Sản phẩm", "Sản phẩm", dataTable);
         }
 
+        /// <summary>
+        /// Nhập dữ liệu sản phẩm từ Excel
+        /// </summary>
+        /// <param name="sender">Nút nhập Excel</param>
+        /// <param name="e">Event arguments</param>
         public override void OnImport(object? sender, EventArgs e)
         {
             ExcelHandler.ImportExcel(async (DataRow row) =>
@@ -82,6 +138,11 @@ namespace QuanLyCuaHangBanh.Presenters
             });
         }
 
+        /// <summary>
+        /// Chỉnh sửa thông tin sản phẩm
+        /// </summary>
+        /// <param name="sender">Nút chỉnh sửa</param>
+        /// <param name="e">Event arguments chứa thông tin về mode chỉnh sửa</param>
         public override async void OnEdit(object? sender, EventArgs e)
         {
             ProductInputView productInputView = new ProductInputView();
@@ -109,6 +170,11 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Thêm sản phẩm mới
+        /// </summary>
+        /// <param name="sender">Nút thêm mới</param>
+        /// <param name="e">Event arguments</param>
         public override async void OnAddNew(object? sender, EventArgs e)
         {
             ProductInputView productInputView = new ProductInputView();
@@ -124,53 +190,84 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
-        private void SelectImage(object? sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string imagePath = openFileDialog.FileName;
-                if (sender is ProductInputView productInputView)
-                {
-                    productInputView.SetImage(imagePath);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Xóa sản phẩm
+        /// </summary>
+        /// <param name="sender">Nút xóa</param>
+        /// <param name="e">Event arguments</param>
         public override async void OnDelete(object? sender, EventArgs e)
         {
             if (this.View.SelectedItem is ProductDTO selectedProduct)
             {
-                ((ProductService)Service).DeleteProduct(selectedProduct);
-                ShowMessage("Xóa sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
-                await InitializeAsync();
+                if (ShowConfirmationDialog($"Bạn có chắc chắn muốn xóa sản phẩm {selectedProduct.ProductName}?", "Xác nhận xóa"))
+                {
+                    try
+                    {
+                        ((ProductService)Service).DeleteProduct(selectedProduct);
+                        ShowMessage("Xóa sản phẩm thành công!", "Thông báo", MessageBoxIcon.Information);
+                        await InitializeAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowMessage($"Lỗi khi xóa sản phẩm: {ex.Message}", "Lỗi", MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
+        /// <summary>
+        /// Tìm kiếm sản phẩm theo từ khóa
+        /// </summary>
+        /// <param name="sender">Nút tìm kiếm</param>
+        /// <param name="e">Event arguments</param>
         public override async void OnSearch(object? sender, EventArgs e)
         {
-            string searchValue = this.View.SearchValue?.Trim() ?? string.Empty;
-
-            if (string.IsNullOrEmpty(searchValue))
+            string searchValue = View.SearchValue;
+            if (!string.IsNullOrWhiteSpace(searchValue))
             {
-                await InitializeAsync();
+                try
+                {
+                    var searchResults = products.Where(p => 
+                        p.ProductName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                        p.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
+                    BindingSource.DataSource = searchResults.ToList();
+                }
+                catch (Exception ex)
+                {
+                    ShowMessage($"Lỗi khi tìm kiếm sản phẩm: {ex.Message}", "Lỗi", MessageBoxIcon.Error);
+                }
             }
             else
             {
-                if (products != null)
-                {
-                    var filteredItems = products
-                        .Where(item => item.MatchesSearch(searchValue))
-                        .ToList();
-
-                    BindingSource.DataSource = filteredItems;
-                }
-                else
-                {
-                    MessageBox.Show("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                await InitializeAsync();
             }
         }
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Hiển thị thông báo cho người dùng
+        /// </summary>
+        /// <param name="message">Nội dung thông báo</param>
+        /// <param name="title">Tiêu đề thông báo</param>
+        /// <param name="icon">Icon hiển thị</param>
+        private void ShowMessage(string message, string title, MessageBoxIcon icon)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, icon);
+        }
+
+        /// <summary>
+        /// Hiển thị hộp thoại xác nhận
+        /// </summary>
+        /// <param name="message">Nội dung cần xác nhận</param>
+        /// <param name="title">Tiêu đề hộp thoại</param>
+        /// <returns>True nếu người dùng đồng ý, False nếu không</returns>
+        private bool ShowConfirmationDialog(string message, string title)
+        {
+            return MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        #endregion
     }
 }

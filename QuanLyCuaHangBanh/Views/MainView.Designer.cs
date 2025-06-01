@@ -290,7 +290,6 @@
             tsmi_AccountsPayable.Name = "tsmi_AccountsPayable";
             tsmi_AccountsPayable.Size = new Size(269, 26);
             tsmi_AccountsPayable.Text = "Thống kê công nợ phải trả";
-            tsmi_AccountsPayable.Click += tsmi_AccountsPayable_Click;
             // 
             // trợGiúpToolStripMenuItem
             // 
@@ -342,7 +341,6 @@
             tsmi_AccountsReceiable.Name = "tsmi_AccountsReceiable";
             tsmi_AccountsReceiable.Size = new Size(269, 26);
             tsmi_AccountsReceiable.Text = "Thống kê công nợ phải thu";
-            tsmi_AccountsReceiable.Click += tsmi_AccountsReceiable_Click;
             // 
             // MainView
             // 

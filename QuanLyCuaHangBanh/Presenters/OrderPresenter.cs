@@ -14,19 +14,40 @@ using System.Threading.Tasks; // Thêm để sử dụng DialogResult
 
 namespace QuanLyCuaHangBanh.Presenters
 {
+    /// <summary>
+    /// Presenter cho quản lý đơn hàng
+    /// Xử lý logic nghiệp vụ giữa view và service
+    /// </summary>
+    /// <param name="view">View hiển thị giao diện đơn hàng</param>
+    /// <param name="orderService">Service xử lý nghiệp vụ đơn hàng</param>
     public class OrderPresenter(IOrderView view, OrderService orderService) : PresenterBase<Order>(view, (IService)orderService)
     {
+        /// <summary>
+        /// Khởi tạo dữ liệu ban đầu
+        /// - Tải danh sách đơn hàng
+        /// - Binding dữ liệu lên view
+        /// </summary>
         public override async Task InitializeAsync()
         {
             BindingSource.DataSource = await ((OrderService)Service).GetAllOrdersAsDto();
         }
 
+        /// <summary>
+        /// Xử lý xuất dữ liệu đơn hàng ra Excel
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override async void OnExport(object? sender, EventArgs e)
         {
             var (orderTable1, orderTable2) = await ((OrderService)Service).ExportOrdersToDataTables((IEnumerable<OrderDTO>)BindingSource.List);
             ExcelHandler.ExportExcel("Đơn hàng", "Đơn hàng", "Chi tiết đơn hàng", orderTable1, orderTable2);
         }
 
+        /// <summary>
+        /// Xử lý nhập dữ liệu đơn hàng từ Excel
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override void OnImport(object? sender, EventArgs e)
         {
             ExcelHandler.ImportExcel(
@@ -36,6 +57,11 @@ namespace QuanLyCuaHangBanh.Presenters
             InitializeAsync(); // Load lại dữ liệu sau khi import
         }
 
+        /// <summary>
+        /// Xử lý chỉnh sửa đơn hàng
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override void OnEdit(object? sender, EventArgs e)
         {
             OrderInputView orderInputView = new OrderInputView((OrderDTO)View.SelectedItem);
@@ -50,6 +76,11 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Xử lý thêm đơn hàng mới
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override void OnAddNew(object? sender, EventArgs e)
         {
             OrderInputView orderInputView = new OrderInputView();
@@ -64,6 +95,11 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Xử lý xóa đơn hàng
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override void OnDelete(object? sender, EventArgs e)
         {
             if (BindingSource.Current is OrderDTO orderDTO)
@@ -74,6 +110,11 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
+        /// <summary>
+        /// Xử lý tìm kiếm đơn hàng
+        /// </summary>
+        /// <param name="sender">Đối tượng gọi sự kiện</param>
+        /// <param name="e">Tham số sự kiện</param>
         public override void OnSearch(object? sender, EventArgs e)
         {
             throw new NotImplementedException();

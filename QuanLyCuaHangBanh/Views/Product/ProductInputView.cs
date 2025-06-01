@@ -7,28 +7,92 @@ using System.ComponentModel;
 
 namespace QuanLyCuaHangBanh.Views
 {
+    /// <summary>
+    /// Record lưu trữ thông tin liên kết giữa Product_Unit và Inventory
+    /// </summary>
+    /// <param name="Product_UnitID">ID của đơn vị sản phẩm</param>
+    /// <param name="InventoryID">ID của kho hàng</param>
     public record ProductUnit_Inventory(
         int Product_UnitID,
         int InventoryID
     );
+
+    /// <summary>
+    /// Form nhập liệu cho sản phẩm
+    /// Cho phép thêm mới và chỉnh sửa thông tin sản phẩm, bao gồm:
+    /// - Thông tin cơ bản sản phẩm
+    /// - Danh sách đơn vị tính
+    /// - Thông tin kho hàng
+    /// - Hình ảnh sản phẩm
+    /// </summary>
     public partial class ProductInputView : Form
     {
-        private QLCHB_DBContext context = new QLCHB_DBContext();
+        #region Fields & Properties
 
-        private ProductDTO? _productDto;
+        /// <summary>
+        /// Database context để truy cập dữ liệu
+        /// </summary>
+        private readonly QLCHB_DBContext context = new QLCHB_DBContext();
 
+        /// <summary>
+        /// DTO chứa thông tin sản phẩm cần chỉnh sửa (null nếu thêm mới)
+        /// </summary>
+        private readonly ProductDTO? _productDto;
+
+        /// <summary>
+        /// Đường dẫn đến hình ảnh sản phẩm
+        /// </summary>
         private string? _imagePath;
 
+        /// <summary>
+        /// Sự kiện hiển thị form nhập liệu đơn vị tính
+        /// </summary>
         public EventHandler ShowUnitInput;
+
+        /// <summary>
+        /// Sự kiện hiển thị form nhập liệu danh mục
+        /// </summary>
         public EventHandler ShowCategoryInput;
+
+        /// <summary>
+        /// Sự kiện hiển thị form nhập liệu nhà cung cấp
+        /// </summary>
         public EventHandler ShowProducerInput;
+
+        /// <summary>
+        /// Sự kiện chọn hình ảnh sản phẩm
+        /// </summary>
         public EventHandler SelectImage;
 
-        public BindingSource bs = new BindingSource();
-        public BindingList<Product_UnitDTO> Product_UnitDTOs => product_Units;
-        public BindingList<Product_UnitDTO> product_Units = new BindingList<Product_UnitDTO>();
+        /// <summary>
+        /// Binding source cho danh sách đơn vị tính
+        /// </summary>
+        public readonly BindingSource bs = new BindingSource();
 
-        private bool _isEdit;
+        /// <summary>
+        /// Danh sách đơn vị tính của sản phẩm
+        /// </summary>
+        private BindingList<Product_UnitDTO> product_Units = new BindingList<Product_UnitDTO>();
+
+        /// <summary>
+        /// Property public để truy cập danh sách đơn vị tính
+        /// </summary>
+        public BindingList<Product_UnitDTO> Product_UnitDTOs => product_Units;
+
+        /// <summary>
+        /// Flag đánh dấu form đang ở chế độ chỉnh sửa
+        /// </summary>
+        private readonly bool _isEdit;
+
+        #endregion
+
+        #region Constructor & Load
+
+        /// <summary>
+        /// Khởi tạo form nhập liệu sản phẩm
+        /// </summary>
+        /// <param name="productDto">DTO sản phẩm cần chỉnh sửa (null nếu thêm mới)</param>
+        /// <param name="isEdit">True nếu ở chế độ chỉnh sửa, False nếu ở chế độ xem</param>
         public ProductInputView(ProductDTO? productDto = null, bool isEdit = true)
         {
             InitializeComponent();
@@ -37,34 +101,70 @@ namespace QuanLyCuaHangBanh.Views
             tabControl1.SelectedIndexChanged += tabControl1_TabIndexChanged;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện load form
+        /// - Khởi tạo các controls
+        /// - Nạp dữ liệu cho các combobox
+        /// - Thiết lập data bindings
+        /// </summary>
         private void ProductInputView_Load(object sender, EventArgs e)
         {
+            // Thiết lập trạng thái controls khi ở chế độ xem
             if(!_isEdit)
             {
-                cbb_Units.Enabled = false;
-                cbb_Units.SelectedIndex = -1;
-                cbb_Units.Text = "";
-                nmr_Conversion.Value = 1;
-                nmr_UnitPrice.Value = 0;
-                nmr_Quantity.Value = 0;
-                btn_EditUnit.Enabled = false;
-                btn_DeleteUnit.Enabled = false;
-                btn_AddUnit.Enabled = false;
-                btn_Cancel.Enabled = false;
-                btn_Save.Enabled = false;
-                nmr_Quantity.Enabled = false;
-                nmr_TotalQuantity.Enabled = false;
-                nmr_UnitPrice.Enabled = false;
-                cbb_Categories.Enabled = false;
-                cbb_Producers.Enabled = false;
-                cbb_Manufacturers.Enabled = false;
-                mttb_Description.Enabled = false;
-                pictureBox.Enabled = false;
-
-                dgv_ProductUnitList.Columns["UnitName"].ReadOnly = true;
-                
+                SetupViewMode();
             }
 
+            // Nạp dữ liệu cho các combobox
+            LoadComboBoxData();
+
+            // Nạp thông tin sản phẩm nếu ở chế độ chỉnh sửa
+            if (_productDto != null)
+            {
+                LoadExistingProduct();
+            }
+            else
+            {
+                InitializeNewProduct();
+            }
+
+            // Thiết lập data bindings
+            SetupDataBindings();
+        }
+
+        /// <summary>
+        /// Thiết lập trạng thái các controls khi ở chế độ xem
+        /// </summary>
+        private void SetupViewMode()
+        {
+            cbb_Units.Enabled = false;
+            cbb_Units.SelectedIndex = -1;
+            cbb_Units.Text = "";
+            nmr_Conversion.Value = 1;
+            nmr_UnitPrice.Value = 0;
+            nmr_Quantity.Value = 0;
+            btn_EditUnit.Enabled = false;
+            btn_DeleteUnit.Enabled = false;
+            btn_AddUnit.Enabled = false;
+            btn_Cancel.Enabled = false;
+            btn_Save.Enabled = false;
+            nmr_Quantity.Enabled = false;
+            nmr_TotalQuantity.Enabled = false;
+            nmr_UnitPrice.Enabled = false;
+            cbb_Categories.Enabled = false;
+            cbb_Producers.Enabled = false;
+            cbb_Manufacturers.Enabled = false;
+            mttb_Description.Enabled = false;
+            pictureBox.Enabled = false;
+
+            dgv_ProductUnitList.Columns["UnitName"].ReadOnly = true;
+        }
+
+        /// <summary>
+        /// Nạp dữ liệu cho các combobox từ database
+        /// </summary>
+        private void LoadComboBoxData()
+        {
             cbb_Manufacturers.DataSource = context.Manufacturers.AsNoTracking().ToList();
             cbb_Manufacturers.DisplayMember = "Name";
             cbb_Manufacturers.ValueMember = "ID";
@@ -80,75 +180,100 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Units.DataSource = context.Units.AsNoTracking().ToList();
             cbb_Units.DisplayMember = "Name";
             cbb_Units.ValueMember = "ID";
+        }
 
-            if (_productDto != null)
+        /// <summary>
+        /// Nạp thông tin sản phẩm hiện có khi ở chế độ chỉnh sửa
+        /// </summary>
+        private void LoadExistingProduct()
+        {
+            // Chọn đơn vị tính mặc định
+            foreach (var unit in _productDto.Units)
             {
-                foreach (var unit in _productDto.Units)
+                if (unit.IsSelected)
                 {
-                    if (unit.IsSelected)
-                    {
-                        cbb_Units.SelectedValue = unit.ID;
-                        break;
-                    }
+                    cbb_Units.SelectedValue = unit.ID;
+                    break;
                 }
-
-                tb_ProductName.Text = _productDto.ProductName;
-                mttb_Description.Text = _productDto.Description;
-                cbb_Categories.SelectedValue = _productDto.CategoryId;
-                cbb_Producers.SelectedValue = _productDto.ProducerId;
-                nmr_UnitPrice.Value = _productDto.UnitPrice;
-                cbb_Manufacturers.SelectedValue = _productDto.ManufacturerId;
-                //dtp_ProductionDate.Value = _productDto.ProductionDate.ToDateTime(new TimeOnly(0, 0, 0));
-                //dtp_ExpirationDate.Value = _productDto.ExpirationDate.ToDateTime(new TimeOnly(0, 0, 0));
-                pictureBox.ImageLocation = _productDto.ImagePath;
-                _imagePath = _productDto.ImagePath;
-
-                nmr_Quantity.Value = _productDto.Quantity;
-                nmr_TotalQuantity.Value = _productDto.TotalQuantity;
-
-                product_Units = new BindingList<Product_UnitDTO>(context.ProductUnits
-                    .Include(o => o.Product)
-                    .Include(o => o.Inventory)
-                    .Where(o => o.ProductID == _productDto.ProductId)
-                    .Select(o => new Product_UnitDTO(
-                        o.ID,
-                        o.ProductID,
-                        o.UnitID,
-                        o.Unit.Name,
-                        // Xử lý Inventory.ID:
-                        // Kiểm tra o.Inventory có null không, nếu null thì trả về 0
-                        o.Inventory != null ? o.Inventory.ID : 0,
-                        o.ConversionRate,
-                        o.UnitPrice,
-                        // Xử lý Inventory.Quantity:
-                        // Kiểm tra o.Inventory có null không, nếu null thì trả về 0
-                        o.Inventory != null ? o.Inventory.Quantity : 0,
-                        o.Product.BaseUnitID == o.UnitID // Kiểm tra xem đây có phải là đơn vị cơ bản không 
-                    )
-                    {
-                        status = DTO.Base.Status.None
-                    }).ToList());
-
-                bs.DataSource = product_Units;
-
-                dgv_ProductUnitList.DataSource = bs;
-            }
-            else
-            {
-                product_Units = new BindingList<Product_UnitDTO>();
-                bs.DataSource = product_Units;
-                dgv_ProductUnitList.DataSource = bs;
             }
 
+            // Nạp thông tin cơ bản
+            tb_ProductName.Text = _productDto.ProductName;
+            mttb_Description.Text = _productDto.Description;
+            cbb_Categories.SelectedValue = _productDto.CategoryId;
+            cbb_Producers.SelectedValue = _productDto.ProducerId;
+            nmr_UnitPrice.Value = _productDto.UnitPrice;
+            cbb_Manufacturers.SelectedValue = _productDto.ManufacturerId;
+            pictureBox.ImageLocation = _productDto.ImagePath;
+            _imagePath = _productDto.ImagePath;
 
+            nmr_Quantity.Value = _productDto.Quantity;
+            nmr_TotalQuantity.Value = _productDto.TotalQuantity;
+
+            // Nạp danh sách đơn vị tính
+            LoadProductUnits();
+        }
+
+        /// <summary>
+        /// Nạp danh sách đơn vị tính của sản phẩm
+        /// </summary>
+        private void LoadProductUnits()
+        {
+            product_Units = new BindingList<Product_UnitDTO>(context.ProductUnits
+                .Include(o => o.Product)
+                .Include(o => o.Inventory)
+                .Where(o => o.ProductID == _productDto.ProductId)
+                .Select(o => new Product_UnitDTO(
+                    o.ID,
+                    o.ProductID,
+                    o.UnitID,
+                    o.Unit.Name,
+                    o.Inventory != null ? o.Inventory.ID : 0,
+                    o.ConversionRate,
+                    o.UnitPrice,
+                    o.Inventory != null ? o.Inventory.Quantity : 0,
+                    o.Product.BaseUnitID == o.UnitID
+                )
+                {
+                    status = DTO.Base.Status.None
+                }).ToList());
+
+            bs.DataSource = product_Units;
+            dgv_ProductUnitList.DataSource = bs;
+        }
+
+        /// <summary>
+        /// Khởi tạo sản phẩm mới
+        /// </summary>
+        private void InitializeNewProduct()
+        {
+            product_Units = new BindingList<Product_UnitDTO>();
+            bs.DataSource = product_Units;
+            dgv_ProductUnitList.DataSource = bs;
+        }
+
+        /// <summary>
+        /// Thiết lập data bindings giữa controls và properties
+        /// </summary>
+        private void SetupDataBindings()
+        {
             cbb_Units.DataBindings.Add("SelectedValue", bs, "UnitID", true, DataSourceUpdateMode.Never);
             cbb_Units.DataBindings.Add("Text", bs, "UnitName", true, DataSourceUpdateMode.Never);
             nmr_Conversion.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.Never);
             nmr_UnitPrice.DataBindings.Add("Value", bs, "UnitPrice", true, DataSourceUpdateMode.Never);
             nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.Never);
-
         }
 
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút Lưu
+        /// - Tạo đối tượng sản phẩm mới
+        /// - Kiểm tra dữ liệu hợp lệ
+        /// - Đóng form và trả về kết quả
+        /// </summary>
         private void btn_Save_Click(object sender, EventArgs e)
         {
             Models.Product product = new Models.Product
@@ -158,16 +283,10 @@ namespace QuanLyCuaHangBanh.Views
                 CategoryID = (int?)cbb_Categories?.SelectedValue ?? 0,
                 ProducerID = (int?)cbb_Producers?.SelectedValue ?? 0,
                 ManufacturerID = (int?)cbb_Manufacturers?.SelectedValue,
-                //ProductionDate = dtp_ProductionDate?.Value != null ? DateOnly.FromDateTime(dtp_ProductionDate.Value) : default,
-                //ExpirationDate = dtp_ExpirationDate?.Value != null ? DateOnly.FromDateTime(dtp_ExpirationDate.Value) : default,
-                Image = pictureBox?.ImageLocation
+                Image = _productDto != null ? _productDto.ImagePath : (pictureBox?.ImageLocation ?? string.Empty)
             };
 
-            if (_productDto != null)
-            {
-                product.Image = _imagePath;
-            }
-
+            // Kiểm tra đơn vị cơ bản
             foreach (var unit in product_Units)
             {
                 if (unit.IsChecked)
@@ -181,24 +300,24 @@ namespace QuanLyCuaHangBanh.Views
                 }
             }
 
-            this.Tag = (product);
-
+            this.Tag = product;
             this.DialogResult = DialogResult.OK;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn link thêm đơn vị tính mới
+        /// </summary>
         private void llb_AddUnit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ShowUnitInput?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn link thêm danh mục mới
+        /// </summary>
         private void llb_AddCategory_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ShowCategoryInput?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void llb_AddProducer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ShowProducerInput?.Invoke(this, EventArgs.Empty);
         }
 
         private void pictureBox_Click(object sender, EventArgs e)
@@ -206,6 +325,10 @@ namespace QuanLyCuaHangBanh.Views
             SelectImage?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Cập nhật hình ảnh cho pictureBox
+        /// </summary>
+        /// <param name="imagePath">Đường dẫn hình ảnh</param>
         internal void SetImage(string imagePath)
         {
             // Kiểm tra nếu đường dẫn hình ảnh hợp lệ
@@ -222,6 +345,9 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi giá trị ô combobox đơn vị tính
+        /// </summary>
         private void dgv_ProductUnitList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -263,17 +389,22 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút thêm đơn vị tính
+        /// Uses <see cref="QuanLyCuaHangBanh.Services.ProductService.UpdateProduct"/>
+        /// Uses <see cref="QuanLyCuaHangBanh.Services.ProductService.AddNewProduct"/>
+        /// </summary>
         private void btn_AddUnit_Click(object sender, EventArgs e)
         {
             var productUnit = new Product_UnitDTO(
-                0,
+                bs.Count + 1, // ID tự động tăng (Không ảnh hưởng đến việc thêm hay sửa do việc đó được sử lý trong ProductService)
                 Convert.ToInt32(cbb_Producers.SelectedValue),
                 Convert.ToInt32(cbb_Units.SelectedValue),
                 cbb_Units.Text,
-                0,
+                0, // Tồn kho chưa được tạo trong database
                 nmr_Conversion.Value,
                 nmr_UnitPrice.Value,
-                (int)nmr_Quantity.Value
+                0 // Mặc định số lượng là 0 khi thêm đơn vị tính mới, số lượng sẽ được cập nhật khi nhập hàngs
             );
 
             if (product_Units.Any(u => u.UnitID == productUnit.UnitID && u.ProductID == _productDto?.ProductId))
@@ -293,6 +424,9 @@ namespace QuanLyCuaHangBanh.Views
             product_Units.Add(productUnit);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút chỉnh sửa đơn vị tính
+        /// </summary>
         private void btn_EditUnit_Click(object sender, EventArgs e)
         {
             if (dgv_ProductUnitList.SelectedRows.Count > 0 && cbb_Units.SelectedIndex != -1)
@@ -321,6 +455,9 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút xóa đơn vị tính
+        /// </summary>
         private void btn_DeleteUnit_Click(object sender, EventArgs e)
         {
             if (bs.Current is Product_UnitDTO selectedProduct)
@@ -341,6 +478,9 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi thay đổi index của tabControl
+        /// </summary>
         private void tabControl1_TabIndexChanged(object sender, EventArgs e)
         {
             switch (tabControl1.SelectedIndex)
@@ -398,6 +538,9 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
+        /// <summary>
+        /// Reset các giá trị đơn vị tính
+        /// </summary>
         private void ClearProductUnitInputControls()
         {
             cbb_Units.SelectedIndex = -1; // Chọn không có gì
@@ -407,9 +550,14 @@ namespace QuanLyCuaHangBanh.Views
             // cbb_Units.Focus(); // Có thể focus hoặc không tùy ý
         }
 
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút hủy
+        /// </summary>
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
             ClearProductUnitInputControls();
         }
+
+        #endregion
     }
 }
