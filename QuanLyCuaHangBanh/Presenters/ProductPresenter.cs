@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using QuanLyCuaHangBanh.Base;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
-using QuanLyCuaHangBanh.Helpers;
 using QuanLyCuaHangBanh.Views.Product;
 using QuanLyCuaHangBanh.Uitls;
 using System.Data;
@@ -222,24 +221,24 @@ namespace QuanLyCuaHangBanh.Presenters
         /// <param name="e">Event arguments</param>
         public override async void OnSearch(object? sender, EventArgs e)
         {
-            string searchValue = View.SearchValue;
-            if (!string.IsNullOrWhiteSpace(searchValue))
+            string searchValue = View.SearchValue.ToLower();
+            if (string.IsNullOrWhiteSpace(searchValue))
             {
-                try
-                {
-                    var searchResults = products.Where(p => 
-                        p.ProductName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
-                        p.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
-                    BindingSource.DataSource = searchResults.ToList();
-                }
-                catch (Exception ex)
-                {
-                    ShowMessage($"Lỗi khi tìm kiếm sản phẩm: {ex.Message}", "Lỗi", MessageBoxIcon.Error);
-                }
+                await InitializeAsync();
             }
             else
             {
-                await InitializeAsync();
+                if (products != null)
+                {
+                    var filtered = products
+                        .Where(p => p.MatchesSearch(searchValue))
+                        .ToList();
+                    BindingSource.DataSource = filtered;
+                }
+                else
+                {
+                    MessageBox.Show("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         #endregion

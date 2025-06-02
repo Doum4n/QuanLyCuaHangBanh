@@ -106,5 +106,10 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 SearchEvent?.Invoke(sender, e);
             }
         }
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            searchValue = toolStripTextBox1.Text.Trim();
+        }
     }
 }

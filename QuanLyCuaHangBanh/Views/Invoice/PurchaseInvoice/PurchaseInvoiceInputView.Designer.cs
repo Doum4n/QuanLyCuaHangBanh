@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             panel3 = new Panel();
             dgv_ProductList = new DataGridView();
@@ -146,6 +146,7 @@
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_ProductList.Size = new Size(1310, 275);
             dgv_ProductList.TabIndex = 0;
+            dgv_ProductList.RowPrePaint += dgv_ProductList_RowPrePaint;
             // 
             // ID
             // 
@@ -190,9 +191,9 @@
             // Price
             // 
             Price.DataPropertyName = "Price";
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N0";
-            Price.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            Price.DefaultCellStyle = dataGridViewCellStyle1;
             Price.HeaderText = "Giá tiền";
             Price.MinimumWidth = 6;
             Price.Name = "Price";

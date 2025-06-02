@@ -11,7 +11,7 @@ namespace QuanLyCuaHangBanh.Views
 {
     public partial class GoodsReceiptNoteInputView : Form
     {
-        private QLCHB_DBContext? context = new QLCHB_DBContext();
+        private QLCHB_DBContext context = new QLCHB_DBContext();
         private GoodsReceiptNoteDTO? dTO;
 
 
@@ -60,6 +60,7 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Units.DisplayMember = "Name";
             cbb_Units.ValueMember = "ID";
 
+            CreatorName.Text = Session.EmployeeName;
 
             if (dTO != null)
             {
@@ -96,7 +97,6 @@ namespace QuanLyCuaHangBanh.Views
                 bs.DataSource = productList;
                 dgv_ProductList.DataSource = bs;
 
-                tb_Id.DataBindings.Add("Text", bs, "ID", true, DataSourceUpdateMode.OnPropertyChanged);
                 cbb_Categories.DataBindings.Add("SelectedValue", bs, "CategoryId", true, DataSourceUpdateMode.OnPropertyChanged);
                 cbb_Products.DataBindings.Add("SelectedValue", bs, "ProductId", true, DataSourceUpdateMode.OnPropertyChanged);
                 nmr_Quantity.DataBindings.Add("Value", bs, "Quantity", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -164,7 +164,7 @@ namespace QuanLyCuaHangBanh.Views
         private void btn_Add_Click(object sender, EventArgs e)
         {
             var productReceiptDTO = new ProductReceiptDTO(
-               0 , // Assuming ID is auto-generated
+               0, // Assuming ID is auto-generated
                 (int)cbb_Products.SelectedValue,
                 cbb_Products.Text,
                 0, // Vì sản phẩm có sẵn
@@ -246,6 +246,43 @@ namespace QuanLyCuaHangBanh.Views
             if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
             {
                 selectedProductUnitId = selectedUnit.ID;
+
+                var productUnit = context.ProductUnits.Where(p => p.ID == selectedUnit.ID).FirstOrDefault();
+                if (productUnit != null)
+                {
+                    nmr_ConversionRate.Value = productUnit.ConversionRate;
+                }
+            }
+        }
+
+        private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Categories.SelectedItem is Models.Category selectedCategory)
+            {
+                var product = context.Products.Where(p => p.CategoryID == selectedCategory.ID).ToList();
+                if (product != null)
+                {
+                    cbb_Products.DataSource = product;
+                    cbb_Products.DisplayMember = "Name";
+                    cbb_Products.ValueMember = "ID";
+                }
+            }
+        }
+
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgv_ProductList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductList.Rows.Count)
+            {
+                var row = dgv_ProductList.Rows[e.RowIndex];
+                if (row.DataBoundItem is ProductReceiptDTO product)
+                {
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
+                }
             }
         }
     }

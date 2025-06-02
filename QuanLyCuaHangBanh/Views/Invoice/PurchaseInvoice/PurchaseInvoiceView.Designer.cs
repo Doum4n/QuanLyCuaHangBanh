@@ -31,6 +31,15 @@
             miniToolStrip = new ToolStrip();
             groupBox1 = new GroupBox();
             dgv_PurchaseInvoiceList = new DataGridView();
+            ID = new DataGridViewTextBoxColumn();
+            EmployeeName = new DataGridViewTextBoxColumn();
+            CreatedDate = new DataGridViewTextBoxColumn();
+            SupplierName = new DataGridViewTextBoxColumn();
+            Status = new DataGridViewTextBoxColumn();
+            Note = new DataGridViewTextBoxColumn();
+            TotalAmount = new DataGridViewTextBoxColumn();
+            TotalUnpaid = new DataGridViewTextBoxColumn();
+            CreditPeriod = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btn_PrintInvoice = new MaterialSkin.Controls.MaterialButton();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
@@ -42,15 +51,6 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tsbtn_Import = new ToolStripButton();
             tsbnt_Export = new ToolStripButton();
-            ID = new DataGridViewTextBoxColumn();
-            EmployeeName = new DataGridViewTextBoxColumn();
-            CreatedDate = new DataGridViewTextBoxColumn();
-            SupplierName = new DataGridViewTextBoxColumn();
-            Status = new DataGridViewTextBoxColumn();
-            Note = new DataGridViewTextBoxColumn();
-            TotalAmount = new DataGridViewTextBoxColumn();
-            TotalUnpaid = new DataGridViewTextBoxColumn();
-            CreditPeriod = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_PurchaseInvoiceList).BeginInit();
             panel1.SuspendLayout();
@@ -105,6 +105,69 @@
             dgv_PurchaseInvoiceList.Size = new Size(1222, 325);
             dgv_PurchaseInvoiceList.TabIndex = 2;
             dgv_PurchaseInvoiceList.SelectionChanged += dgv_PurchaseInvoiceList_SelectionChanged;
+            // 
+            // ID
+            // 
+            ID.DataPropertyName = "ID";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 6;
+            ID.Name = "ID";
+            // 
+            // EmployeeName
+            // 
+            EmployeeName.DataPropertyName = "EmployeeName";
+            EmployeeName.HeaderText = "Người lập";
+            EmployeeName.MinimumWidth = 6;
+            EmployeeName.Name = "EmployeeName";
+            // 
+            // CreatedDate
+            // 
+            CreatedDate.DataPropertyName = "CreatedDate";
+            CreatedDate.HeaderText = "Ngày lập";
+            CreatedDate.MinimumWidth = 6;
+            CreatedDate.Name = "CreatedDate";
+            // 
+            // SupplierName
+            // 
+            SupplierName.DataPropertyName = "SupplierName";
+            SupplierName.HeaderText = "Nhà cung cấp";
+            SupplierName.MinimumWidth = 6;
+            SupplierName.Name = "SupplierName";
+            // 
+            // Status
+            // 
+            Status.DataPropertyName = "Status";
+            Status.HeaderText = "Trạng thái";
+            Status.MinimumWidth = 6;
+            Status.Name = "Status";
+            // 
+            // Note
+            // 
+            Note.DataPropertyName = "Note";
+            Note.HeaderText = "Ghi chú";
+            Note.MinimumWidth = 6;
+            Note.Name = "Note";
+            // 
+            // TotalAmount
+            // 
+            TotalAmount.DataPropertyName = "TotalAmount";
+            TotalAmount.HeaderText = "Tổng thành tiền";
+            TotalAmount.MinimumWidth = 6;
+            TotalAmount.Name = "TotalAmount";
+            // 
+            // TotalUnpaid
+            // 
+            TotalUnpaid.DataPropertyName = "TotalUnpaid";
+            TotalUnpaid.HeaderText = "Tổng chưa trả";
+            TotalUnpaid.MinimumWidth = 6;
+            TotalUnpaid.Name = "TotalUnpaid";
+            // 
+            // CreditPeriod
+            // 
+            CreditPeriod.DataPropertyName = "CreditPeriod";
+            CreditPeriod.HeaderText = "Thời hạn tín dụng";
+            CreditPeriod.MinimumWidth = 6;
+            CreditPeriod.Name = "CreditPeriod";
             // 
             // panel1
             // 
@@ -214,6 +277,7 @@
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new Size(100, 27);
             toolStripTextBox1.KeyDown += toolStripTextBox1_KeyDown;
+            toolStripTextBox1.TextChanged += toolStripTextBox1_TextChanged;
             // 
             // tsbtn_Search
             // 
@@ -243,69 +307,6 @@
             tsbnt_Export.Size = new Size(52, 24);
             tsbnt_Export.Text = "Xuất...";
             tsbnt_Export.Click += tsbnt_Export_Click;
-            // 
-            // ID
-            // 
-            ID.DataPropertyName = "ID";
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            // 
-            // EmployeeName
-            // 
-            EmployeeName.DataPropertyName = "EmployeeName";
-            EmployeeName.HeaderText = "Người lập";
-            EmployeeName.MinimumWidth = 6;
-            EmployeeName.Name = "EmployeeName";
-            // 
-            // CreatedDate
-            // 
-            CreatedDate.DataPropertyName = "CreatedDate";
-            CreatedDate.HeaderText = "Ngày lập";
-            CreatedDate.MinimumWidth = 6;
-            CreatedDate.Name = "CreatedDate";
-            // 
-            // SupplierName
-            // 
-            SupplierName.DataPropertyName = "SupplierName";
-            SupplierName.HeaderText = "Nhà cung cấp";
-            SupplierName.MinimumWidth = 6;
-            SupplierName.Name = "SupplierName";
-            // 
-            // Status
-            // 
-            Status.DataPropertyName = "Status";
-            Status.HeaderText = "Trạng thái";
-            Status.MinimumWidth = 6;
-            Status.Name = "Status";
-            // 
-            // Note
-            // 
-            Note.DataPropertyName = "Note";
-            Note.HeaderText = "Ghi chú";
-            Note.MinimumWidth = 6;
-            Note.Name = "Note";
-            // 
-            // TotalAmount
-            // 
-            TotalAmount.DataPropertyName = "TotalAmount";
-            TotalAmount.HeaderText = "Tổng thành tiền";
-            TotalAmount.MinimumWidth = 6;
-            TotalAmount.Name = "TotalAmount";
-            // 
-            // TotalUnpaid
-            // 
-            TotalUnpaid.DataPropertyName = "TotalUnpaid";
-            TotalUnpaid.HeaderText = "Tổng chưa trả";
-            TotalUnpaid.MinimumWidth = 6;
-            TotalUnpaid.Name = "TotalUnpaid";
-            // 
-            // CreditPeriod
-            // 
-            CreditPeriod.DataPropertyName = "CreditPeriod";
-            CreditPeriod.HeaderText = "Thời hạn tín dụng";
-            CreditPeriod.MinimumWidth = 6;
-            CreditPeriod.Name = "CreditPeriod";
             // 
             // PurchaseInvoiceView
             // 

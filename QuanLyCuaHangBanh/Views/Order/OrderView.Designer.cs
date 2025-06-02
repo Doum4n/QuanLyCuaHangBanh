@@ -224,6 +224,8 @@
             // 
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new Size(100, 27);
+            toolStripTextBox1.KeyDown += toolStripTextBox1_KeyDown;
+            toolStripTextBox1.TextChanged += toolStripTextBox1_TextChanged;
             // 
             // tsbtn_Search
             // 
@@ -232,6 +234,7 @@
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
             tsbtn_Search.Text = "Tìm kiếm";
+            tsbtn_Search.Click += tsbtn_Search_Click;
             // 
             // toolStripSeparator1
             // 

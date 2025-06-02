@@ -100,12 +100,19 @@ namespace QuanLyCuaHangBanh.Views.Unit
 
         private void tstb_Search_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(sender, e);
+            }
         }
 
         private void tstb_Search_TextChanged(object sender, EventArgs e)
         {
             _searchValue = tstb_Search.Text.Trim();
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
             SearchEvent?.Invoke(sender, e);
         }
     }

@@ -87,7 +87,7 @@ namespace QuanLyCuaHangBanh
         private void InitializeFormState()
         {
             tsslb_EmployeeName.Text = "Chưa đăng nhập";
-            DisableAllMenuItems();
+            // DisableAllMenuItems();
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace QuanLyCuaHangBanh
             if (loginView.ShowDialog() == DialogResult.OK)
             {
                 tsslb_EmployeeName.Text = $"{Session.Role}: {Session.EmployeeName}";
-                applyPermissions();
+                // applyPermissions();
             }
             else
             {

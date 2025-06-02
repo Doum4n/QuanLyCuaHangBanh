@@ -21,7 +21,7 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// Database context để truy cập dữ liệu
         /// </summary>
         private readonly QLCHB_DBContext context = new QLCHB_DBContext();
-        
+
         /// <summary>
         /// DTO chứa thông tin đơn hàng cần chỉnh sửa (null nếu thêm mới)
         /// </summary>
@@ -36,7 +36,7 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// Danh sách sản phẩm trong đơn hàng
         /// </summary>
         private BindingList<ProductOrderDTO> _products = new BindingList<ProductOrderDTO>();
-        
+
         /// <summary>
         /// Property public để truy cập danh sách sản phẩm
         /// </summary>
@@ -51,6 +51,11 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// Tổng số tiền cần thanh toán cho đơn hàng
         /// </summary>
         private decimal totalPaymentRequired;
+
+        /// <summary>
+        /// Danh sách phương thức thanh toán
+        /// </summary>
+        private BindingList<string> paymentMethod = new BindingList<string>();
 
         #endregion
 
@@ -127,7 +132,7 @@ namespace QuanLyCuaHangBanh.Views.Order
         private void LoadExistingOrder()
         {
             cbb_Customer.Enabled = false;
-            
+
             cbb_Customer.Text = orderDTO.CustomerName;
             rtb_DeliverAddress.Text = orderDTO.DeliveryAddress;
             dtpicker.Value = orderDTO.OrderDate;
@@ -241,17 +246,20 @@ namespace QuanLyCuaHangBanh.Views.Order
             if (dgv_ProductList.CurrentRow?.DataBoundItem is ProductOrderDTO productOrderDTO)
             {
                 productOrderDTO.ProductName = cbb_Products.Text;
-                productOrderDTO.CategoryId = cbb_Products.SelectedValue != null ? 
-                    (int)cbb_Products.SelectedValue : 
-                    throw new Exception("Xin chọn sản phẩm");
+                productOrderDTO.CategoryId = cbb_Products.SelectedValue != null ? (int)cbb_Products.SelectedValue : throw new Exception("Xin chọn sản phẩm");
                 productOrderDTO.UnitName = cbb_Units.Text;
                 productOrderDTO.ProductUnitId = selectedProductUnitId;
                 productOrderDTO.ConversionRate = nmr_ConversionRate.Value;
                 productOrderDTO.Quantity = Convert.ToInt32(nmr_Quantity.Value);
                 productOrderDTO.Note = rtb_ProductNote.Text;
                 productOrderDTO.Price = nmr_Price.Value;
-                productOrderDTO.Status = DTO.Base.Status.Modified;
-                
+
+                // Nếu sản phẩm mới được thêm vào thì không cập nhật trạng thái (giữ nguyên trạng thái)
+                if (productOrderDTO.Status != DTO.Base.Status.New)
+                {
+                    productOrderDTO.Status = DTO.Base.Status.Modified;
+                }
+
                 bs.ResetBindings(false);
                 UpdateTotalPaymentRequired();
             }
@@ -353,6 +361,16 @@ namespace QuanLyCuaHangBanh.Views.Order
             if (cbb_Customer.SelectedItem is Models.Customer selectedCustomer)
             {
                 tb_PhoneNumber.Text = selectedCustomer.PhoneNumber;
+                tb_TypeCustomer.Text = selectedCustomer.Type;
+
+                if (selectedCustomer.Type == "Khách hàng thân thiết" || selectedCustomer.Type == "Khách hàng VIP" || selectedCustomer.Type == "Khách hàng doanh nghiệp")
+                {
+                    paymentMethod.Add("Ghi nợ");
+                }
+                else
+                {
+                    paymentMethod.Remove("Ghi nợ");
+                }
             }
         }
 
@@ -406,8 +424,8 @@ namespace QuanLyCuaHangBanh.Views.Order
                     .Where(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnitId)
                     .Sum(g => g.Inventory != null ? g.Inventory.Quantity : -1);
 
-                nmr_Quantity.Maximum = totalQuantity != -1 ? 
-                    totalQuantity : 
+                nmr_Quantity.Maximum = totalQuantity != -1 ?
+                    totalQuantity :
                     throw new Exception("Không tìm thấy kho hàng");
 
                 nmr_ConversionRate.Value = _productUnit.ConversionRate;
@@ -435,6 +453,9 @@ namespace QuanLyCuaHangBanh.Views.Order
                     "Đã hủy"
                 };
 
+                //Chỉ được chọn trạng thái theo thứ tự từ trên xuống dưới
+                //Các trạng thái trước đó sẽ không được hiển thị
+
                 int currentIndex = allStatuses.IndexOf(cbb_Status.Text);
 
                 if (currentIndex != -1)
@@ -456,12 +477,8 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// </summary>
         private void AdjustPaymentMethods()
         {
-            List<string> paymentMethod = new List<string>()
-            {
-                "Tiền mặt",
-                "Chuyển khoản",
-                "Thẻ tín dụng",
-            };
+            paymentMethod.Add("Tiền mặt");
+            paymentMethod.Add("Chuyển khoản");
 
             cbb_PaymentMethods.DataSource = paymentMethod;
         }
@@ -516,7 +533,13 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// </summary>
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
-            // Xử lý khi nhấn nút hủy
+            cbb_Categories.SelectedIndex = -1;
+            cbb_Products.SelectedIndex = -1;
+            cbb_Units.SelectedIndex = -1;
+            nmr_ConversionRate.Value = 1;
+            nmr_Quantity.Value = 1;
+            nmr_Price.Value = 0;
+            rtb_ProductNote.Text = "";
         }
 
         /// <summary>
@@ -570,5 +593,17 @@ namespace QuanLyCuaHangBanh.Views.Order
         }
 
         #endregion
+
+        private void dgv_ProductList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductList.Rows.Count)
+            {
+                var row = dgv_ProductList.Rows[e.RowIndex];
+                if (row.DataBoundItem is ProductOrderDTO product)
+                {
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
+                }
+            }
+        }
     }
 }

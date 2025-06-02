@@ -39,11 +39,11 @@ namespace QuanLyCuaHangBanh.DTO
         {
             if (string.IsNullOrEmpty(searchValue)) return true;
             searchValue = searchValue.ToLower();
-            return SupplierName.ToLower().Contains(searchValue) ||
-                   Status.ToLower().Contains(searchValue) ||
-                   TotalAmount.ToString().Contains(searchValue) ||
-                   CreditPeriod.ToString().Contains(searchValue) ||
-                   TotalUnpaid.ToString().Contains(searchValue);
+            return SupplierName.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Status.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   TotalAmount.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   CreditPeriod.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   TotalUnpaid.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

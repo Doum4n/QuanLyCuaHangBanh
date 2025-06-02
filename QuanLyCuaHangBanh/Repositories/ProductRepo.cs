@@ -21,6 +21,8 @@ namespace QuanLyCuaHangBanh.Repositories
             return await context.Products
                 .Include(p => p.ProductUnits)
                 .ThenInclude(pu => pu.Unit)
+                .Include(p => p.ProductUnits)
+                .ThenInclude(pu => pu.Inventory)
                 .AsNoTracking()
                 .Select(selector)
                 .ToListAsync();
@@ -52,13 +54,22 @@ namespace QuanLyCuaHangBanh.Repositories
             if (!string.IsNullOrEmpty(entity.Image) &&
                 !entity.Image.StartsWith("https://res.cloudinary.com"))
             {
-                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
-                var uploadParams = new ImageUploadParams()
+                try
                 {
-                    File = new FileDescription(entity.Image)
-                };
-                var uploadResult = cloudinary.Upload(uploadParams);
-                entity.Image = uploadResult.SecureUri.ToString();
+                    var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+                    isNewImageUploaded = true;
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(entity.Image)
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+                    entity.Image = uploadResult.SecureUri.ToString();
+                }
+                catch (Exception ex)
+                {
+                    entity.Image = oldImageUrl;
+                    throw new Exception(ex.Message);
+                }
             }
             else
             {

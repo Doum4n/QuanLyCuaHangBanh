@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyCuaHangBanh.Base;
 
 namespace QuanLyCuaHangBanh.DTO
 {
-    public class OrderDTO
+    public class OrderDTO : ISearchable
     {
         public int ID { get; set; }
         public int CustomerID { get; set; }
@@ -28,5 +29,14 @@ namespace QuanLyCuaHangBanh.DTO
             TotalAmount = totalAmount;
         }
 
+        public bool MatchesSearch(string searchValue)
+        {
+            return ID.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   CustomerName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   OrderDate.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Status.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   PaymentMethod.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   DeliveryAddress.Contains(searchValue, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

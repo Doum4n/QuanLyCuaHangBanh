@@ -76,21 +76,6 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             }
         }
 
-        private void btn_AddPurchaseInvoice_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_EditPurchaseInvoice_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_DeletePurchaseInvoice_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void InvoiceView_Load(object sender, EventArgs e)
         {
             if (Session.Role == "Nhân viên bán hàng")
@@ -140,6 +125,29 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(sender, e);
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(sender, e);
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            searchValue = toolStripTextBox1.Text.Trim();
+        }
+
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(sender, e);
+            }
         }
     }
 }

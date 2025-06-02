@@ -22,6 +22,9 @@ namespace QuanLyCuaHangBanh.Presenters
     /// <param name="orderService">Service xử lý nghiệp vụ đơn hàng</param>
     public class OrderPresenter(IOrderView view, OrderService orderService) : PresenterBase<Order>(view, (IService)orderService)
     {
+
+        private IList<OrderDTO> _orders = new List<OrderDTO>();
+
         /// <summary>
         /// Khởi tạo dữ liệu ban đầu
         /// - Tải danh sách đơn hàng
@@ -29,7 +32,8 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = await ((OrderService)Service).GetAllOrdersAsDto();
+            _orders = await ((OrderService)Service).GetAllOrdersAsDto();
+            BindingSource.DataSource = _orders;
         }
 
         /// <summary>
@@ -48,13 +52,13 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         /// <param name="sender">Đối tượng gọi sự kiện</param>
         /// <param name="e">Tham số sự kiện</param>
-        public override void OnImport(object? sender, EventArgs e)
+        public override async void OnImport(object? sender, EventArgs e)
         {
             ExcelHandler.ImportExcel(
                 ((OrderService)Service).ImportOrder,
                 ((OrderService)Service).ImportOrderDetail
             );
-            InitializeAsync(); // Load lại dữ liệu sau khi import
+            await InitializeAsync(); // Load lại dữ liệu sau khi import
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         /// <param name="sender">Đối tượng gọi sự kiện</param>
         /// <param name="e">Tham số sự kiện</param>
-        public override void OnEdit(object? sender, EventArgs e)
+        public override async void OnEdit(object? sender, EventArgs e)
         {
             OrderInputView orderInputView = new OrderInputView((OrderDTO)View.SelectedItem);
             if (orderInputView.ShowDialog() == DialogResult.OK)
@@ -71,7 +75,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((OrderService)Service).UpdateOrder(order, orderInputView.Products);
                     View.Message = "Cập nhật đơn hàng thành công!";
-                    InitializeAsync();
+                    await InitializeAsync();
                 }
             }
         }
@@ -81,7 +85,7 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         /// <param name="sender">Đối tượng gọi sự kiện</param>
         /// <param name="e">Tham số sự kiện</param>
-        public override void OnAddNew(object? sender, EventArgs e)
+        public override async void OnAddNew(object? sender, EventArgs e)
         {
             OrderInputView orderInputView = new OrderInputView();
             if (orderInputView.ShowDialog() == DialogResult.OK)
@@ -90,7 +94,7 @@ namespace QuanLyCuaHangBanh.Presenters
                 {
                     ((OrderService)Service).AddOrder(order, orderInputView.Products);
                     View.Message = "Thêm đơn hàng thành công!";
-                    InitializeAsync();
+                   await InitializeAsync();
                 }
             }
         }
@@ -100,13 +104,13 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         /// <param name="sender">Đối tượng gọi sự kiện</param>
         /// <param name="e">Tham số sự kiện</param>
-        public override void OnDelete(object? sender, EventArgs e)
+        public override async void OnDelete(object? sender, EventArgs e)
         {
             if (BindingSource.Current is OrderDTO orderDTO)
             {
-                ((OrderService)Service).DeleteOrder(orderDTO.ID);
+                await ((OrderService)Service).DeleteOrder(orderDTO.ID);
                 View.Message = "Xóa đơn hàng thành công!";
-                InitializeAsync();
+                await InitializeAsync();
             }
         }
 
@@ -115,9 +119,25 @@ namespace QuanLyCuaHangBanh.Presenters
         /// </summary>
         /// <param name="sender">Đối tượng gọi sự kiện</param>
         /// <param name="e">Tham số sự kiện</param>
-        public override void OnSearch(object? sender, EventArgs e)
+        public override async void OnSearch(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var searchValue = this.View.SearchValue.ToLower();
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                await InitializeAsync();
+            }
+            else
+            {
+                if (_orders != null)
+                {
+                    var searchResult = _orders.Where(x => x.MatchesSearch(searchValue)).ToList();
+                    BindingSource.DataSource = searchResult;
+                }
+                else
+                {
+                    MessageBox.Show("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

@@ -25,7 +25,10 @@ namespace QuanLyCuaHangBanh.Views
             InitializeComponent();
         }
 
-        string IView.SearchValue { get; set; }
+        string IView.SearchValue {
+            get => searchValue;
+            set => searchValue = value;
+        }
         string IView.Message
         {
             get
@@ -56,7 +59,7 @@ namespace QuanLyCuaHangBanh.Views
         public void RefreshData()
         {
             dgv_WarehouseNoteList.Refresh();
-            dgv_WarehouseNoteList.ClearSelection(); 
+            dgv_WarehouseNoteList.ClearSelection();
         }
 
         private void btn_Add_Click(object sender, EventArgs e)
@@ -91,6 +94,24 @@ namespace QuanLyCuaHangBanh.Views
         private void tsbnt_Export_Click(object sender, EventArgs e)
         {
             ExportEvent?.Invoke(sender, e);
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(sender, e);
+        }
+
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(sender, e);
+            }
+        }
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            searchValue = toolStripTextBox1.Text;
         }
     }
 }

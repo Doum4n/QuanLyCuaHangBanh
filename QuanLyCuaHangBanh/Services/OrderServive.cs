@@ -23,7 +23,7 @@ namespace QuanLyCuaHangBanh.Services
         /// Lấy danh sách tất cả đơn hàng dưới dạng DTO
         /// </summary>
         /// <returns>Danh sách OrderDTO chứa thông tin đơn hàng</returns>
-        public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsDto()
+        public async Task<IList<OrderDTO>> GetAllOrdersAsDto()
         {
             return await _provider.GetRepository<Order>().GetAllAsDto<OrderDTO>(
                 o => new OrderDTO

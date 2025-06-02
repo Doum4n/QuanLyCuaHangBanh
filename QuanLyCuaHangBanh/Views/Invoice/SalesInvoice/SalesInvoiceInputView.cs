@@ -196,7 +196,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 dateTimePicker.Value = _invoiceDTO.CreatedDate;
                 cbb_PaymentMethod.Text = _invoiceDTO.PaymentMethod;
                 rtb_Note.Text = _invoiceDTO.Note;
-                
+
                 _products = new BindingList<ProductSaleInvoiceDTO>(
                     context.SalesInvoiceDetails
                     .Where(o => o.InvoiceID == _invoiceDTO.ID)
@@ -337,6 +337,18 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             // bs.ResetBindings(false);
             // bs.DataSource = _products;
             // dgv_ProductList.DataSource = bs;
+        }
+
+        private void dgv_ProductList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductList.Rows.Count)
+            {
+                var row = dgv_ProductList.Rows[e.RowIndex];
+                if (row.DataBoundItem is ProductSaleInvoiceDTO product)
+                {
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
+                }
+            }
         }
     }
 }

@@ -22,15 +22,15 @@ namespace QuanLyCuaHangBanh.Views
                 .Include(o => o.Supplier)
                 .Include(o => o.GoodsReceiptNoteDetails)
                 .Select(
-                    o => new GoodsReceiptNoteDTO(
-                        o.ID,
-                        o.SupplierId,
-                        o.Supplier.Name,
-                        o.CreatedDate,
-                        o.Status,
-                        o.Note,
-                        o.GoodsReceiptNoteDetails.Select(g => g.Product).ToList()
-                    )
+                    o => new GoodsReceiptNoteDTO{
+                        ID = o.ID,
+                        SupplierId = o.SupplierId,
+                        SupplierName = o.Supplier.Name,
+                        CreatedDate = o.CreatedDate,
+                        Status = o.Status,
+                        Note = o.Note,
+                        Products = o.GoodsReceiptNoteDetails.Select(g => g.Product).ToList()
+                    }
                 ).ToList();
 
             foreach (DataGridViewRow row in dgv_GoodsReceiptNote.Rows)

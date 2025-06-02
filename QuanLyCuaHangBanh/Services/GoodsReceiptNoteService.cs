@@ -21,18 +21,18 @@ namespace QuanLyCuaHangBanh.Services
             _provider = provider;
         }
 
-        public async Task<IEnumerable<GoodsReceiptNoteDTO>> GetAllGoodsReceiptNotesAsDto()
+        public async Task<IList<GoodsReceiptNoteDTO>> GetAllGoodsReceiptNotesAsDto()
         {
             return await _provider.GetRepository<GoodsReceiptNote>().GetAllAsDto(
-                o => new GoodsReceiptNoteDTO(
-                    o.ID,
-                    o.SupplierId,
-                    o.Supplier.Name,
-                    o.CreatedDate,
-                    o.Status,
-                    o.Note,
-                    o.GoodsReceiptNoteDetails.Select(g => g.Product).ToList()
-                )
+                o => new GoodsReceiptNoteDTO{
+                    ID = o.ID,
+                    SupplierId = o.SupplierId,
+                    SupplierName = o.Supplier != null ? o.Supplier.Name : string.Empty,
+                    CreatedDate = o.CreatedDate,
+                    Status = o.Status ?? string.Empty,
+                    Note = o.Note ?? string.Empty,
+                    Products = o.GoodsReceiptNoteDetails.Select(g => g.Product).ToList()
+                }
             );
         }
 

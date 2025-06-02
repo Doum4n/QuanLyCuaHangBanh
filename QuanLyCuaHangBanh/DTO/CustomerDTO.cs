@@ -17,11 +17,11 @@ namespace QuanLyCuaHangBanh.DTO
         {
             if (string.IsNullOrEmpty(searchValue)) return true;
             searchValue = searchValue.ToLower();
-            return Name.ToLower().Contains(searchValue) ||
-                   PhoneNumber.ToLower().Contains(searchValue) ||
-                   Address.ToLower().Contains(searchValue) ||
-                   Email.ToLower().Contains(searchValue) ||
-                   Type.ToLower().Contains(searchValue); 
+            return Name.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   PhoneNumber.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Address.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Email.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Type.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase); 
         }
 
         public Customer ToEntity()

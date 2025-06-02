@@ -19,8 +19,8 @@ public class ProductDTO
     public List<UnitDTO> Units { get; set; } // Giữ nguyên kiểu List<UnitDTO>
     public decimal UnitPrice { get; set; }
     public int InventoryId { get; set; }
-    public int Quantity { get; set; }
-    public int TotalQuantity { get; set; }
+    public int Quantity { get; set; } // Tồn kho của đơn vị được chọn
+    public int TotalQuantity { get; set; } // Tổng tồn kho của tất cả các đơn vị
     public string Description { get; set; }
     public string ImagePath { get; set; }
     public string ViewDetail { get; set; } // Giả định đây là một string hiển thị "Xem chi tiết"
@@ -76,10 +76,11 @@ public class ProductDTO
         TotalQuantity = productUnits?.Sum(pu => pu.Inventory?.Quantity ?? 0) ?? 0;
     }
 
-    // Bổ sung phương thức MatchesSearch nếu chưa có
     public bool MatchesSearch(string searchValue)
     {
         return ProductName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+               ProducerName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+               ManufacturerName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                CategoryName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                (Units != null && Units.Any(u => u.UnitName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)));

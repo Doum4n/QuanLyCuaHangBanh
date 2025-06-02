@@ -14,7 +14,9 @@ namespace QuanLyCuaHangBanh.Repositories
     {
         public void UpdateQuantity(int productUnitId, int quantity, bool isIncrease)
         {
+            // Do lưu tồn kho theo lô (Phiếu nnhập) nên có cùng 1 đvt của 1 sản phẩm có thể nhiều tồn kho
             var inventory = context.Inventories
+                .Where(o => o.Quantity > 0) // Lấy tồn kho có số lượng > 0, trường hợp số lượng nhập đợt đó hết
                 .FirstOrDefault(i => i.ProductUnitID == productUnitId);
 
             if (inventory != null)

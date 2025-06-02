@@ -180,5 +180,23 @@ namespace QuanLyCuaHangBanh.Views.Order
             _selectedItem = null;
         }
         #endregion
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            _searchValue = toolStripTextBox1.Text.Trim();
+        }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(this, EventArgs.Empty); // Gọi sự kiện tìm kiếm
+            }
+        }
     }
 }

@@ -30,6 +30,8 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel2 = new Panel();
+            label7 = new Label();
+            nmr_TotalPaymentRequired = new NumericUpDown();
             dgv_ProductList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             ProductName = new DataGridViewTextBoxColumn();
@@ -58,6 +60,10 @@
             CreatorName = new TextBox();
             materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
             panel1 = new Panel();
+            btn_Cancel = new Button();
+            btn_DeleteProduct = new Button();
+            btn_UpdateProduct = new Button();
+            btn_AddProduct = new Button();
             label3 = new Label();
             nmr_Price = new NumericUpDown();
             nmr_ConversionRate = new NumericUpDown();
@@ -77,7 +83,6 @@
             pane_Payment = new Panel();
             dtp_PaymentDate = new DateTimePicker();
             materialLabel8 = new MaterialSkin.Controls.MaterialLabel();
-            nmr_TotalPaymentRequired = new NumericUpDown();
             label11 = new Label();
             nmr_TotalPaid = new NumericUpDown();
             dtp_DueDate = new DateTimePicker();
@@ -86,12 +91,8 @@
             dtp_TransactionDate = new DateTimePicker();
             materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
             label10 = new Label();
-            label7 = new Label();
-            btn_AddProduct = new Button();
-            btn_UpdateProduct = new Button();
-            btn_DeleteProduct = new Button();
-            btn_Cancel = new Button();
             panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).BeginInit();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -102,7 +103,6 @@
             ((System.ComponentModel.ISupportInitialize)nmr_Quantity).BeginInit();
             panel3.SuspendLayout();
             pane_Payment.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).BeginInit();
             SuspendLayout();
@@ -116,6 +116,25 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(1294, 50);
             panel2.TabIndex = 35;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(941, 15);
+            label7.Name = "label7";
+            label7.Size = new Size(177, 20);
+            label7.TabIndex = 50;
+            label7.Text = "Tổng tiền cần thanh toán:";
+            // 
+            // nmr_TotalPaymentRequired
+            // 
+            nmr_TotalPaymentRequired.Enabled = false;
+            nmr_TotalPaymentRequired.Location = new Point(1129, 11);
+            nmr_TotalPaymentRequired.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nmr_TotalPaymentRequired.Name = "nmr_TotalPaymentRequired";
+            nmr_TotalPaymentRequired.Size = new Size(197, 27);
+            nmr_TotalPaymentRequired.TabIndex = 59;
+            nmr_TotalPaymentRequired.ThousandsSeparator = true;
             // 
             // dgv_ProductList
             // 
@@ -132,6 +151,7 @@
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_ProductList.Size = new Size(1288, 305);
             dgv_ProductList.TabIndex = 0;
+            dgv_ProductList.RowPrePaint += dgv_ProductList_RowPrePaint;
             // 
             // ID
             // 
@@ -414,6 +434,46 @@
             panel1.Size = new Size(1294, 181);
             panel1.TabIndex = 37;
             // 
+            // btn_Cancel
+            // 
+            btn_Cancel.Location = new Point(1129, 106);
+            btn_Cancel.Name = "btn_Cancel";
+            btn_Cancel.Size = new Size(94, 29);
+            btn_Cancel.TabIndex = 29;
+            btn_Cancel.Text = "Hủy";
+            btn_Cancel.UseVisualStyleBackColor = true;
+            btn_Cancel.Click += btn_Cancel_Click;
+            // 
+            // btn_DeleteProduct
+            // 
+            btn_DeleteProduct.Location = new Point(1129, 56);
+            btn_DeleteProduct.Name = "btn_DeleteProduct";
+            btn_DeleteProduct.Size = new Size(94, 29);
+            btn_DeleteProduct.TabIndex = 28;
+            btn_DeleteProduct.Text = "Xóa";
+            btn_DeleteProduct.UseVisualStyleBackColor = true;
+            btn_DeleteProduct.Click += btn_DeleteProduct_Click;
+            // 
+            // btn_UpdateProduct
+            // 
+            btn_UpdateProduct.Location = new Point(1006, 106);
+            btn_UpdateProduct.Name = "btn_UpdateProduct";
+            btn_UpdateProduct.Size = new Size(94, 29);
+            btn_UpdateProduct.TabIndex = 27;
+            btn_UpdateProduct.Text = "Sửa";
+            btn_UpdateProduct.UseVisualStyleBackColor = true;
+            btn_UpdateProduct.Click += btn_UpdateProduct_Click;
+            // 
+            // btn_AddProduct
+            // 
+            btn_AddProduct.Location = new Point(1006, 56);
+            btn_AddProduct.Name = "btn_AddProduct";
+            btn_AddProduct.Size = new Size(94, 29);
+            btn_AddProduct.TabIndex = 26;
+            btn_AddProduct.Text = "Thêm";
+            btn_AddProduct.UseVisualStyleBackColor = true;
+            btn_AddProduct.Click += btn_AddProduct_Click;
+            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -611,16 +671,6 @@
             materialLabel8.TabIndex = 60;
             materialLabel8.Text = "Ngày thanh toán";
             // 
-            // nmr_TotalPaymentRequired
-            // 
-            nmr_TotalPaymentRequired.Enabled = false;
-            nmr_TotalPaymentRequired.Location = new Point(1129, 11);
-            nmr_TotalPaymentRequired.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
-            nmr_TotalPaymentRequired.Name = "nmr_TotalPaymentRequired";
-            nmr_TotalPaymentRequired.Size = new Size(197, 27);
-            nmr_TotalPaymentRequired.TabIndex = 59;
-            nmr_TotalPaymentRequired.ThousandsSeparator = true;
-            // 
             // label11
             // 
             label11.AutoSize = true;
@@ -703,55 +753,6 @@
             label10.TabIndex = 54;
             label10.Text = "Tổng tiền đã thanh toán";
             // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(941, 15);
-            label7.Name = "label7";
-            label7.Size = new Size(177, 20);
-            label7.TabIndex = 50;
-            label7.Text = "Tổng tiền cần thanh toán:";
-            // 
-            // btn_AddProduct
-            // 
-            btn_AddProduct.Location = new Point(1006, 56);
-            btn_AddProduct.Name = "btn_AddProduct";
-            btn_AddProduct.Size = new Size(94, 29);
-            btn_AddProduct.TabIndex = 26;
-            btn_AddProduct.Text = "Thêm";
-            btn_AddProduct.UseVisualStyleBackColor = true;
-            btn_AddProduct.Click += btn_AddProduct_Click;
-            // 
-            // btn_UpdateProduct
-            // 
-            btn_UpdateProduct.Location = new Point(1006, 106);
-            btn_UpdateProduct.Name = "btn_UpdateProduct";
-            btn_UpdateProduct.Size = new Size(94, 29);
-            btn_UpdateProduct.TabIndex = 27;
-            btn_UpdateProduct.Text = "Sửa";
-            btn_UpdateProduct.UseVisualStyleBackColor = true;
-            btn_UpdateProduct.Click += btn_UpdateProduct_Click;
-            // 
-            // btn_DeleteProduct
-            // 
-            btn_DeleteProduct.Location = new Point(1129, 56);
-            btn_DeleteProduct.Name = "btn_DeleteProduct";
-            btn_DeleteProduct.Size = new Size(94, 29);
-            btn_DeleteProduct.TabIndex = 28;
-            btn_DeleteProduct.Text = "Xóa";
-            btn_DeleteProduct.UseVisualStyleBackColor = true;
-            btn_DeleteProduct.Click += btn_DeleteProduct_Click;
-            // 
-            // btn_Cancel
-            // 
-            btn_Cancel.Location = new Point(1129, 106);
-            btn_Cancel.Name = "btn_Cancel";
-            btn_Cancel.Size = new Size(94, 29);
-            btn_Cancel.TabIndex = 29;
-            btn_Cancel.Text = "Hủy";
-            btn_Cancel.UseVisualStyleBackColor = true;
-            btn_Cancel.Click += btn_Cancel_Click;
-            // 
             // SalesInvoiceInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -768,6 +769,7 @@
             Load += InvoiceInputView_Load;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
@@ -782,7 +784,6 @@
             panel3.ResumeLayout(false);
             pane_Payment.ResumeLayout(false);
             pane_Payment.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nmr_TotalPaymentRequired).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalPaid).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_TotalAmountOwed).EndInit();
             ResumeLayout(false);

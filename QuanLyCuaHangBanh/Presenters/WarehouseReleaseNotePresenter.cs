@@ -27,12 +27,13 @@ namespace QuanLyCuaHangBanh.Presenters
         // The QLCHB_DBContext context field is removed as it's now injected into the service.
         // private QLCHB_DBContext context = new QLCHB_DBContext(); // REMOVED
 
-        private ProductReleaseDTO productReleaseDTO; // Retaining this as it was in original code
+        private IList<WarehouseReleaseNoteDTO> _releaseNotes = new List<WarehouseReleaseNoteDTO>();
 
         public override async Task InitializeAsync()
         {
             // Use the service to get data
-            BindingSource.DataSource = await ((WarehouseReleaseNoteService)Service).GetAllReleaseNotesAsDto();
+            _releaseNotes = await ((WarehouseReleaseNoteService)Service).GetAllReleaseNotesAsDto();
+            BindingSource.DataSource = _releaseNotes;
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -204,9 +205,28 @@ namespace QuanLyCuaHangBanh.Presenters
             }
         }
 
-        public override void OnSearch(object? sender, EventArgs e)
+        public override async void OnSearch(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            string searchValue = this.View.SearchValue.ToLower();  // Chuyển đổi sang chữ thường để tìm kiếm không phân biệt chữ hoa/thường
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                InitializeAsync(); // Reload all data if search value is empty
+            }
+            else
+            {
+                if (_releaseNotes != null)
+                {
+                    // Filter the release notes based on the search value
+                    var filteredItems = _releaseNotes
+                        .Where(item => item.MatchesSearch(searchValue))
+                        .ToList();
+                    BindingSource.DataSource = filteredItems;
+                }
+                else
+                {
+                    MessageBox.Show("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

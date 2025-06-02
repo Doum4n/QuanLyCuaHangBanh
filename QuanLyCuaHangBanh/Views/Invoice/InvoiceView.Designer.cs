@@ -84,11 +84,15 @@
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
             tsbtn_Search.Text = "Tìm kiếm";
+            tsbtn_Search.Click += tsbtn_Search_Click;
             // 
             // toolStripTextBox1
             // 
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new Size(100, 27);
+            toolStripTextBox1.KeyDown += toolStripTextBox1_KeyDown;
+            toolStripTextBox1.Click += toolStripTextBox1_Click;
+            toolStripTextBox1.TextChanged += toolStripTextBox1_TextChanged;
             // 
             // toolStrip1
             // 
@@ -317,7 +321,7 @@
             tabControl2.SelectedIndex = 0;
             tabControl2.Size = new Size(1280, 474);
             tabControl2.TabIndex = 5;
-            tabControl2.SelectedIndexChanged += this.tabControl2_SelectedIndexChanged;
+            tabControl2.SelectedIndexChanged += tabControl2_SelectedIndexChanged;
             // 
             // tabPage_SalesInvoice
             // 

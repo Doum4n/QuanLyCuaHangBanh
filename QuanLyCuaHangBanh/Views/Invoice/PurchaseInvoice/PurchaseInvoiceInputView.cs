@@ -357,5 +357,17 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 pane_Payment.Visible = false;
             }
         }
+
+        private void dgv_ProductList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductList.Rows.Count)
+            {
+                var row = dgv_ProductList.Rows[e.RowIndex];
+                if (row.DataBoundItem is ProductPurchaseInvoiceDTO product)
+                {
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
+                }
+            }
+        }
     }
 }

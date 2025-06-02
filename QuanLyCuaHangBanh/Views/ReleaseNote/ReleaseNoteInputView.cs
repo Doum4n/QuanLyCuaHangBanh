@@ -187,14 +187,6 @@ namespace QuanLyCuaHangBanh.Views
                     selectedReleaseNoteId = result;
                 }
             }
-            else if (rbtn_Order.Checked)
-            {
-                var result = ShowSelectOrderForm?.Invoke(sender, e) ?? 0;
-                if (result != 0)
-                {
-                    selectedReleaseNoteId = result;
-                }
-            }
         }
 
         /// <summary>
@@ -206,6 +198,18 @@ namespace QuanLyCuaHangBanh.Views
             {
                 UpdateSelectedProduct(selectedProduct);
             }
+        }
+
+        /// <summary>
+        /// Xử lý sự kiện khi nhấn nút hủy
+        /// </summary>
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+            cbb_Products.SelectedIndex = -1;
+            cbb_Units.SelectedIndex = -1;
+            nmr_ConversionRate.Value = 0;
+            nmr_Quantity.Value = 0;
+            rtb_ProductNote.Text = "";
         }
 
         /// <summary>
@@ -224,6 +228,8 @@ namespace QuanLyCuaHangBanh.Views
                     .ToList();
 
                 cbb_Units.DataSource = units;
+                cbb_Units.DisplayMember = "Name";
+                cbb_Units.ValueMember = "ID";
 
                 var baseUnit = context.ProductUnits
                     .FirstOrDefault(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedProduct.BaseUnitID);
@@ -238,19 +244,31 @@ namespace QuanLyCuaHangBanh.Views
         /// <summary>
         /// Xử lý sự kiện khi thay đổi đơn vị tính
         /// - Cập nhật ID đơn vị tính
-        /// - Cập nhật tỷ lệ quy đổi
+        /// - Cập nhật tỷ lệ quy đổi và số lượng tối đa
         /// </summary>
         private void cbb_Units_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbb_Products.SelectedItem is Models.Product selectedProduct && cbb_Units.SelectedItem is Models.Unit selectedUnit)
             {
-                var productUnit = context.ProductUnits
-                    .FirstOrDefault(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnit.ID);
+                var selectedUnitId = selectedUnit.ID;
+                var _productUnit = context.ProductUnits
+                    .Include(o => o.Inventory)
+                    .Where(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnitId)
+                    .FirstOrDefault();
 
-                if (productUnit != null)
+                if (_productUnit != null)
                 {
-                    productUnitID = productUnit.ID;
-                    nmr_ConversionRate.Value = productUnit.ConversionRate;
+                    productUnitID = _productUnit.ID;
+                    nmr_ConversionRate.Value = _productUnit.ConversionRate;
+
+                    var totalQuantity = context.ProductUnits
+                        .Include(o => o.Inventory)
+                        .Where(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnitId)
+                        .Sum(g => g.Inventory != null ? g.Inventory.Quantity : -1);
+
+                    nmr_Quantity.Maximum = totalQuantity != -1 ?
+                        totalQuantity :
+                        throw new Exception("Không tìm thấy kho hàng");
                 }
             }
         }
@@ -280,7 +298,7 @@ namespace QuanLyCuaHangBanh.Views
                 var row = dgv_ProductList.Rows[e.RowIndex];
                 if (row.DataBoundItem is ProductReleaseDTO product)
                 {
-                    row.DefaultCellStyle.BackColor = GetStatusColor(product.Status);
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
                 }
             }
         }
@@ -306,16 +324,15 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Units.DisplayMember = "Name";
             cbb_Units.ValueMember = "ID";
 
+            CreatorName.Text = Session.EmployeeName;
+
             cbb_Status.DataSource = new List<string>
             {
                 "Mới",
-                "Đã lưu",
                 "Đã duyệt",
-                "Đã nhập vào kho",
-                "Đã hủy",
-                "Đang xử lý",
-                "Đã thanh toán một phần",
-                "Đã thanh toán",
+                "Đang xuất kho",
+                "Đã xuất kho",
+                "Đã hủy"
             };
         }
 
@@ -345,7 +362,7 @@ namespace QuanLyCuaHangBanh.Views
                         o.Quantity,
                         o.Note
                     )
-                    { 
+                    {
                         Status = DTO.Base.Status.None,
                     }).ToList()
             );
@@ -412,7 +429,12 @@ namespace QuanLyCuaHangBanh.Views
             selectedProduct.ConversionRate = (decimal)nmr_ConversionRate.Value;
             selectedProduct.Quantity = Convert.ToInt32(nmr_Quantity.Value);
             selectedProduct.Note = rtb_ProductNote.Text;
-            selectedProduct.Status = DTO.Base.Status.Modified;
+
+            // Nếu sản phẩm mới được thêm vào thì không cập nhật trạng thái (giữ nguyên trạng thái)
+            if (selectedProduct.Status != DTO.Base.Status.New)
+            {
+                selectedProduct.Status = DTO.Base.Status.Modified;
+            }
 
             bs.ResetBindings(false);
         }
@@ -427,21 +449,6 @@ namespace QuanLyCuaHangBanh.Views
             return MessageBox.Show(message, "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
-        /// <summary>
-        /// Lấy màu tương ứng với trạng thái sản phẩm
-        /// </summary>
-        /// <param name="status">Trạng thái sản phẩm</param>
-        /// <returns>Màu tương ứng</returns>
-        private Color GetStatusColor(DTO.Base.Status status)
-        {
-            return status switch
-            {
-                DTO.Base.Status.New => Color.LightGreen,
-                DTO.Base.Status.Modified => Color.LightYellow,
-                DTO.Base.Status.Deleted => Color.LightPink,
-                _ => Color.White
-            };
-        }
 
         private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -456,5 +463,17 @@ namespace QuanLyCuaHangBanh.Views
         }
 
         #endregion
+
+        private void rbtn_Order_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbtn_Order.Checked)
+            {
+                var result = ShowSelectOrderForm?.Invoke(sender, e) ?? 0;
+                if (result != 0)
+                {
+                    selectedReleaseNoteId = result;
+                }
+            }
+        }
     }
 }

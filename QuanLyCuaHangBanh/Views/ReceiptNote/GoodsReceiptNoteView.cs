@@ -86,5 +86,23 @@ namespace QuanLyCuaHangBanh.Views
         {
             ExportEvent?.Invoke(sender, e);
         }
+
+        private void tsbtn_Search_Click(object sender, EventArgs e)
+        {
+            SearchEvent?.Invoke(sender, e);
+        }
+
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchEvent?.Invoke(sender, e);
+            }
+        }
+
+        private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            searchValue = toolStripTextBox1.Text;
+        }
     }
 }

@@ -514,6 +514,7 @@
             dgv_ProductUnitList.Size = new Size(1147, 374);
             dgv_ProductUnitList.TabIndex = 0;
             dgv_ProductUnitList.CellContentClick += dgv_ProductUnitList_CellContentClick;
+            dgv_ProductUnitList.RowPrePaint += dgv_ProductUnitList_RowPrePaint;
             // 
             // ID
             // 

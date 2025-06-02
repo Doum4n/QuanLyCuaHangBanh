@@ -4,10 +4,10 @@ using QuanLyCuaHangBanh.DTO;
 using System.Data;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.Models;
-using QuanLyCuaHangBanh.Helpers;
 using QuanLyCuaHangBanh.Views.Product;
 using System.Threading.Tasks;
 using QuanLyCuaHangBanh.Presenters;
+using QuanLyCuaHangBanh.Migrations.Helpers;
 
 namespace QuanLyCuaHangBanh.Views
 {
@@ -295,23 +295,17 @@ namespace QuanLyCuaHangBanh.Views
             }
         }
 
-        private void tsbtn_Search_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void tstb_Search_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true; // Ngăn chặn âm thanh "ding" khi nhấn Enter
                 SearchEvent?.Invoke(this, EventArgs.Empty);
             }
         }
 
         private void tstb_Search_TextChanged(object sender, EventArgs e)
         {
-            searchValue = tstb_Search.Text.Trim(); // Cập nhật giá trị tìm kiếm khi người dùng nhập
+            searchValue = tstb_Search.Text;
         }
     }
 }

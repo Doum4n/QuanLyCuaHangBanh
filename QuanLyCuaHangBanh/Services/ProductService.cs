@@ -50,12 +50,14 @@ namespace QuanLyCuaHangBanh.Services
                     o.Category.Name,
                     o.Producer.ID,
                     o.Producer.Name,
-                    o.Manufacturer.ID,
+                    o.Manufacturer!.ID,
                     o.Manufacturer.Name,
                     o.ProductUnits,
                     o.Description,
-                    o.Image
-            ));
+                    o.Image ?? string.Empty
+            ){
+                TotalQuantity = o.ProductUnits.Sum(pu => pu.Inventory!.Quantity)
+            });
         }
 
         /// <summary>

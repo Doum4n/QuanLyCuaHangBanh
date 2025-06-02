@@ -19,9 +19,11 @@ namespace QuanLyCuaHangBanh.Presenters
 {
     class GoodsReceiptNotePresenter(IGoodsReceiptNoteView view, GoodsReceiptNoteService goodsReceiptNoteService) : PresenterBase<GoodsReceiptNote>(view, (IService)goodsReceiptNoteService)
     {
+        private IList<GoodsReceiptNoteDTO> _goodsReceiptNoteDTOs = new List<GoodsReceiptNoteDTO>();
         public override async Task InitializeAsync()
         {
-            BindingSource.DataSource = await ((GoodsReceiptNoteService)Service).GetAllGoodsReceiptNotesAsDto();
+            _goodsReceiptNoteDTOs = await ((GoodsReceiptNoteService)Service).GetAllGoodsReceiptNotesAsDto();
+            BindingSource.DataSource = _goodsReceiptNoteDTOs;
         }
 
         public override void OnExport(object? sender, EventArgs e)
@@ -90,7 +92,23 @@ namespace QuanLyCuaHangBanh.Presenters
 
         public override void OnSearch(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            string searchValue = this.View.SearchValue.ToLower();  // Chuyển đổi sang chữ thường để tìm kiếm không phân biệt chữ hoa/thường
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                InitializeAsync(); // Reload all data if search value is empty
+            }
+            else
+            {
+                if (_goodsReceiptNoteDTOs != null)
+                {
+                    var searchResult = _goodsReceiptNoteDTOs.Where(x => x.MatchesSearch(searchValue)).ToList();
+                    BindingSource.DataSource = searchResult;
+                }
+                else
+                {
+                    MessageBox.Show("Dữ liệu không khả dụng để tìm kiếm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

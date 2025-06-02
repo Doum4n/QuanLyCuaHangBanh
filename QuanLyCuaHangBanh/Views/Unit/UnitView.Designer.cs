@@ -203,6 +203,7 @@
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
             tsbtn_Search.Text = "Tìm kiếm";
+            tsbtn_Search.Click += tsbtn_Search_Click;
             // 
             // toolStripSeparator1
             // 

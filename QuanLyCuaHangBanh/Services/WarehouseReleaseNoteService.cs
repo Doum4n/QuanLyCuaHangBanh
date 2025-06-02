@@ -24,14 +24,14 @@ namespace QuanLyCuaHangBanh.Services
         {
             // Direct transfer of logic from LoadData
             return await repositoryProvider.GetRepository<WarehouseReleaseNote>().GetAllAsDto<WarehouseReleaseNoteDTO>(
-                o => new WarehouseReleaseNoteDTO(
-                    o.ID,
+                o => new WarehouseReleaseNoteDTO {
+                    ID = o.ID,
                     //o.CreatedById, // commented out in original, so keeping it commented
                     //o.CreatedBy.Name, // commented out in original, so keeping it commented
-                    o.CreatedDate,
-                    o.Status,
-                    o.Note
-                )
+                    CreatedDate = o.CreatedDate,
+                    Status = o.Status,
+                    Note = o.Note
+                }
             );
         }
 

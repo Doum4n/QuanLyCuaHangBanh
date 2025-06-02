@@ -110,7 +110,7 @@ namespace QuanLyCuaHangBanh.Views
         private void ProductInputView_Load(object sender, EventArgs e)
         {
             // Thiết lập trạng thái controls khi ở chế độ xem
-            if(!_isEdit)
+            if (!_isEdit)
             {
                 SetupViewMode();
             }
@@ -559,5 +559,17 @@ namespace QuanLyCuaHangBanh.Views
         }
 
         #endregion
+
+        private void dgv_ProductUnitList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductUnitList.Rows.Count)
+            {   
+                var row = dgv_ProductUnitList.Rows[e.RowIndex];
+                if (row.DataBoundItem is Product_UnitDTO product_UnitDTO)
+                {
+                    row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product_UnitDTO.status);
+                }
+            }
+        }
     }
 }

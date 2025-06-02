@@ -31,11 +31,11 @@ namespace QuanLyCuaHangBanh.DTO
         {
             if (string.IsNullOrEmpty(searchValue)) return true; // Nếu không có giá trị tìm kiếm, coi là khớp
             searchValue = searchValue.ToLower(); // Chuyển đổi giá trị tìm kiếm sang chữ thường
-            return Name.ToLower().Contains(searchValue) ||
-                   Address.ToLower().Contains(searchValue) ||
-                   PhoneNumber.ToLower().Contains(searchValue) ||
-                   Email.ToLower().Contains(searchValue) ||
-                   Description.ToLower().Contains(searchValue);
+            return Name.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Address.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   PhoneNumber.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Email.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                   Description.ToLower().Contains(searchValue, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuanLyCuaHangBanh.Base;
 using QuanLyCuaHangBanh.DTO;
-using QuanLyCuaHangBanh.Helpers;
+using QuanLyCuaHangBanh.Migrations.Helpers;
 using QuanLyCuaHangBanh.Models;
 using QuanLyCuaHangBanh.Views.Customer;
 
