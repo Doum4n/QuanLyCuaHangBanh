@@ -36,6 +36,7 @@ namespace QuanLyCuaHangBanh.Reports
             var Products = context.Products
                 .Include(o => o.Category)
                 .Include(o => o.Producer)
+                .Include(o => o.Manufacturer)
                 .Select(o => new ProductReportItem
                 (
                     o.ID,
@@ -44,10 +45,11 @@ namespace QuanLyCuaHangBanh.Reports
                     o.Category.Name,
                     o.ProducerID,
                     o.Producer.Name,
+                    o.Manufacturer != null ? o.Manufacturer.Name : "",
                     //o.ProductionDate,
                     //o.ExpirationDate,
                     o.Description,
-                    o.Image
+                    o.Image ?? ""
                 )).Cast<Object>().ToList();
 
             ReportHanler.LoadData(
@@ -65,6 +67,7 @@ namespace QuanLyCuaHangBanh.Reports
                         row["CategoryName"] = product.CategoryName;
                         row["SupplierID"] = product.ProducerID;
                         row["SupplierName"] = product.SupplierName;
+                        row["ManufacturerName"] = product.ManufacturerName;
                         //row["ProductionDate"] = product.ProductionDate.ToDateTime(TimeOnly.MinValue);
                         //row["ExpirationDate"] = product.ExpirationDate.ToDateTime(TimeOnly.MinValue);
                         row["Description"] = product.Description;
@@ -81,6 +84,7 @@ namespace QuanLyCuaHangBanh.Reports
         public string CategoryName { get; set; }
         public int ProducerID { get; set; }
         public string SupplierName { get; set; }
+        public string ManufacturerName { get; set; }
         //public DateOnly ProductionDate { get; set; }
         //public DateOnly ExpirationDate { get; set; }
         public string Description { get; set; }
@@ -88,7 +92,7 @@ namespace QuanLyCuaHangBanh.Reports
 
         public ProductReportItem() { }
 
-        public ProductReportItem(int id, string productName, int categoryID, string categoryName, int producerID, string supplierName, string description, string image)
+        public ProductReportItem(int id, string productName, int categoryID, string categoryName, int producerID, string supplierName, string manufacturerName, string description, string image)
         {
             ID = id;
             ProductName = productName;
@@ -96,6 +100,7 @@ namespace QuanLyCuaHangBanh.Reports
             CategoryName = categoryName;
             ProducerID = producerID;
             SupplierName = supplierName;
+            ManufacturerName = manufacturerName;
             //ProductionDate = productionDate;
             //ExpirationDate = expirationDate;
             Description = description;

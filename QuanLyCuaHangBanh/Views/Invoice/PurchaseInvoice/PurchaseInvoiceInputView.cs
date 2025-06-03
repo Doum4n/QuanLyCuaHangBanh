@@ -3,6 +3,7 @@ using QuanLyCuaHangBanh.DTO;
 using System.ComponentModel;
 using System.Data;
 using QuanLyCuaHangBanh.Models;
+using QuanLyCuaHangBanh.Uitls;
 
 namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
 {
@@ -156,6 +157,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
                 cbb_Status.SelectedItem = _purchaseInvoiceDTO.Status;
                 dateTimePicker.Value = _purchaseInvoiceDTO.CreatedDate;
                 rtb_Note.Text = _purchaseInvoiceDTO.Note ?? string.Empty;
+                cbb_PaymentMethod.Text = _purchaseInvoiceDTO.PaymentMethod;
 
                 _product = new BindingList<ProductPurchaseInvoiceDTO>(context.PurchaseInvoiceDetails
                     .Where(p => p.InvoiceID == _purchaseInvoiceDTO.ID)
@@ -219,6 +221,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
             nmr_ConversionRate.DataBindings.Add("Value", bs, "ConversionRate", true, DataSourceUpdateMode.Never);
             nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.Never);
 
+            Utils.DataGridView.HideColumn(dgv_ProductList, new string[] { "Status", "CategoryID", "ID", "ProductUnitID", "InvoiceID" });
+
         }
 
         private void cbb_Units_SelectedIndexChanged(object sender, EventArgs e)
@@ -248,11 +252,12 @@ namespace QuanLyCuaHangBanh.Views.Invoice.PurchaseInvoice
             Models.PurchaseInvoice purchaseInvoice = new Models.PurchaseInvoice()
             {
                 ID = 0, // Invoice chưa được tạo
-                EmployeeID = 1, // Assuming you will set this later
+                EmployeeID = Session.EmployeeId, // Assuming you will set this later
                 SupplierID = (int)cbb_Suppliers.SelectedValue,
                 Date = dateTimePicker.Value.ToUniversalTime(),
                 Status = cbb_Status.Text,
                 Note = rtb_Note.Text,
+                PaymentMethod = cbb_PaymentMethod.Text,
             };
 
             if (_purchaseInvoiceDTO != null)

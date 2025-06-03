@@ -16,13 +16,15 @@ namespace QuanLyCuaHangBanh.DTO
         public int CreditPeriod { get; set; }
         public decimal TotalUnpaid { get; set; }
         public string Note { get; set; } = string.Empty;
-        public PurchaseInvoiceDTO(int id, string employeeName, int supplierId, string supplierName, DateTime createdDate, decimal totalAmount, string status, int creditPeriod, decimal totalUnpaid, string note) : base(id, employeeName, createdDate, totalAmount, status)
+        public string PaymentMethod { get; set; } = string.Empty;
+        public PurchaseInvoiceDTO(int id, string employeeName, int supplierId, string supplierName, DateTime createdDate, decimal totalAmount, string status, int creditPeriod, decimal totalUnpaid, string note, string paymentMethod) : base(id, employeeName, createdDate, totalAmount, status)
         {
             SupplierName = supplierName;
             SupplierID = supplierId;
             CreditPeriod = creditPeriod;
             TotalUnpaid = totalUnpaid;
             Note = note;
+            PaymentMethod = paymentMethod;
         }
 
         internal PurchaseInvoice ToEntity()
@@ -32,6 +34,7 @@ namespace QuanLyCuaHangBanh.DTO
                 ID = ID,
                 SupplierID = SupplierID,
                 Status = Status,
+                PaymentMethod = PaymentMethod,
             };
         }
 

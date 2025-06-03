@@ -51,6 +51,7 @@ namespace QuanLyCuaHangBanh.Views.Unit
 
         public void SetBindingSource(BindingSource bindingSource)
         {
+            dgv_UnitList.AutoGenerateColumns = false;
             dgv_UnitList.DataSource = bindingSource;
         }
 

@@ -43,7 +43,6 @@ namespace QuanLyCuaHangBanh.Repositories
             base.Add(entity);
         }
 
-        // TODO sửa lại
         public override void Update(Product entity)
         {
             var oldEntity = context.Products.AsNoTracking().FirstOrDefault(p => p.ID == entity.ID);
@@ -54,22 +53,14 @@ namespace QuanLyCuaHangBanh.Repositories
             if (!string.IsNullOrEmpty(entity.Image) &&
                 !entity.Image.StartsWith("https://res.cloudinary.com"))
             {
-                try
+
+                var cloudinary = CloudinaryConfig.GetCloudinaryClient();
+                var uploadParams = new ImageUploadParams()
                 {
-                    var cloudinary = CloudinaryConfig.GetCloudinaryClient();
-                    isNewImageUploaded = true;
-                    var uploadParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(entity.Image)
-                    };
-                    var uploadResult = cloudinary.Upload(uploadParams);
-                    entity.Image = uploadResult.SecureUri.ToString();
-                }
-                catch (Exception ex)
-                {
-                    entity.Image = oldImageUrl;
-                    throw new Exception(ex.Message);
-                }
+                    File = new FileDescription(entity.Image)
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                entity.Image = uploadResult.SecureUri.ToString();
             }
             else
             {

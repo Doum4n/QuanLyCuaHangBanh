@@ -56,11 +56,8 @@ namespace QuanLyCuaHangBanh.Views
             // Khởi tạo danh sách loại khách hàng
             List<string> types =
             [
-                "Khách hàng thường",    // Regular customer
-                "Khách hàng VIP",       // VIP customer
-                "Khách hàng thân thiết", // Loyal customer
-                "Khách hàng mới",       // New customer
-                "Khách hàng doanh nghiệp" // Corporate customer
+                "Cá nhân",
+                "Doanh nghiệp"// Regular customer
             ];
 
             cbb_CustomerTypes.DataSource = types;

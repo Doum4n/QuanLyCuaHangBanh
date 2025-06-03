@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CategoryInputView));
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             tb_Name = new MaterialSkin.Controls.MaterialTextBox2();
             mttb_Description = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
@@ -69,7 +70,7 @@
             tb_Name.SelectionStart = 0;
             tb_Name.ShortcutsEnabled = true;
             tb_Name.Size = new Size(312, 48);
-            tb_Name.TabIndex = 5;
+            tb_Name.TabIndex = 0;
             tb_Name.TabStop = false;
             tb_Name.TextAlign = HorizontalAlignment.Left;
             tb_Name.TrailingIcon = null;
@@ -94,7 +95,7 @@
             mttb_Description.SelectionStart = 0;
             mttb_Description.ShortcutsEnabled = true;
             mttb_Description.Size = new Size(312, 125);
-            mttb_Description.TabIndex = 6;
+            mttb_Description.TabIndex = 1;
             mttb_Description.TabStop = false;
             mttb_Description.TextAlign = HorizontalAlignment.Left;
             mttb_Description.UseSystemPasswordChar = false;
@@ -142,8 +143,10 @@
             Controls.Add(tb_Name);
             Controls.Add(materialLabel2);
             Controls.Add(materialLabel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "CategoryInputView";
-            Text = "CategoryInputView";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Loại sản phẩm";
             Load += CategoryInputView_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerInputView));
             materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
@@ -102,7 +103,7 @@
             tb_CustomerName.Location = new Point(45, 78);
             tb_CustomerName.Name = "tb_CustomerName";
             tb_CustomerName.Size = new Size(194, 20);
-            tb_CustomerName.TabIndex = 7;
+            tb_CustomerName.TabIndex = 0;
             // 
             // tb_PhoneNumer
             // 
@@ -110,7 +111,7 @@
             tb_PhoneNumer.Location = new Point(45, 159);
             tb_PhoneNumer.Name = "tb_PhoneNumer";
             tb_PhoneNumer.Size = new Size(194, 20);
-            tb_PhoneNumer.TabIndex = 8;
+            tb_PhoneNumer.TabIndex = 1;
             // 
             // mttb_Address
             // 
@@ -118,7 +119,7 @@
             mttb_Address.Location = new Point(304, 78);
             mttb_Address.Name = "mttb_Address";
             mttb_Address.Size = new Size(250, 187);
-            mttb_Address.TabIndex = 9;
+            mttb_Address.TabIndex = 2;
             mttb_Address.Text = "";
             // 
             // cbb_CustomerTypes
@@ -127,7 +128,7 @@
             cbb_CustomerTypes.Location = new Point(45, 237);
             cbb_CustomerTypes.Name = "cbb_CustomerTypes";
             cbb_CustomerTypes.Size = new Size(194, 28);
-            cbb_CustomerTypes.TabIndex = 10;
+            cbb_CustomerTypes.TabIndex = 3;
             // 
             // materialLabel4
             // 
@@ -155,7 +156,9 @@
             Controls.Add(materialLabel3);
             Controls.Add(materialLabel2);
             Controls.Add(materialLabel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "CustomerInputView";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Thêm khách hàng";
             Load += CustomerInputView_Load;
             ResumeLayout(false);

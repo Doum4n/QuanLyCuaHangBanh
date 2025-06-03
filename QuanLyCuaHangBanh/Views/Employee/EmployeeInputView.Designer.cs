@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmployeeInputView));
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -102,14 +103,14 @@
             tb_EmployeeName.Location = new Point(24, 55);
             tb_EmployeeName.Name = "tb_EmployeeName";
             tb_EmployeeName.Size = new Size(213, 27);
-            tb_EmployeeName.TabIndex = 6;
+            tb_EmployeeName.TabIndex = 0;
             // 
             // tb_PhoneNumber
             // 
             tb_PhoneNumber.Location = new Point(24, 133);
             tb_PhoneNumber.Name = "tb_PhoneNumber";
             tb_PhoneNumber.Size = new Size(213, 27);
-            tb_PhoneNumber.TabIndex = 7;
+            tb_PhoneNumber.TabIndex = 1;
             // 
             // rtb_Address
             // 
@@ -117,7 +118,7 @@
             rtb_Address.Location = new Point(22, 210);
             rtb_Address.Name = "rtb_Address";
             rtb_Address.Size = new Size(215, 165);
-            rtb_Address.TabIndex = 8;
+            rtb_Address.TabIndex = 2;
             rtb_Address.Text = "";
             // 
             // cbb_Role
@@ -126,24 +127,25 @@
             cbb_Role.Location = new Point(296, 207);
             cbb_Role.Name = "cbb_Role";
             cbb_Role.Size = new Size(213, 28);
-            cbb_Role.TabIndex = 9;
+            cbb_Role.TabIndex = 5;
             // 
             // tb_Username
             // 
             tb_Username.Location = new Point(296, 55);
             tb_Username.Name = "tb_Username";
             tb_Username.Size = new Size(213, 27);
-            tb_Username.TabIndex = 10;
+            tb_Username.TabIndex = 3;
             // 
             // tb_Password
             // 
             tb_Password.Location = new Point(296, 133);
             tb_Password.Name = "tb_Password";
             tb_Password.Size = new Size(213, 27);
-            tb_Password.TabIndex = 11;
+            tb_Password.TabIndex = 4;
             // 
             // btn_Save
             // 
+            btn_Save.Anchor = AnchorStyles.None;
             btn_Save.AutoSize = false;
             btn_Save.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn_Save.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -156,7 +158,7 @@
             btn_Save.Name = "btn_Save";
             btn_Save.NoAccentTextColor = Color.Empty;
             btn_Save.Size = new Size(158, 36);
-            btn_Save.TabIndex = 12;
+            btn_Save.TabIndex = 6;
             btn_Save.Text = "Lưu";
             btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Save.UseAccentColor = false;
@@ -181,7 +183,9 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "EmployeeInputView";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Nhân viên";
             Load += EmployeeInputView_Load;
             ResumeLayout(false);

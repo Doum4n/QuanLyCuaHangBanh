@@ -223,7 +223,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -236,7 +236,7 @@
             // 
             // tsbtn_Import
             // 
-            tsbtn_Import.Image = (Image)resources.GetObject("tsbtn_Import.Image");
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
             tsbtn_Import.ImageTransparentColor = Color.Magenta;
             tsbtn_Import.Name = "tsbtn_Import";
             tsbtn_Import.Size = new Size(78, 24);
@@ -245,7 +245,7 @@
             // 
             // tsbnt_Export
             // 
-            tsbnt_Export.Image = (Image)resources.GetObject("tsbnt_Export.Image");
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
             tsbnt_Export.ImageTransparentColor = Color.Magenta;
             tsbnt_Export.Name = "tsbnt_Export";
             tsbnt_Export.Size = new Size(72, 24);
@@ -258,7 +258,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1103, 607);
             Controls.Add(groupBox1);
-            Text = "EmployeeView";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Nhân viên";
             Load += EmployeeView_Load;
             ((System.ComponentModel.ISupportInitialize)dgv_EmployeeList).EndInit();
             groupBox1.ResumeLayout(false);

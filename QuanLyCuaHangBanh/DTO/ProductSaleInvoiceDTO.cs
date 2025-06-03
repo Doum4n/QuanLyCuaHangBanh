@@ -9,10 +9,12 @@ using QuanLyCuaHangBanh.DTO.Base;
 
 namespace QuanLyCuaHangBanh.DTO
 {
-    public class ProductSaleInvoiceDTO(int iD, string productName, int categoryId, string categoryName, string unitName, int productUnitId, decimal conversionRate, int quantity, string note, decimal price) : DisplayProduct(iD, productName, categoryId, categoryName, unitName, productUnitId, conversionRate, quantity, note)
+    public class ProductSaleInvoiceDTO(int iD, string productName, int categoryId, string categoryName, string unitName, int productUnitId, decimal conversionRate, int quantity, string note, decimal price, int customerId, string paymentMethod) : DisplayProduct(iD, productName, categoryId, categoryName, unitName, productUnitId, conversionRate, quantity, note)
     {
         public decimal Price { get; set; } = price;
         public int InvoiceID { get; set; }
+        public int CustomerID { get; set; } = customerId;
+        public string PaymentMethod { get; set; } = paymentMethod;
 
         public SalesInvoice_Detail ToSalesInvoiceDetail()
         {

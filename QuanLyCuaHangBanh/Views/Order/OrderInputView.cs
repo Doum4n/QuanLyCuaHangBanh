@@ -90,9 +90,12 @@ namespace QuanLyCuaHangBanh.Views.Order
                 InitializeNewProductList();
             }
 
+            Utils.DataGridView.HideColumn(dgv_ProductList, new string[] { "Status", "CategoryID", "ID", "ProductUnitID", "OrderID" });
             // Thiết lập data bindings
             SetupDataBindings();
         }
+
+        
 
         #endregion
 
@@ -306,6 +309,14 @@ namespace QuanLyCuaHangBanh.Views.Order
                 if (cbb_Products.SelectedItem is Models.Product selectedProduct)
                 {
                     UpdateProductUnitDetails(selectedProduct);
+
+                    // var productUnit = context.ProductUnits.Where(p => p.ProductID == selectedProduct.ID && p.UnitID == selectedUnit.ID).FirstOrDefault();
+                    // if (productUnit != null)
+                    // {
+                    //     nmr_Price.Value = productUnit.UnitPrice;
+                    //     nmr_ConversionRate.Value = productUnit.ConversionRate;
+                    //     nmr_Quantity.Maximum = productUnit.Inventory != null ? productUnit.Inventory.Quantity : 0;
+                    // }
                 }
             }
         }
@@ -363,7 +374,7 @@ namespace QuanLyCuaHangBanh.Views.Order
                 tb_PhoneNumber.Text = selectedCustomer.PhoneNumber;
                 tb_TypeCustomer.Text = selectedCustomer.Type;
 
-                if (selectedCustomer.Type == "Khách hàng thân thiết" || selectedCustomer.Type == "Khách hàng VIP" || selectedCustomer.Type == "Khách hàng doanh nghiệp")
+                if (selectedCustomer.Type == "Doanh nghiệp")
                 {
                     paymentMethod.Add("Ghi nợ");
                 }
@@ -408,27 +419,26 @@ namespace QuanLyCuaHangBanh.Views.Order
         /// <param name="selectedProduct">Sản phẩm được chọn</param>
         private void UpdateProductUnitDetails(Models.Product selectedProduct)
         {
-            var selectedUnitId = Convert.ToInt32(cbb_Units.SelectedValue);
-            var _productUnit = context.ProductUnits
-                .Include(o => o.Inventory)
-                .Where(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnitId)
-                .FirstOrDefault();
-
-            if (_productUnit != null)
+            if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
             {
-                nmr_ConversionRate.Value = _productUnit.ConversionRate;
-                nmr_Price.Value = _productUnit.UnitPrice;
-
-                var totalQuantity = context.ProductUnits
+                var selectedUnitId = selectedUnit.ID;
+                var _productUnit = context.ProductUnits
                     .Include(o => o.Inventory)
-                    .Where(o => o.ProductID == selectedProduct.ID && o.UnitID == selectedUnitId)
-                    .Sum(g => g.Inventory != null ? g.Inventory.Quantity : -1);
+                    .Where(o => o.ProductID == selectedProduct.ID && o.ID == selectedUnitId)
+                    .FirstOrDefault();
 
-                nmr_Quantity.Maximum = totalQuantity != -1 ?
-                    totalQuantity :
-                    throw new Exception("Không tìm thấy kho hàng");
+                if (_productUnit != null)
+                {
+                    nmr_ConversionRate.Value = _productUnit.ConversionRate;
+                    nmr_Price.Value = _productUnit.UnitPrice;
 
-                nmr_ConversionRate.Value = _productUnit.ConversionRate;
+                    var totalQuantity = context.ProductUnits
+                        .Include(o => o.Inventory)
+                        .Where(o => o.ProductID == selectedProduct.ID && o.ID == selectedUnitId)
+                        .Sum(g => g.Inventory != null ? g.Inventory.Quantity : 0);
+
+                    nmr_Quantity.Maximum = totalQuantity;
+                }
             }
         }
 

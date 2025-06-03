@@ -124,6 +124,8 @@ namespace QuanLyCuaHangBanh.Views
             {
                 InitializeNewReleaseNote();
             }
+
+            Utils.DataGridView.HideColumn(dgv_ProductList, new string[] { "Status", "CategoryID", "ID", "ProductUnitID", "WarehouseReleaseNoteId", "IsNewlyAdded" });
         }
 
         /// <summary>

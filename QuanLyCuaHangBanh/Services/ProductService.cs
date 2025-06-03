@@ -153,20 +153,126 @@ namespace QuanLyCuaHangBanh.Services
             string soLuongStr = SafeGet(row, "Số lượng");
             string giaBanStr = SafeGet(row, "Giá bán");
             string image = SafeGet(row, "Hình ảnh");
+            string conversionRateStr = SafeGet(row, "Tỷ lệ quy đổi");
 
-            // Lấy ID của các thực thể liên quan
-            int existingCategoryId = GetExistingCategoryId(danhMuc);
-            int existingSupplierId = GetExistingSupplierId(nhaCungCap);
-            int existingManufacturerId = GetExistingManufacturerId(nhaSanXuat);
+            // Validate conversion rate
+            if (!decimal.TryParse(conversionRateStr, out decimal conversionRate) || conversionRate <= 0)
+            {
+                MessageBox.Show("Tỷ lệ quy đổi không hợp lệ");
+                return;
+            }
 
-            // Xử lý sản phẩm
-            Product product = ProcessProduct(tenSanPham, existingCategoryId, existingSupplierId, existingManufacturerId, moTa, image);
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.ChangeTracker.Clear();
 
-            // Xử lý đơn vị và tồn kho
-            ProcessProductUnitAndInventory(product, donVi, soLuongStr, giaBanStr);
+                    // Lấy ID của các thực thể liên quan
+                    int existingCategoryId = GetExistingCategoryId(danhMuc);
+                    int existingSupplierId = GetExistingSupplierId(nhaCungCap);
+                    int existingManufacturerId = GetExistingManufacturerId(nhaSanXuat);
 
-            // Lưu thay đổi
-            _context.SaveChanges();
+                    // Lấy hoặc tạo đơn vị
+                    var unit = _context.Units.FirstOrDefault(u => u.Name == donVi);
+                    if (unit == null)
+                    {
+                        unit = new Unit { Name = donVi };
+                        _context.Units.Add(unit);
+                        _context.SaveChanges();
+                        _context.ChangeTracker.Clear();
+                    }
+
+                    // Tìm sản phẩm hiện có
+                    var existingProduct = _context.Products
+                        .Include(p => p.ProductUnits)
+                        .FirstOrDefault(p => p.Name == tenSanPham &&
+                                           p.CategoryID == existingCategoryId &&
+                                           p.ManufacturerID == existingManufacturerId);
+
+                    Product product;
+                    if (existingProduct == null)
+                    {
+                        // Tạo sản phẩm mới
+                        product = new Product
+                        {
+                            Name = tenSanPham,
+                            CategoryID = existingCategoryId,
+                            ProducerID = existingSupplierId,
+                            ManufacturerID = existingManufacturerId,
+                            Description = moTa,
+                            Image = image,
+                            BaseUnitID = unit.ID
+                        };
+                        _context.Products.Add(product);
+                    }
+                    else
+                    {
+                        product = existingProduct;
+                        if (conversionRate == 1 && !product.ProductUnits.Any(pu => pu.ConversionRate == 1))
+                        {
+                            product.BaseUnitID = unit.ID;
+                        }
+                    }
+                    _context.SaveChanges();
+                    _context.ChangeTracker.Clear();
+
+                    // Xử lý đơn vị sản phẩm
+                    var existingProductUnit = _context.ProductUnits
+                        .Include(pu => pu.Inventory)
+                        .FirstOrDefault(pu => pu.ProductID == product.ID && pu.UnitID == unit.ID);
+
+                    Product_Unit productUnit;
+                    if (existingProductUnit == null)
+                    {
+                        // Tạo mới đơn vị sản phẩm
+                        productUnit = new Product_Unit
+                        {
+                            ProductID = product.ID,
+                            UnitID = unit.ID,
+                            ConversionRate = conversionRate,
+                            UnitPrice = decimal.TryParse(giaBanStr, out decimal giaBan) ? giaBan : 0
+                        };
+                        _context.ProductUnits.Add(productUnit);
+                    }
+                    else
+                    {
+                        productUnit = existingProductUnit;
+                        productUnit.ConversionRate = conversionRate;
+                        productUnit.UnitPrice = decimal.TryParse(giaBanStr, out decimal giaBan) ? giaBan : productUnit.UnitPrice;
+                    }
+                    _context.SaveChanges();
+                    _context.ChangeTracker.Clear();
+
+                    // Xử lý tồn kho
+                    var inventory = _context.Inventories
+                        .FirstOrDefault(i => i.ProductUnitID == productUnit.ID);
+
+                    if (inventory == null)
+                    {
+                        // Tạo mới tồn kho
+                        inventory = new Inventory
+                        {
+                            ProductUnitID = productUnit.ID,
+                            Quantity = int.TryParse(soLuongStr, out int soLuong) ? soLuong : 0
+                        };
+                        _context.Inventories.Add(inventory);
+                    }
+                    else
+                    {
+                        inventory.Quantity = int.TryParse(soLuongStr, out int soLuong) ? soLuong : inventory.Quantity;
+                    }
+                    _context.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Lỗi khi nhập sản phẩm: {ex.Message}");
+                    throw; // Re-throw to see the full error in debug
+                }
+            }
         }
 
         /// <summary>
@@ -199,19 +305,14 @@ namespace QuanLyCuaHangBanh.Services
                 switch (productUnitDto.status)
                 {
                     case DTO.Base.Status.New:
+                        productUnitDto.ID = 0;
                         productUnitDto.ProductID = product.ID;
                         _repositoryProvider.GetRepository<Product_Unit>().Add(productUnitDto.ToProductUnit());
                         break;
                         
                     case DTO.Base.Status.Modified:
-                        var existingProductUnit = _repositoryProvider.GetRepository<Product_Unit>().GetAll().Result.
-                            FirstOrDefault(pu => pu.UnitID == productUnitDto.UnitID && pu.ProductID == productUnitDto.ProductID);
-                        if (existingProductUnit != null)
-                        {
-                            existingProductUnit.UnitPrice = productUnitDto.UnitPrice;
-                            existingProductUnit.ConversionRate = productUnitDto.ConversionRate;
-                            _repositoryProvider.GetRepository<Product_Unit>().Update(existingProductUnit);
-                        }
+                        productUnitDto.ProductID = product.ID;
+                        _repositoryProvider.GetRepository<Product_Unit>().Update(productUnitDto.ToProductUnit());
                         break;
 
                     case DTO.Base.Status.Deleted:
@@ -322,98 +423,6 @@ namespace QuanLyCuaHangBanh.Services
                 _context.SaveChanges();
             }
             return manufacturer.ID;
-        }
-
-        /// <summary>
-        /// Xử lý thông tin sản phẩm từ dữ liệu nhập
-        /// </summary>
-        /// <param name="tenSanPham">Tên sản phẩm</param>
-        /// <param name="categoryId">ID danh mục</param>
-        /// <param name="supplierId">ID nhà cung cấp</param>
-        /// <param name="manufacturerId">ID nhà sản xuất</param>
-        /// <param name="moTa">Mô tả sản phẩm</param>
-        /// <param name="image">Đường dẫn hình ảnh</param>
-        /// <returns>Đối tượng Product đã được xử lý</returns>
-        private Product ProcessProduct(string tenSanPham, int categoryId, int supplierId, int manufacturerId, string moTa, string image)
-        {
-            var existingProduct = _context.Products.FirstOrDefault(p => p.Name == tenSanPham);
-            if (existingProduct != null)
-            {
-                existingProduct.CategoryID = categoryId;
-                existingProduct.ProducerID = supplierId;
-                existingProduct.ManufacturerID = manufacturerId;
-                existingProduct.Description = moTa;
-                existingProduct.Image = image;
-                _context.Products.Update(existingProduct);
-                return existingProduct;
-            }
-            else
-            {
-                var newProduct = new Product
-                {
-                    Name = tenSanPham,
-                    CategoryID = categoryId,
-                    ProducerID = supplierId,
-                    ManufacturerID = manufacturerId,
-                    Description = moTa,
-                    Image = image
-                };
-                _context.Products.Add(newProduct);
-                _context.SaveChanges();
-                return newProduct;
-            }
-        }
-
-        /// <summary>
-        /// Xử lý thông tin đơn vị và tồn kho của sản phẩm
-        /// </summary>
-        /// <param name="product">Sản phẩm cần xử lý</param>
-        /// <param name="donVi">Tên đơn vị tính</param>
-        /// <param name="soLuongStr">Số lượng dạng chuỗi</param>
-        /// <param name="giaBanStr">Giá bán dạng chuỗi</param>
-        private void ProcessProductUnitAndInventory(Product product, string donVi, string soLuongStr, string giaBanStr)
-        {
-            var unit = _context.Units.FirstOrDefault(u => u.Name == donVi);
-            if (unit == null)
-            {
-                unit = new Unit { Name = donVi };
-                _context.Units.Add(unit);
-                _context.SaveChanges();
-            }
-
-            var productUnit = _context.ProductUnits
-                .FirstOrDefault(pu => pu.ProductID == product.ID && pu.UnitID == unit.ID);
-
-            if (productUnit == null)
-            {
-                productUnit = new Product_Unit
-                {
-                    ProductID = product.ID,
-                    UnitID = unit.ID,
-                    ConversionRate = 1,
-                    UnitPrice = decimal.TryParse(giaBanStr, out decimal giaBan) ? giaBan : 0
-                };
-                _context.ProductUnits.Add(productUnit);
-                _context.SaveChanges();
-            }
-
-            var inventory = _context.Inventories
-                .FirstOrDefault(i => i.ProductUnitID == productUnit.ID);
-
-            if (inventory == null)
-            {
-                inventory = new Inventory
-                {
-                    ProductUnitID = productUnit.ID,
-                    Quantity = int.TryParse(soLuongStr, out int soLuong) ? soLuong : 0
-                };
-                _context.Inventories.Add(inventory);
-            }
-            else
-            {
-                inventory.Quantity = int.TryParse(soLuongStr, out int soLuong) ? soLuong : 0;
-                _context.Inventories.Update(inventory);
-            }
         }
         #endregion
     }

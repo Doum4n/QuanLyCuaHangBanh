@@ -32,6 +32,7 @@ namespace QuanLyCuaHangBanh.Repositories
                 .ThenInclude(p => p.Category)
                 .Include(od => od.Product_Unit)
                 .ThenInclude(pu => pu.Unit)
+                .Include(od => od.Order)
                 .Where(od => od.OrderId == orderId)
                 .ToList();
 

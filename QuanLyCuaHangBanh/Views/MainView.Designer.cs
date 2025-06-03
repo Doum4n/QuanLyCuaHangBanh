@@ -61,13 +61,13 @@
             stmi_OrderStatistics = new ToolStripMenuItem();
             tsmi_InventoryStatistical = new ToolStripMenuItem();
             tsmi_AccountsPayable = new ToolStripMenuItem();
+            tsmi_AccountsReceiable = new ToolStripMenuItem();
             trợGiúpToolStripMenuItem = new ToolStripMenuItem();
             thôngTinPhầnMềmToolStripMenuItem = new ToolStripMenuItem();
             hướngDẫnSửDụngToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tsslb_EmployeeName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
-            tsmi_AccountsReceiable = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -290,6 +290,14 @@
             tsmi_AccountsPayable.Name = "tsmi_AccountsPayable";
             tsmi_AccountsPayable.Size = new Size(269, 26);
             tsmi_AccountsPayable.Text = "Thống kê công nợ phải trả";
+            tsmi_AccountsPayable.Click += tsmi_AccountsPayable_Click;
+            // 
+            // tsmi_AccountsReceiable
+            // 
+            tsmi_AccountsReceiable.Name = "tsmi_AccountsReceiable";
+            tsmi_AccountsReceiable.Size = new Size(269, 26);
+            tsmi_AccountsReceiable.Text = "Thống kê công nợ phải thu";
+            tsmi_AccountsReceiable.Click += tsmi_AccountsReceiable_Click;
             // 
             // trợGiúpToolStripMenuItem
             // 
@@ -335,12 +343,6 @@
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             toolStripStatusLabel2.Size = new Size(157, 20);
             toolStripStatusLabel2.Text = "@ Khoa CNTT - ĐHAG";
-            // 
-            // tsmi_AccountsReceiable
-            // 
-            tsmi_AccountsReceiable.Name = "tsmi_AccountsReceiable";
-            tsmi_AccountsReceiable.Size = new Size(269, 26);
-            tsmi_AccountsReceiable.Text = "Thống kê công nợ phải thu";
             // 
             // MainView
             // 

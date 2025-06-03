@@ -227,7 +227,7 @@
             cbb_Status.Location = new Point(250, 56);
             cbb_Status.Name = "cbb_Status";
             cbb_Status.Size = new Size(202, 28);
-            cbb_Status.TabIndex = 1;
+            cbb_Status.TabIndex = 2;
             // 
             // materialLabel2
             // 
@@ -278,6 +278,7 @@
             cbb_Suppliers.Name = "cbb_Suppliers";
             cbb_Suppliers.Size = new Size(202, 28);
             cbb_Suppliers.TabIndex = 0;
+            cbb_Suppliers.SelectedIndexChanged += cbb_Suppliers_SelectedIndexChanged;
             // 
             // label1
             // 
@@ -294,7 +295,7 @@
             CreatorName.Location = new Point(19, 124);
             CreatorName.Name = "CreatorName";
             CreatorName.Size = new Size(202, 27);
-            CreatorName.TabIndex = 2;
+            CreatorName.TabIndex = 1;
             // 
             // materialLabel5
             // 
@@ -386,7 +387,7 @@
             btn_Cancel.Location = new Point(1345, 62);
             btn_Cancel.Name = "btn_Cancel";
             btn_Cancel.Size = new Size(91, 29);
-            btn_Cancel.TabIndex = 11;
+            btn_Cancel.TabIndex = 12;
             btn_Cancel.Text = "Hủy";
             btn_Cancel.UseVisualStyleBackColor = true;
             btn_Cancel.Click += btn_Cancel_Click;
@@ -396,7 +397,7 @@
             btn_DeleteProduct.Location = new Point(1345, 104);
             btn_DeleteProduct.Name = "btn_DeleteProduct";
             btn_DeleteProduct.Size = new Size(94, 29);
-            btn_DeleteProduct.TabIndex = 12;
+            btn_DeleteProduct.TabIndex = 13;
             btn_DeleteProduct.Text = "Xóa";
             btn_DeleteProduct.UseVisualStyleBackColor = true;
             btn_DeleteProduct.Click += btn_DeleteProduct_Click;
@@ -406,7 +407,7 @@
             btn_UpdateProduct.Location = new Point(1234, 104);
             btn_UpdateProduct.Name = "btn_UpdateProduct";
             btn_UpdateProduct.Size = new Size(94, 29);
-            btn_UpdateProduct.TabIndex = 10;
+            btn_UpdateProduct.TabIndex = 11;
             btn_UpdateProduct.Text = "Sửa";
             btn_UpdateProduct.UseVisualStyleBackColor = true;
             btn_UpdateProduct.Click += btn_UpdateProduct_Click;
@@ -416,7 +417,7 @@
             btn_Add.Location = new Point(1234, 62);
             btn_Add.Name = "btn_Add";
             btn_Add.Size = new Size(94, 29);
-            btn_Add.TabIndex = 9;
+            btn_Add.TabIndex = 10;
             btn_Add.Text = "Thêm";
             btn_Add.UseVisualStyleBackColor = true;
             btn_Add.Click += btn_Add_Click;
@@ -437,7 +438,7 @@
             dtp_ExpirationDate.Location = new Point(699, 115);
             dtp_ExpirationDate.Name = "dtp_ExpirationDate";
             dtp_ExpirationDate.Size = new Size(147, 27);
-            dtp_ExpirationDate.TabIndex = 7;
+            dtp_ExpirationDate.TabIndex = 8;
             // 
             // nmr_PurchasePrice
             // 
@@ -483,7 +484,7 @@
             dtp_ProductionDate.Location = new Point(699, 56);
             dtp_ProductionDate.Name = "dtp_ProductionDate";
             dtp_ProductionDate.Size = new Size(147, 27);
-            dtp_ProductionDate.TabIndex = 6;
+            dtp_ProductionDate.TabIndex = 7;
             // 
             // label9
             // 
@@ -500,7 +501,7 @@
             rtb_ProductNote.Location = new Point(909, 56);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(264, 89);
-            rtb_ProductNote.TabIndex = 8;
+            rtb_ProductNote.TabIndex = 9;
             rtb_ProductNote.Text = "";
             // 
             // label8
@@ -528,7 +529,7 @@
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
-            nmr_Quantity.TabIndex = 5;
+            nmr_Quantity.TabIndex = 6;
             nmr_Quantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label6
@@ -591,7 +592,7 @@
             groupBox3.Location = new Point(0, 0);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(1490, 186);
-            groupBox3.TabIndex = 45;
+            groupBox3.TabIndex = 5;
             groupBox3.TabStop = false;
             groupBox3.Text = "Thông tin sản phẩm";
             // 
@@ -652,14 +653,6 @@
         private Label label9;
         private ComboBox cbb_Products;
         private NumericUpDown nmr_ConversionRate;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn ProductName;
-        private DataGridViewTextBoxColumn CategoryName;
-        private DataGridViewTextBoxColumn UnitName;
-        private DataGridViewTextBoxColumn ConversionRate;
-        private DataGridViewTextBoxColumn PurchasePrice;
-        private DataGridViewTextBoxColumn Quantity;
-        private DataGridViewTextBoxColumn Note;
         private NumericUpDown nmr_PurchasePrice;
         private Label label3;
         private DateTimePicker dtp_ExpirationDate;
@@ -669,8 +662,16 @@
         private Button btn_Add;
         private Button btn_Cancel;
         private Button btn_DeleteProduct;
+        private GroupBox groupBox3;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn ProductName;
+        private DataGridViewTextBoxColumn CategoryName;
+        private DataGridViewTextBoxColumn UnitName;
+        private DataGridViewTextBoxColumn ConversionRate;
+        private DataGridViewTextBoxColumn PurchasePrice;
+        private DataGridViewTextBoxColumn Quantity;
+        private DataGridViewTextBoxColumn Note;
         private DataGridViewTextBoxColumn ProductionDate;
         private DataGridViewTextBoxColumn ExpirationDate;
-        private GroupBox groupBox3;
     }
 }

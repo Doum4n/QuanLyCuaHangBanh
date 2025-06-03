@@ -29,7 +29,6 @@ namespace QuanLyCuaHangBanh.Views
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReleaseNoteInputView));
             cbb_Status = new ComboBox();
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
@@ -62,7 +61,6 @@ namespace QuanLyCuaHangBanh.Views
             CategoryName = new DataGridViewTextBoxColumn();
             UnitName = new DataGridViewTextBoxColumn();
             ConversionRate = new DataGridViewTextBoxColumn();
-            PurchasePrice = new DataGridViewTextBoxColumn();
             Quantity = new DataGridViewTextBoxColumn();
             Note = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
@@ -90,7 +88,7 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Status.Location = new Point(302, 60);
             cbb_Status.Name = "cbb_Status";
             cbb_Status.Size = new Size(197, 28);
-            cbb_Status.TabIndex = 32;
+            cbb_Status.TabIndex = 1;
             // 
             // materialLabel2
             // 
@@ -111,7 +109,7 @@ namespace QuanLyCuaHangBanh.Views
             dateTimePicker.Location = new Point(302, 147);
             dateTimePicker.Name = "dateTimePicker";
             dateTimePicker.Size = new Size(197, 27);
-            dateTimePicker.TabIndex = 30;
+            dateTimePicker.TabIndex = 2;
             // 
             // rtb_Note
             // 
@@ -119,7 +117,7 @@ namespace QuanLyCuaHangBanh.Views
             rtb_Note.Location = new Point(562, 57);
             rtb_Note.Name = "rtb_Note";
             rtb_Note.Size = new Size(387, 117);
-            rtb_Note.TabIndex = 27;
+            rtb_Note.TabIndex = 3;
             rtb_Note.Text = "";
             // 
             // panel3
@@ -145,7 +143,7 @@ namespace QuanLyCuaHangBanh.Views
             btn_Save.Name = "btn_Save";
             btn_Save.NoAccentTextColor = Color.Empty;
             btn_Save.Size = new Size(132, 42);
-            btn_Save.TabIndex = 9;
+            btn_Save.TabIndex = 0;
             btn_Save.Text = "Lưu";
             btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Save.UseAccentColor = false;
@@ -158,7 +156,7 @@ namespace QuanLyCuaHangBanh.Views
             nmr_ConversionRate.Location = new Point(481, 117);
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
-            nmr_ConversionRate.TabIndex = 21;
+            nmr_ConversionRate.TabIndex = 3;
             // 
             // cbb_Products
             // 
@@ -166,7 +164,7 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Products.Location = new Point(23, 117);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
-            cbb_Products.TabIndex = 20;
+            cbb_Products.TabIndex = 1;
             cbb_Products.SelectedIndexChanged += cbb_Products_SelectedIndexChanged;
             // 
             // materialLabel1
@@ -196,7 +194,7 @@ namespace QuanLyCuaHangBanh.Views
             rtb_ProductNote.Location = new Point(674, 52);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(287, 117);
-            rtb_ProductNote.TabIndex = 14;
+            rtb_ProductNote.TabIndex = 4;
             rtb_ProductNote.Text = "";
             // 
             // label8
@@ -215,7 +213,7 @@ namespace QuanLyCuaHangBanh.Views
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
-            nmr_Quantity.TabIndex = 11;
+            nmr_Quantity.TabIndex = 2;
             nmr_Quantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label6
@@ -233,7 +231,7 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Units.Location = new Point(250, 54);
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
-            cbb_Units.TabIndex = 7;
+            cbb_Units.TabIndex = 0;
             cbb_Units.SelectedIndexChanged += cbb_Units_SelectedIndexChanged;
             // 
             // label5
@@ -251,7 +249,7 @@ namespace QuanLyCuaHangBanh.Views
             cbb_Categories.Location = new Point(23, 54);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
-            cbb_Categories.TabIndex = 5;
+            cbb_Categories.TabIndex = 0;
             cbb_Categories.SelectedIndexChanged += cbb_Categories_SelectedIndexChanged;
             // 
             // label4
@@ -312,7 +310,7 @@ namespace QuanLyCuaHangBanh.Views
             btn_Cancel.Location = new Point(1126, 75);
             btn_Cancel.Name = "btn_Cancel";
             btn_Cancel.Size = new Size(94, 29);
-            btn_Cancel.TabIndex = 27;
+            btn_Cancel.TabIndex = 3;
             btn_Cancel.Text = "Hủy";
             btn_Cancel.UseVisualStyleBackColor = true;
             btn_Cancel.Click += btn_Cancel_Click;
@@ -323,7 +321,7 @@ namespace QuanLyCuaHangBanh.Views
             btn_DeleteProduct.Location = new Point(1126, 119);
             btn_DeleteProduct.Name = "btn_DeleteProduct";
             btn_DeleteProduct.Size = new Size(94, 29);
-            btn_DeleteProduct.TabIndex = 26;
+            btn_DeleteProduct.TabIndex = 4;
             btn_DeleteProduct.Text = "Xóa";
             btn_DeleteProduct.UseVisualStyleBackColor = false;
             btn_DeleteProduct.Click += btn_DeleteProduct_Click;
@@ -333,7 +331,7 @@ namespace QuanLyCuaHangBanh.Views
             btn_UpdateProduct.Location = new Point(1008, 119);
             btn_UpdateProduct.Name = "btn_UpdateProduct";
             btn_UpdateProduct.Size = new Size(94, 29);
-            btn_UpdateProduct.TabIndex = 25;
+            btn_UpdateProduct.TabIndex = 2;
             btn_UpdateProduct.Text = "Sửa";
             btn_UpdateProduct.UseVisualStyleBackColor = true;
             btn_UpdateProduct.Click += btn_UpdateProduct_Click;
@@ -344,7 +342,7 @@ namespace QuanLyCuaHangBanh.Views
             btn_AddProduct.Location = new Point(1008, 74);
             btn_AddProduct.Name = "btn_AddProduct";
             btn_AddProduct.Size = new Size(94, 29);
-            btn_AddProduct.TabIndex = 24;
+            btn_AddProduct.TabIndex = 1;
             btn_AddProduct.Text = "Thêm";
             btn_AddProduct.UseVisualStyleBackColor = false;
             btn_AddProduct.Click += btn_AddProduct_Click;
@@ -355,7 +353,7 @@ namespace QuanLyCuaHangBanh.Views
             dgv_ProductList.AllowUserToDeleteRows = false;
             dgv_ProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_ProductList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, PurchasePrice, Quantity, Note });
+            dgv_ProductList.Columns.AddRange(new DataGridViewColumn[] { ID, ProductName, CategoryName, UnitName, ConversionRate, Quantity, Note });
             dgv_ProductList.Dock = DockStyle.Fill;
             dgv_ProductList.Location = new Point(3, 23);
             dgv_ProductList.Name = "dgv_ProductList";
@@ -405,17 +403,6 @@ namespace QuanLyCuaHangBanh.Views
             ConversionRate.MinimumWidth = 6;
             ConversionRate.Name = "ConversionRate";
             ConversionRate.ReadOnly = true;
-            // 
-            // PurchasePrice
-            // 
-            PurchasePrice.DataPropertyName = "PurchasePrice";
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N0";
-            PurchasePrice.DefaultCellStyle = dataGridViewCellStyle1;
-            PurchasePrice.HeaderText = "Giá tiền";
-            PurchasePrice.MinimumWidth = 6;
-            PurchasePrice.Name = "PurchasePrice";
-            PurchasePrice.ReadOnly = true;
             // 
             // Quantity
             // 
@@ -480,7 +467,7 @@ namespace QuanLyCuaHangBanh.Views
             rbtn_GoodsReciveNote.Location = new Point(16, 56);
             rbtn_GoodsReciveNote.Name = "rbtn_GoodsReciveNote";
             rbtn_GoodsReciveNote.Size = new Size(103, 24);
-            rbtn_GoodsReciveNote.TabIndex = 34;
+            rbtn_GoodsReciveNote.TabIndex = 1;
             rbtn_GoodsReciveNote.TabStop = true;
             rbtn_GoodsReciveNote.Text = "Phiếu nhập";
             rbtn_GoodsReciveNote.UseVisualStyleBackColor = true;
@@ -492,7 +479,7 @@ namespace QuanLyCuaHangBanh.Views
             rbtn_Order.Location = new Point(16, 26);
             rbtn_Order.Name = "rbtn_Order";
             rbtn_Order.Size = new Size(95, 24);
-            rbtn_Order.TabIndex = 33;
+            rbtn_Order.TabIndex = 0;
             rbtn_Order.TabStop = true;
             rbtn_Order.Text = "Đơn hàng";
             rbtn_Order.UseVisualStyleBackColor = true;
@@ -512,7 +499,7 @@ namespace QuanLyCuaHangBanh.Views
             CreatorName.Location = new Point(24, 57);
             CreatorName.Name = "CreatorName";
             CreatorName.Size = new Size(223, 27);
-            CreatorName.TabIndex = 24;
+            CreatorName.TabIndex = 0;
             // 
             // materialLabel5
             // 
@@ -537,7 +524,7 @@ namespace QuanLyCuaHangBanh.Views
             Controls.Add(groupBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ReleaseNoteInputView";
-            Text = "WarehouseReleaseNoteInputView";
+            Text = "Phiếu xuất";
             Load += WarehouseReleaseNoteInputView_Load;
             panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)nmr_ConversionRate).EndInit();
@@ -577,14 +564,6 @@ namespace QuanLyCuaHangBanh.Views
         private Label textbox34;
         private Panel panel1;
         private DataGridView dgv_ProductList;
-        private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn ProductName;
-        private DataGridViewTextBoxColumn CategoryName;
-        private DataGridViewTextBoxColumn UnitName;
-        private DataGridViewTextBoxColumn ConversionRate;
-        private DataGridViewTextBoxColumn PurchasePrice;
-        private DataGridViewTextBoxColumn Quantity;
-        private DataGridViewTextBoxColumn Note;
         private GroupBox groupBox2;
         private GroupBox groupBox1;
         private Label label1;
@@ -599,5 +578,12 @@ namespace QuanLyCuaHangBanh.Views
         private Button btn_UpdateProduct;
         private Button btn_AddProduct;
         private MaterialSkin.Controls.MaterialButton btn_Save;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn ProductName;
+        private DataGridViewTextBoxColumn CategoryName;
+        private DataGridViewTextBoxColumn UnitName;
+        private DataGridViewTextBoxColumn ConversionRate;
+        private DataGridViewTextBoxColumn Quantity;
+        private DataGridViewTextBoxColumn Note;
     }
 }

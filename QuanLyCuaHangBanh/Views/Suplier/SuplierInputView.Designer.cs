@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SuplierInputView));
             materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
@@ -98,7 +99,7 @@
             tb_ProducerName.Location = new Point(44, 80);
             tb_ProducerName.Name = "tb_ProducerName";
             tb_ProducerName.Size = new Size(208, 20);
-            tb_ProducerName.TabIndex = 17;
+            tb_ProducerName.TabIndex = 0;
             // 
             // tb_PhoneNumber
             // 
@@ -106,7 +107,7 @@
             tb_PhoneNumber.Location = new Point(44, 163);
             tb_PhoneNumber.Name = "tb_PhoneNumber";
             tb_PhoneNumber.Size = new Size(208, 20);
-            tb_PhoneNumber.TabIndex = 18;
+            tb_PhoneNumber.TabIndex = 1;
             // 
             // tb_Email
             // 
@@ -114,7 +115,7 @@
             tb_Email.Location = new Point(44, 251);
             tb_Email.Name = "tb_Email";
             tb_Email.Size = new Size(208, 20);
-            tb_Email.TabIndex = 19;
+            tb_Email.TabIndex = 2;
             // 
             // mttb_Address
             // 
@@ -122,7 +123,7 @@
             mttb_Address.Location = new Point(341, 73);
             mttb_Address.Name = "mttb_Address";
             mttb_Address.Size = new Size(208, 110);
-            mttb_Address.TabIndex = 20;
+            mttb_Address.TabIndex = 5;
             mttb_Address.Text = "";
             // 
             // mttb_Description
@@ -131,7 +132,7 @@
             mttb_Description.Location = new Point(347, 251);
             mttb_Description.Name = "mttb_Description";
             mttb_Description.Size = new Size(206, 115);
-            mttb_Description.TabIndex = 21;
+            mttb_Description.TabIndex = 6;
             mttb_Description.Text = "";
             // 
             // label1
@@ -167,7 +168,7 @@
             nmr_Limit.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_Limit.Name = "nmr_Limit";
             nmr_Limit.Size = new Size(150, 27);
-            nmr_Limit.TabIndex = 25;
+            nmr_Limit.TabIndex = 3;
             // 
             // label4
             // 
@@ -201,7 +202,7 @@
             nmr_CreditPeriod.Location = new Point(44, 431);
             nmr_CreditPeriod.Name = "nmr_CreditPeriod";
             nmr_CreditPeriod.Size = new Size(150, 27);
-            nmr_CreditPeriod.TabIndex = 29;
+            nmr_CreditPeriod.TabIndex = 4;
             // 
             // label7
             // 
@@ -234,8 +235,9 @@
             Controls.Add(materialLabel5);
             Controls.Add(btn_Save);
             Controls.Add(materialLabel3);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SuplierInputView";
-            Text = "ProducerInputView";
+            Text = "Nhà cung cấp";
             Load += ProducerInputView_Load;
             ((System.ComponentModel.ISupportInitialize)nmr_Limit).EndInit();
             ((System.ComponentModel.ISupportInitialize)nmr_CreditPeriod).EndInit();

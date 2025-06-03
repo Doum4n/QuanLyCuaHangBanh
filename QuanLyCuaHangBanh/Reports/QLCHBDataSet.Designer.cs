@@ -826,6 +826,8 @@ namespace QuanLyCuaHangBanh.Reports {
             
             private global::System.Data.DataColumn columnImage;
             
+            private global::System.Data.DataColumn columnManufacturerName;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ProductsDataTable() {
@@ -943,6 +945,14 @@ namespace QuanLyCuaHangBanh.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ManufacturerNameColumn {
+                get {
+                    return this.columnManufacturerName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -978,7 +988,7 @@ namespace QuanLyCuaHangBanh.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ProductsRow AddProductsRow(int ID, string Name, int CategoryID, string CategoryName, int SupplierID, string SupplierName, System.DateTime ProductionDate, System.DateTime ExpirationDate, string Description, string Image) {
+            public ProductsRow AddProductsRow(int ID, string Name, int CategoryID, string CategoryName, int SupplierID, string SupplierName, System.DateTime ProductionDate, System.DateTime ExpirationDate, string Description, string Image, string ManufacturerName) {
                 ProductsRow rowProductsRow = ((ProductsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID,
@@ -990,7 +1000,8 @@ namespace QuanLyCuaHangBanh.Reports {
                         ProductionDate,
                         ExpirationDate,
                         Description,
-                        Image};
+                        Image,
+                        ManufacturerName};
                 rowProductsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowProductsRow);
                 return rowProductsRow;
@@ -1023,6 +1034,7 @@ namespace QuanLyCuaHangBanh.Reports {
                 this.columnExpirationDate = base.Columns["ExpirationDate"];
                 this.columnDescription = base.Columns["Description"];
                 this.columnImage = base.Columns["Image"];
+                this.columnManufacturerName = base.Columns["ManufacturerName"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1048,6 +1060,8 @@ namespace QuanLyCuaHangBanh.Reports {
                 base.Columns.Add(this.columnDescription);
                 this.columnImage = new global::System.Data.DataColumn("Image", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnImage);
+                this.columnManufacturerName = new global::System.Data.DataColumn("ManufacturerName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnManufacturerName);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6529,6 +6543,22 @@ namespace QuanLyCuaHangBanh.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string ManufacturerName {
+                get {
+                    try {
+                        return ((string)(this[this.tableProducts.ManufacturerNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ManufacturerName\' in table \'Products\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProducts.ManufacturerNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableProducts.IDColumn);
             }
@@ -6645,6 +6675,18 @@ namespace QuanLyCuaHangBanh.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetImageNull() {
                 this[this.tableProducts.ImageColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsManufacturerNameNull() {
+                return this.IsNull(this.tableProducts.ManufacturerNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetManufacturerNameNull() {
+                this[this.tableProducts.ManufacturerNameColumn] = global::System.Convert.DBNull;
             }
         }
         

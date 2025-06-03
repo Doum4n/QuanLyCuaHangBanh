@@ -28,10 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerView));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerView));
             groupBox1 = new GroupBox();
             dgv_CustomerList = new DataGridView();
+            ID = new DataGridViewTextBoxColumn();
+            Name = new DataGridViewTextBoxColumn();
+            PhoneNumber = new DataGridViewTextBoxColumn();
+            Address = new DataGridViewTextBoxColumn();
+            Type = new DataGridViewTextBoxColumn();
+            Limit = new DataGridViewTextBoxColumn();
+            TotalAccountPayable = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
             btn_Edit = new MaterialSkin.Controls.MaterialButton();
@@ -42,13 +49,6 @@
             toolStripSeparator1 = new ToolStripSeparator();
             tsbtn_Import = new ToolStripButton();
             tsbnt_Export = new ToolStripButton();
-            ID = new DataGridViewTextBoxColumn();
-            Name = new DataGridViewTextBoxColumn();
-            PhoneNumber = new DataGridViewTextBoxColumn();
-            Address = new DataGridViewTextBoxColumn();
-            Type = new DataGridViewTextBoxColumn();
-            Limit = new DataGridViewTextBoxColumn();
-            TotalAccountPayable = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgv_CustomerList).BeginInit();
             panel1.SuspendLayout();
@@ -84,124 +84,6 @@
             dgv_CustomerList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_CustomerList.Size = new Size(952, 311);
             dgv_CustomerList.TabIndex = 2;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(btn_Delete);
-            panel1.Controls.Add(btn_Edit);
-            panel1.Controls.Add(btn_Add);
-            panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(3, 361);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(952, 86);
-            panel1.TabIndex = 3;
-            // 
-            // btn_Delete
-            // 
-            btn_Delete.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_Delete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_Delete.Depth = 0;
-            btn_Delete.HighEmphasis = true;
-            btn_Delete.Icon = null;
-            btn_Delete.Location = new Point(548, 26);
-            btn_Delete.Margin = new Padding(4, 6, 4, 6);
-            btn_Delete.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_Delete.Name = "btn_Delete";
-            btn_Delete.NoAccentTextColor = Color.Empty;
-            btn_Delete.Size = new Size(64, 36);
-            btn_Delete.TabIndex = 5;
-            btn_Delete.Text = "Xóa";
-            btn_Delete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_Delete.UseAccentColor = false;
-            btn_Delete.UseVisualStyleBackColor = true;
-            btn_Delete.Click += btn_Delete_Click;
-            // 
-            // btn_Edit
-            // 
-            btn_Edit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_Edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_Edit.Depth = 0;
-            btn_Edit.HighEmphasis = true;
-            btn_Edit.Icon = null;
-            btn_Edit.Location = new Point(449, 26);
-            btn_Edit.Margin = new Padding(4, 6, 4, 6);
-            btn_Edit.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_Edit.Name = "btn_Edit";
-            btn_Edit.NoAccentTextColor = Color.Empty;
-            btn_Edit.Size = new Size(64, 36);
-            btn_Edit.TabIndex = 4;
-            btn_Edit.Text = "Sửa...";
-            btn_Edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_Edit.UseAccentColor = false;
-            btn_Edit.UseVisualStyleBackColor = true;
-            btn_Edit.Click += btn_Edit_Click;
-            // 
-            // btn_Add
-            // 
-            btn_Add.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btn_Add.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btn_Add.Depth = 0;
-            btn_Add.HighEmphasis = true;
-            btn_Add.Icon = null;
-            btn_Add.Location = new Point(340, 25);
-            btn_Add.Margin = new Padding(4, 6, 4, 6);
-            btn_Add.MouseState = MaterialSkin.MouseState.HOVER;
-            btn_Add.Name = "btn_Add";
-            btn_Add.NoAccentTextColor = Color.Empty;
-            btn_Add.Size = new Size(74, 36);
-            btn_Add.TabIndex = 3;
-            btn_Add.Text = "Thêm...";
-            btn_Add.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btn_Add.UseAccentColor = false;
-            btn_Add.UseVisualStyleBackColor = true;
-            btn_Add.Click += btn_Add_Click;
-            // 
-            // toolStrip1
-            // 
-            toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { tstb_Search, tsbtn_Search, toolStripSeparator1, tsbtn_Import, tsbnt_Export });
-            toolStrip1.Location = new Point(3, 23);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(952, 27);
-            toolStrip1.TabIndex = 1;
-            toolStrip1.Text = "toolStrip1";
-            // 
-            // tstb_Search
-            // 
-            tstb_Search.Name = "tstb_Search";
-            tstb_Search.Size = new Size(100, 27);
-            tstb_Search.TextChanged += tstb_Search_TextChanged;
-            // 
-            // tsbtn_Search
-            // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
-            tsbtn_Search.ImageTransparentColor = Color.Magenta;
-            tsbtn_Search.Name = "tsbtn_Search";
-            tsbtn_Search.Size = new Size(94, 24);
-            tsbtn_Search.Text = "Tìm kiếm";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 27);
-            // 
-            // tsbtn_Import
-            // 
-            tsbtn_Import.Image = (Image)resources.GetObject("tsbtn_Import.Image");
-            tsbtn_Import.ImageTransparentColor = Color.Magenta;
-            tsbtn_Import.Name = "tsbtn_Import";
-            tsbtn_Import.Size = new Size(78, 24);
-            tsbtn_Import.Text = "Nhập...";
-            tsbtn_Import.Click += tsbtn_Import_Click;
-            // 
-            // tsbnt_Export
-            // 
-            tsbnt_Export.Image = (Image)resources.GetObject("tsbnt_Export.Image");
-            tsbnt_Export.ImageTransparentColor = Color.Magenta;
-            tsbnt_Export.Name = "tsbnt_Export";
-            tsbnt_Export.Size = new Size(72, 24);
-            tsbnt_Export.Text = "Xuất...";
-            tsbnt_Export.Click += tsbnt_Export_Click;
             // 
             // ID
             // 
@@ -261,12 +143,135 @@
             TotalAccountPayable.Name = "TotalAccountPayable";
             TotalAccountPayable.ReadOnly = true;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(btn_Delete);
+            panel1.Controls.Add(btn_Edit);
+            panel1.Controls.Add(btn_Add);
+            panel1.Dock = DockStyle.Bottom;
+            panel1.Location = new Point(3, 361);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(952, 86);
+            panel1.TabIndex = 3;
+            // 
+            // btn_Delete
+            // 
+            btn_Delete.Anchor = AnchorStyles.None;
+            btn_Delete.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_Delete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_Delete.Depth = 0;
+            btn_Delete.HighEmphasis = true;
+            btn_Delete.Icon = null;
+            btn_Delete.Location = new Point(548, 26);
+            btn_Delete.Margin = new Padding(4, 6, 4, 6);
+            btn_Delete.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_Delete.Name = "btn_Delete";
+            btn_Delete.NoAccentTextColor = Color.Empty;
+            btn_Delete.Size = new Size(64, 36);
+            btn_Delete.TabIndex = 5;
+            btn_Delete.Text = "Xóa";
+            btn_Delete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_Delete.UseAccentColor = false;
+            btn_Delete.UseVisualStyleBackColor = true;
+            btn_Delete.Click += btn_Delete_Click;
+            // 
+            // btn_Edit
+            // 
+            btn_Edit.Anchor = AnchorStyles.None;
+            btn_Edit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_Edit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_Edit.Depth = 0;
+            btn_Edit.HighEmphasis = true;
+            btn_Edit.Icon = null;
+            btn_Edit.Location = new Point(449, 26);
+            btn_Edit.Margin = new Padding(4, 6, 4, 6);
+            btn_Edit.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_Edit.Name = "btn_Edit";
+            btn_Edit.NoAccentTextColor = Color.Empty;
+            btn_Edit.Size = new Size(64, 36);
+            btn_Edit.TabIndex = 4;
+            btn_Edit.Text = "Sửa...";
+            btn_Edit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_Edit.UseAccentColor = false;
+            btn_Edit.UseVisualStyleBackColor = true;
+            btn_Edit.Click += btn_Edit_Click;
+            // 
+            // btn_Add
+            // 
+            btn_Add.Anchor = AnchorStyles.None;
+            btn_Add.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btn_Add.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btn_Add.Depth = 0;
+            btn_Add.HighEmphasis = true;
+            btn_Add.Icon = null;
+            btn_Add.Location = new Point(340, 25);
+            btn_Add.Margin = new Padding(4, 6, 4, 6);
+            btn_Add.MouseState = MaterialSkin.MouseState.HOVER;
+            btn_Add.Name = "btn_Add";
+            btn_Add.NoAccentTextColor = Color.Empty;
+            btn_Add.Size = new Size(74, 36);
+            btn_Add.TabIndex = 3;
+            btn_Add.Text = "Thêm...";
+            btn_Add.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btn_Add.UseAccentColor = false;
+            btn_Add.UseVisualStyleBackColor = true;
+            btn_Add.Click += btn_Add_Click;
+            // 
+            // toolStrip1
+            // 
+            toolStrip1.ImageScalingSize = new Size(20, 20);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { tstb_Search, tsbtn_Search, toolStripSeparator1, tsbtn_Import, tsbnt_Export });
+            toolStrip1.Location = new Point(3, 23);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(952, 27);
+            toolStrip1.TabIndex = 1;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // tstb_Search
+            // 
+            tstb_Search.Name = "tstb_Search";
+            tstb_Search.Size = new Size(100, 27);
+            tstb_Search.TextChanged += tstb_Search_TextChanged;
+            // 
+            // tsbtn_Search
+            // 
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
+            tsbtn_Search.ImageTransparentColor = Color.Magenta;
+            tsbtn_Search.Name = "tsbtn_Search";
+            tsbtn_Search.Size = new Size(94, 24);
+            tsbtn_Search.Text = "Tìm kiếm";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 27);
+            // 
+            // tsbtn_Import
+            // 
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
+            tsbtn_Import.ImageTransparentColor = Color.Magenta;
+            tsbtn_Import.Name = "tsbtn_Import";
+            tsbtn_Import.Size = new Size(78, 24);
+            tsbtn_Import.Text = "Nhập...";
+            tsbtn_Import.Click += tsbtn_Import_Click;
+            // 
+            // tsbnt_Export
+            // 
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
+            tsbnt_Export.ImageTransparentColor = Color.Magenta;
+            tsbnt_Export.Name = "tsbnt_Export";
+            tsbnt_Export.Size = new Size(72, 24);
+            tsbnt_Export.Text = "Xuất...";
+            tsbnt_Export.Click += tsbnt_Export_Click;
+            // 
             // CustomerView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(958, 450);
             Controls.Add(groupBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Khách hàng";
             Load += CustomerView_Load;
             groupBox1.ResumeLayout(false);

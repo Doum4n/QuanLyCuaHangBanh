@@ -53,7 +53,7 @@
             tb_Username.Location = new Point(324, 50);
             tb_Username.Name = "tb_Username";
             tb_Username.Size = new Size(182, 20);
-            tb_Username.TabIndex = 1;
+            tb_Username.TabIndex = 0;
             // 
             // tb_password
             // 
@@ -61,7 +61,7 @@
             tb_password.Location = new Point(324, 105);
             tb_password.Name = "tb_password";
             tb_password.Size = new Size(182, 20);
-            tb_password.TabIndex = 3;
+            tb_password.TabIndex = 1;
             tb_password.KeyDown += tb_password_KeyDown;
             // 
             // label2
@@ -86,7 +86,7 @@
             btn_Login.Name = "btn_Login";
             btn_Login.NoAccentTextColor = Color.Empty;
             btn_Login.Size = new Size(105, 36);
-            btn_Login.TabIndex = 4;
+            btn_Login.TabIndex = 2;
             btn_Login.Text = "Đăng nhập";
             btn_Login.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Login.UseAccentColor = false;
@@ -116,7 +116,7 @@
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LoginView";
-            Text = "LoginView";
+            Text = "Đăng nhập";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -65,7 +65,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -177,7 +177,7 @@
             btn_Done.UseVisualStyleBackColor = true;
             btn_Done.Click += btn_Done_Click;
             // 
-            // SelectGoodsReceiptNoteView
+            // SelectReceiptNoteView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -185,8 +185,9 @@
             Controls.Add(panel1);
             Controls.Add(dgv_GoodsReceiptNote);
             Controls.Add(toolStrip1);
-            Name = "SelectGoodsReceiptNoteView";
-            Text = "SelectGoodsReciveNoteView";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "SelectReceiptNoteView";
+            Text = "Chọn phiếu nhập";
             Load += SelectGoodsReceiptNoteView_Load;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

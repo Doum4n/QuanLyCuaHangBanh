@@ -61,7 +61,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             Models.SalesInvoice salesInvoice = new Models.SalesInvoice()
             {
                 Date = dateTimePicker.Value,
-                EmployeeID = 1, // TODO: Get current employee
+                EmployeeID = Session.EmployeeId,
                 CustomerID = cbb_Customers.SelectedValue != null ? (int)cbb_Customers.SelectedValue : throw new InvalidOperationException("Please select a customer"),
                 PaymentMethod = cbb_PaymentMethod.Text,
                 Status = cbb_Status.Text,
@@ -92,7 +92,9 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 nmr_ConversionRate.Value, // Assuming a default conversion rate of 1
                 (int)nmr_Quantity.Value,
                 rtb_ProductNote.Text,
-                nmr_Price.Value
+                nmr_Price.Value,
+                0, // không cần customerId
+                string.Empty // không cần paymentMethod
             );
 
             productSaleInvoiceDTO.Status = Status.New; // Set default status to Active
@@ -111,6 +113,9 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         {
             bs.Add(productSaleInvoiceDTO);
             UpdateTotalPaymentRequired();
+
+            cbb_Customers.SelectedValue = productSaleInvoiceDTO.CategoryId;
+            cbb_PaymentMethod.Text = productSaleInvoiceDTO.PaymentMethod;
         }
 
         private void btn_UpdateProduct_Click(object sender, EventArgs e)
@@ -175,6 +180,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             {
                 "Tiền mặt",
                 "Chuyển khoản",
+                "Thẻ tín dụng",
                 // "Ghi nợ"
             };
             cbb_PaymentMethod.DataSource = paymentMethods;
@@ -183,7 +189,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             {
                 "Đã thanh toán",
                 "Chưa thanh toán",
-                "Đã hoàn trả"
+                "Đã thanh toán một phần"
             };
             cbb_Status.DataSource = statuses;
 
@@ -211,7 +217,9 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                             o.Product_Unit.ConversionRate,
                             o.Quantity,
                             o.Note ?? "",
-                            o.UnitPrice
+                            o.UnitPrice,
+                            0, // không cần customerId
+                            string.Empty // không cần paymentMethod
                         )
                         {
                             Status = Status.None // Assuming existing products are active by default
@@ -259,6 +267,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
             nmr_Price.DataBindings.Add("Value", bs, "Price", true, DataSourceUpdateMode.Never);
             // rtb_Note.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.Never);
+
+            Utils.DataGridView.HideColumn(dgv_ProductList, new string[] { "Status", "CategoryID", "ID", "ProductUnitID", "InvoiceID", "PaymentMethod", "CustomerID" });
         }
 
         private void cbb_Products_SelectedIndexChanged(object sender, EventArgs e)
@@ -280,6 +290,13 @@ namespace QuanLyCuaHangBanh.Views.Invoice
             if (cbb_Units.SelectedItem is AddedProduct selectedUnit)
             {
                 selectedProductUnitId = selectedUnit.ID;
+
+                var productUnit = context.ProductUnits.Find(selectedProductUnitId);
+                if (productUnit != null)
+                {
+                    nmr_Price.Value = productUnit.UnitPrice;
+                    nmr_ConversionRate.Value = productUnit.ConversionRate;
+                }
             }
         }
 
@@ -299,7 +316,7 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         {
             if (cbb_Customers.SelectedItem is Models.Customer selectedCustomer)
             {
-                if (selectedCustomer.Type == "Khách hàng doanh nghiệp" || selectedCustomer.Type == "Khách hàng thân thiết" || selectedCustomer.Type == "Khách hàng VIP")
+                if (selectedCustomer.Type == "Doanh nghiệp")
                 {
                     if (!paymentMethods.Contains("Ghi nợ"))
                         paymentMethods.Add("Ghi nợ");
@@ -348,6 +365,16 @@ namespace QuanLyCuaHangBanh.Views.Invoice
                 {
                     row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
                 }
+            }
+        }
+
+        private void cbb_Categories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Categories.SelectedItem is Models.Category selectedCategory)
+            {
+                cbb_Products.DataSource = context.Products.Where(p => p.CategoryID == selectedCategory.ID).ToList();
+                cbb_Products.DisplayMember = "Name";
+                cbb_Products.ValueMember = "ID";
             }
         }
     }

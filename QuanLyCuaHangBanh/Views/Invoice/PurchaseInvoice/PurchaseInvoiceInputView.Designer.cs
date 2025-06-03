@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PurchaseInvoiceInputView));
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             panel3 = new Panel();
             dgv_ProductList = new DataGridView();
@@ -115,7 +116,7 @@
             btn_Save.Name = "btn_Save";
             btn_Save.NoAccentTextColor = Color.Empty;
             btn_Save.Size = new Size(132, 42);
-            btn_Save.TabIndex = 9;
+            btn_Save.TabIndex = 0;
             btn_Save.Text = "Lưu";
             btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Save.UseAccentColor = false;
@@ -251,7 +252,7 @@
             btn_SelectReceiptNote.Name = "btn_SelectReceiptNote";
             btn_SelectReceiptNote.NoAccentTextColor = Color.Empty;
             btn_SelectReceiptNote.Size = new Size(152, 36);
-            btn_SelectReceiptNote.TabIndex = 41;
+            btn_SelectReceiptNote.TabIndex = 6;
             btn_SelectReceiptNote.Text = "Chọn phiếu nhập";
             btn_SelectReceiptNote.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_SelectReceiptNote.UseAccentColor = false;
@@ -264,7 +265,7 @@
             cbb_Suppliers.Location = new Point(335, 54);
             cbb_Suppliers.Name = "cbb_Suppliers";
             cbb_Suppliers.Size = new Size(250, 28);
-            cbb_Suppliers.TabIndex = 40;
+            cbb_Suppliers.TabIndex = 1;
             // 
             // materialLabel6
             // 
@@ -284,7 +285,7 @@
             cbb_PaymentMethod.Location = new Point(335, 121);
             cbb_PaymentMethod.Name = "cbb_PaymentMethod";
             cbb_PaymentMethod.Size = new Size(250, 28);
-            cbb_PaymentMethod.TabIndex = 38;
+            cbb_PaymentMethod.TabIndex = 2;
             cbb_PaymentMethod.SelectedIndexChanged += cbb_PaymentMethod_SelectedIndexChanged;
             // 
             // materialLabel4
@@ -305,7 +306,7 @@
             cbb_Status.Location = new Point(628, 54);
             cbb_Status.Name = "cbb_Status";
             cbb_Status.Size = new Size(250, 28);
-            cbb_Status.TabIndex = 32;
+            cbb_Status.TabIndex = 3;
             // 
             // materialLabel2
             // 
@@ -326,7 +327,7 @@
             dateTimePicker.Location = new Point(627, 122);
             dateTimePicker.Name = "dateTimePicker";
             dateTimePicker.Size = new Size(250, 27);
-            dateTimePicker.TabIndex = 30;
+            dateTimePicker.TabIndex = 4;
             // 
             // materialLabel1
             // 
@@ -346,7 +347,7 @@
             rtb_Note.Location = new Point(916, 51);
             rtb_Note.Name = "rtb_Note";
             rtb_Note.Size = new Size(362, 98);
-            rtb_Note.TabIndex = 27;
+            rtb_Note.TabIndex = 5;
             rtb_Note.Text = "";
             // 
             // label1
@@ -363,7 +364,7 @@
             CreatorName.Location = new Point(36, 55);
             CreatorName.Name = "CreatorName";
             CreatorName.Size = new Size(256, 27);
-            CreatorName.TabIndex = 24;
+            CreatorName.TabIndex = 0;
             // 
             // materialLabel5
             // 
@@ -403,7 +404,7 @@
             dtp_PaymentDate.Location = new Point(830, 47);
             dtp_PaymentDate.Name = "dtp_PaymentDate";
             dtp_PaymentDate.Size = new Size(175, 27);
-            dtp_PaymentDate.TabIndex = 63;
+            dtp_PaymentDate.TabIndex = 3;
             // 
             // materialLabel8
             // 
@@ -433,7 +434,7 @@
             nmr_TotalAmountOwed.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_TotalAmountOwed.Name = "nmr_TotalAmountOwed";
             nmr_TotalAmountOwed.Size = new Size(175, 27);
-            nmr_TotalAmountOwed.TabIndex = 47;
+            nmr_TotalAmountOwed.TabIndex = 4;
             nmr_TotalAmountOwed.ThousandsSeparator = true;
             // 
             // nmr_TotalPaid
@@ -443,7 +444,7 @@
             nmr_TotalPaid.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_TotalPaid.Name = "nmr_TotalPaid";
             nmr_TotalPaid.Size = new Size(175, 27);
-            nmr_TotalPaid.TabIndex = 26;
+            nmr_TotalPaid.TabIndex = 0;
             nmr_TotalPaid.ThousandsSeparator = true;
             // 
             // dtp_DueDate
@@ -454,7 +455,7 @@
             dtp_DueDate.Location = new Point(570, 48);
             dtp_DueDate.Name = "dtp_DueDate";
             dtp_DueDate.Size = new Size(175, 27);
-            dtp_DueDate.TabIndex = 46;
+            dtp_DueDate.TabIndex = 2;
             // 
             // materialLabel7
             // 
@@ -476,7 +477,7 @@
             dtp_TransactionDate.Location = new Point(312, 48);
             dtp_TransactionDate.Name = "dtp_TransactionDate";
             dtp_TransactionDate.Size = new Size(175, 27);
-            dtp_TransactionDate.TabIndex = 43;
+            dtp_TransactionDate.TabIndex = 1;
             // 
             // materialLabel3
             // 
@@ -542,7 +543,7 @@
             cbb_Categories.Location = new Point(39, 89);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
-            cbb_Categories.TabIndex = 5;
+            cbb_Categories.TabIndex = 1;
             cbb_Categories.SelectedIndexChanged += cbb_Categories_SelectedIndexChanged;
             // 
             // label5
@@ -560,7 +561,7 @@
             cbb_Units.Location = new Point(39, 143);
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
-            cbb_Units.TabIndex = 7;
+            cbb_Units.TabIndex = 2;
             cbb_Units.SelectedIndexChanged += cbb_Units_SelectedIndexChanged;
             // 
             // label6
@@ -579,7 +580,7 @@
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
-            nmr_Quantity.TabIndex = 11;
+            nmr_Quantity.TabIndex = 4;
             nmr_Quantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.ValueChanged += nmr_Quantity_ValueChanged;
             // 
@@ -598,7 +599,7 @@
             rtb_ProductNote.Location = new Point(509, 33);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(341, 138);
-            rtb_ProductNote.TabIndex = 14;
+            rtb_ProductNote.TabIndex = 6;
             rtb_ProductNote.Text = "";
             // 
             // label9
@@ -616,7 +617,7 @@
             cbb_Products.Location = new Point(39, 34);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
-            cbb_Products.TabIndex = 20;
+            cbb_Products.TabIndex = 0;
             cbb_Products.SelectedIndexChanged += cbb_Products_SelectedIndexChanged;
             // 
             // nmr_ConversionRate
@@ -626,7 +627,7 @@
             nmr_ConversionRate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
-            nmr_ConversionRate.TabIndex = 21;
+            nmr_ConversionRate.TabIndex = 3;
             nmr_ConversionRate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // nmr_Price
@@ -637,7 +638,7 @@
             nmr_Price.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Price.Name = "nmr_Price";
             nmr_Price.Size = new Size(150, 27);
-            nmr_Price.TabIndex = 24;
+            nmr_Price.TabIndex = 5;
             nmr_Price.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label3
@@ -673,14 +674,14 @@
             panel1.Location = new Point(0, 285);
             panel1.Name = "panel1";
             panel1.Size = new Size(1310, 190);
-            panel1.TabIndex = 42;
+            panel1.TabIndex = 0;
             // 
             // btn_Cancel
             // 
             btn_Cancel.Location = new Point(1103, 56);
             btn_Cancel.Name = "btn_Cancel";
             btn_Cancel.Size = new Size(94, 29);
-            btn_Cancel.TabIndex = 29;
+            btn_Cancel.TabIndex = 9;
             btn_Cancel.Text = "Hủy";
             btn_Cancel.UseVisualStyleBackColor = true;
             btn_Cancel.Click += btn_Cancel_Click;
@@ -690,7 +691,7 @@
             btn_DeleteProduct.Location = new Point(1103, 102);
             btn_DeleteProduct.Name = "btn_DeleteProduct";
             btn_DeleteProduct.Size = new Size(94, 29);
-            btn_DeleteProduct.TabIndex = 28;
+            btn_DeleteProduct.TabIndex = 10;
             btn_DeleteProduct.Text = "Xóa";
             btn_DeleteProduct.UseVisualStyleBackColor = true;
             btn_DeleteProduct.Click += btn_DeleteProduct_Click;
@@ -700,7 +701,7 @@
             btn_UpdateProduct.Location = new Point(994, 102);
             btn_UpdateProduct.Name = "btn_UpdateProduct";
             btn_UpdateProduct.Size = new Size(94, 29);
-            btn_UpdateProduct.TabIndex = 27;
+            btn_UpdateProduct.TabIndex = 8;
             btn_UpdateProduct.Text = "Sửa";
             btn_UpdateProduct.UseVisualStyleBackColor = true;
             btn_UpdateProduct.Click += btn_UpdateProduct_Click;
@@ -710,7 +711,7 @@
             btn_AddProduct.Location = new Point(994, 55);
             btn_AddProduct.Name = "btn_AddProduct";
             btn_AddProduct.Size = new Size(94, 29);
-            btn_AddProduct.TabIndex = 26;
+            btn_AddProduct.TabIndex = 7;
             btn_AddProduct.Text = "Thêm";
             btn_AddProduct.UseVisualStyleBackColor = true;
             btn_AddProduct.Click += btn_AddProduct_Click;
@@ -736,8 +737,10 @@
             Controls.Add(groupBox1);
             Controls.Add(panel2);
             Controls.Add(panel3);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PurchaseInvoiceInputView";
-            Text = "PurchaseInvoiceInputView";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Hóa đơn nhập hàng";
             Load += PurchaseInvoiceInputView_Load;
             panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgv_ProductList).EndInit();

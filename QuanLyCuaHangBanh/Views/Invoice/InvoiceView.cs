@@ -50,6 +50,8 @@ namespace QuanLyCuaHangBanh.Views.Invoice
         public void SetBindingSource(BindingSource bindingSource)
         {
             dgv_InvoiceList.DataSource = bindingSource;
+
+            dgv_InvoiceList.AutoGenerateColumns = false;
         }
 
         private void btn_Add_Click(object sender, EventArgs e)

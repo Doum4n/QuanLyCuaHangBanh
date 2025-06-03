@@ -31,7 +31,8 @@ namespace QuanLyCuaHangBanh.Services
                     i.Status,
                     i.Supplier.CreditPeriod,
                     i.Accounts.OfType<AccountsPayable>().Sum(o => o.Amount),
-                    i.Note
+                    i.Note,
+                    i.PaymentMethod
                 )
             );
         }

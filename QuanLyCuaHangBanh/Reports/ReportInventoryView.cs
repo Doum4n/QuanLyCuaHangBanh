@@ -36,7 +36,7 @@ namespace QuanLyCuaHangBanh.Reports
             cbb_Categories.DisplayMember = "Name";
             cbb_Categories.ValueMember = "ID";
 
-            var suppliers = context.Suppliers.AsNoTracking().Select(o => new {o.ID, o.Name}).ToList();
+            var suppliers = context.Suppliers.AsNoTracking().Select(o => new { o.ID, o.Name }).ToList();
             cbb_Suppliers.DataSource = suppliers;
             cbb_Suppliers.DisplayMember = "Name";
             cbb_Suppliers.ValueMember = "ID";
@@ -62,8 +62,8 @@ namespace QuanLyCuaHangBanh.Reports
                     UnitName = i.ProductUnit.Unit.Name,
                     SupplierName = i.ProductUnit.Product.Producer.Name,
                     ManufacturerName = i.ProductUnit.Product.Manufacturer.Name,
-                    ProductionDate = i.GoodsReceiptNoteDetail.ProductionDate.ToString("dd/MM/yyyy"),
-                    ExpirationDate = i.GoodsReceiptNoteDetail.ExpirationDate.ToString("dd/MM/yyyy"),
+                    ProductionDate = i.GoodsReceiptNoteDetail.ProductionDate.ToString(),
+                    ExpirationDate = i.GoodsReceiptNoteDetail.ExpirationDate.ToString(),
                     ConversionRate = i.ProductUnit.ConversionRate,
                     Quantity = i.Quantity
                 }).Cast<Object>()
@@ -98,20 +98,20 @@ namespace QuanLyCuaHangBanh.Reports
                         .ThenInclude(p => p.Manufacturer);
 
             // 2. Áp dụng các điều kiện lọc sau khi đã Include tất cả
-            if (selectedProductId.HasValue)
+            if (selectedProductId.HasValue && cb_Product.Checked)
             {
                 inventoryItemsQuery = inventoryItemsQuery.Where(i => i.ProductUnit.ProductID == selectedProductId.Value);
             }
-            if (selectedCategoryId.HasValue)
+            if (selectedCategoryId.HasValue && cb_Category.Checked)
             {
                 inventoryItemsQuery = inventoryItemsQuery.Where(i => i.ProductUnit.Product.CategoryID == selectedCategoryId.Value);
             }
-            if (selectedSupplierId.HasValue)
+            if (selectedSupplierId.HasValue && cb_Supplier.Checked)
             {
                 // Đảm bảo Product.ProducerID tồn tại và là FK đến Supplier
                 inventoryItemsQuery = inventoryItemsQuery.Where(i => i.ProductUnit.Product.ProducerID == selectedSupplierId.Value);
             }
-            if (selectedManufacturerId.HasValue)
+            if (selectedManufacturerId.HasValue && cb_Manufacterer.Checked)
             {
                 // Đảm bảo Product.ManufacturerID tồn tại và là FK đến Manufacturer
                 inventoryItemsQuery = inventoryItemsQuery.Where(i => i.ProductUnit.Product.ManufacturerID == selectedManufacturerId.Value);
@@ -214,6 +214,16 @@ namespace QuanLyCuaHangBanh.Reports
             cbb_Products.DataSource = products;
             cbb_Products.DisplayMember = "Name";
             cbb_Products.ValueMember = "ID";
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

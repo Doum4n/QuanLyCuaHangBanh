@@ -108,6 +108,8 @@ namespace QuanLyCuaHangBanh.Views
                 rtb_ProductNote.DataBindings.Add("Text", bs, "Note", true, DataSourceUpdateMode.OnPropertyChanged);
                 //\dgv_ProductList.DataSource = dTO.Products;
 
+                Utils.DataGridView.HideColumn(dgv_ProductList, new string[] { "Status", "CategoryID", "ID", "ProductId", "ProductUnitID", "GoodsReceiptNoteId", "UnitId" });
+
             }
             else
             {
@@ -135,11 +137,6 @@ namespace QuanLyCuaHangBanh.Views
                 goodsReceiptNote.ID = dTO.ID;
                 //goodsReceiptNote.LastModifiedById = Session.EmployeeId;
                 goodsReceiptNote.LastModifiedDate = DateOnly.FromDateTime(DateTime.Now);
-            }
-
-            foreach (var item in ProductList)
-            {
-                MessageBox.Show(item.ProductName);
             }
 
             this.Tag = (goodsReceiptNote);
@@ -237,6 +234,13 @@ namespace QuanLyCuaHangBanh.Views
                     cbb_Units.DataSource = productUnit;
                     cbb_Units.DisplayMember = "UnitName";
                     cbb_Units.ValueMember = "UnitId";
+
+                    var category = context.Categories.Where(p => p.ID == selectedProduct.CategoryID).FirstOrDefault();
+                    if (category != null)
+                    {
+                        cbb_Categories.SelectedValue = category.ID;
+                        cbb_Categories.Text = category.Name;
+                    }
                 }
             }
         }
@@ -282,6 +286,20 @@ namespace QuanLyCuaHangBanh.Views
                 if (row.DataBoundItem is ProductReceiptDTO product)
                 {
                     row.DefaultCellStyle.BackColor = Utils.DataGridView.GetStatusColor(product.Status);
+                }
+            }
+        }
+
+        private void cbb_Suppliers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_Suppliers.SelectedItem is Models.Supplier selectedSupplier)
+            {
+                var product = context.Products.Where(p => p.ProducerID == selectedSupplier.ID).ToList();
+                if (product != null)
+                {
+                    cbb_Products.DataSource = product;
+                    cbb_Products.DisplayMember = "Name";
+                    cbb_Products.ValueMember = "ID";
                 }
             }
         }

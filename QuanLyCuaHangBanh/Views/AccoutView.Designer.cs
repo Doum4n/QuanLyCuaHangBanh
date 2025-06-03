@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccoutView));
             label1 = new Label();
             tb_Username = new TextBox();
             tb_OldPassword = new TextBox();
@@ -54,14 +55,14 @@
             tb_Username.Location = new Point(225, 49);
             tb_Username.Name = "tb_Username";
             tb_Username.Size = new Size(158, 27);
-            tb_Username.TabIndex = 1;
+            tb_Username.TabIndex = 0;
             // 
             // tb_OldPassword
             // 
             tb_OldPassword.Location = new Point(225, 101);
             tb_OldPassword.Name = "tb_OldPassword";
             tb_OldPassword.Size = new Size(158, 27);
-            tb_OldPassword.TabIndex = 3;
+            tb_OldPassword.TabIndex = 1;
             // 
             // label2
             // 
@@ -77,7 +78,7 @@
             tb_NewPassword.Location = new Point(225, 157);
             tb_NewPassword.Name = "tb_NewPassword";
             tb_NewPassword.Size = new Size(158, 27);
-            tb_NewPassword.TabIndex = 5;
+            tb_NewPassword.TabIndex = 2;
             tb_NewPassword.TextChanged += tb_NewPassword_TextChanged;
             // 
             // label3
@@ -94,7 +95,7 @@
             tb_ConfirmPassword.Location = new Point(225, 216);
             tb_ConfirmPassword.Name = "tb_ConfirmPassword";
             tb_ConfirmPassword.Size = new Size(158, 27);
-            tb_ConfirmPassword.TabIndex = 7;
+            tb_ConfirmPassword.TabIndex = 3;
             tb_ConfirmPassword.TextChanged += tb_ConfirmPassword_TextChanged;
             tb_ConfirmPassword.KeyDown += tb_ConfirmPassword_KeyDown;
             // 
@@ -122,7 +123,7 @@
             btn_Save.Name = "btn_Save";
             btn_Save.NoAccentTextColor = Color.Empty;
             btn_Save.Size = new Size(93, 36);
-            btn_Save.TabIndex = 8;
+            btn_Save.TabIndex = 4;
             btn_Save.Text = " Lưu";
             btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Save.UseAccentColor = false;
@@ -154,8 +155,9 @@
             Controls.Add(label2);
             Controls.Add(tb_Username);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AccoutView";
-            Text = "AccoutView";
+            Text = "Tài khoản";
             Load += AccoutView_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -11,7 +11,7 @@ namespace QuanLyCuaHangBanh.Models
     {
         public int SupplierID { get; set; }
         public string Status { get; set; } // e.g., "Paid", "Unpaid"
-
+        public string PaymentMethod { get; set; }
         public virtual Supplier Supplier { get; set; } // Navigation property to the Supplier
         public virtual ICollection<Invoice_Detail> InvoiceDetails { get; set; }
 

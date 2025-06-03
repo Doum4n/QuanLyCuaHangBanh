@@ -83,20 +83,20 @@ namespace QuanLyCuaHangBanh.Data
             // Cấu hình Kế thừa TPT cho Account
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.ToTable("Accounts"); // Đảm bảo bảng Account cơ sở được đặt tên (nếu TPT)
+                entity.ToTable("Accounts");
 
                 // Cấu hình mối quan hệ với Invoice
-                entity.HasOne(d => d.Invoice)               // Một Account thuộc về một Invoice
-                      .WithMany(p => p.Accounts)           // Một Invoice có nhiều Accounts (đảm bảo Invoice.cs có ICollection<Account> Accounts)
-                      .HasForeignKey(d => d.InvoiceID)     // Khóa ngoại là InvoiceID trong bảng Accounts
-                      .OnDelete(DeleteBehavior.Cascade);   // Hoặc Restrict/SetNull tùy logic của bạn
+                entity.HasOne(d => d.Invoice)               
+                      .WithMany(p => p.Accounts)           
+                      .HasForeignKey(d => d.InvoiceID)     
+                      .OnDelete(DeleteBehavior.Cascade);   
             });
 
-            // Cấu hình TPT cho Account (bạn đã có phần này và nó có vẻ đúng)
-            // modelBuilder.Entity<Account>().ToTable("Accounts"); // Lặp lại nếu đã có ở trên
+            // Cấu hình TPT cho Account
             modelBuilder.Entity<AccountsPayable>()
                 .ToTable("AccountsPayable")
                 .HasBaseType<Account>();
+
             modelBuilder.Entity<AccountsReceivable>()
                 .ToTable("AccountsReceivable")
                 .HasBaseType<Account>();
@@ -105,7 +105,8 @@ namespace QuanLyCuaHangBanh.Data
             modelBuilder.Entity<Invoice>().ToTable("Invoices");
             modelBuilder.Entity<SalesInvoice>()
                 .ToTable("SalesInvoices")
-                .HasBaseType<Invoice>(); 
+                .HasBaseType<Invoice>();
+
             modelBuilder.Entity<PurchaseInvoice>()
                 .ToTable("PurchaseInvoices")
                 .HasBaseType<Invoice>();

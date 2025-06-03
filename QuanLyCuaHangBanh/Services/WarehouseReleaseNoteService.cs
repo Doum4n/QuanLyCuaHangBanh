@@ -26,8 +26,7 @@ namespace QuanLyCuaHangBanh.Services
             return await repositoryProvider.GetRepository<WarehouseReleaseNote>().GetAllAsDto<WarehouseReleaseNoteDTO>(
                 o => new WarehouseReleaseNoteDTO {
                     ID = o.ID,
-                    //o.CreatedById, // commented out in original, so keeping it commented
-                    //o.CreatedBy.Name, // commented out in original, so keeping it commented
+                    CreatedBy = o.CreatedBy.Name,
                     CreatedDate = o.CreatedDate,
                     Status = o.Status,
                     Note = o.Note
@@ -171,7 +170,6 @@ namespace QuanLyCuaHangBanh.Services
                         repositoryProvider.GetRepository<WarehouseReleaseNote_Detail>().Update(item.ToWarehouseReleaseNoteDetail());
                         break;
                     case Status.Deleted:
-                        // This also requires casting to a specific repository, preserving original logic
                         ((WarehouseReleaseNoteDetailRepo)repositoryProvider.GetRepository<WarehouseReleaseNote_Detail>()).DeleteByID(item.ID);
                         break;
                     case Status.None:

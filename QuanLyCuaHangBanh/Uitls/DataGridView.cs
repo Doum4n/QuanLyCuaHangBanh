@@ -19,5 +19,16 @@ namespace Utils
                 _ => Color.White
             };
         }
+
+        public static void HideColumn(System.Windows.Forms.DataGridView dgv, string[] columnsToHide)
+        {
+            foreach (var columnName in columnsToHide)
+            {
+                if (dgv.Columns[columnName] != null)
+                {
+                    dgv.Columns[columnName].Visible = false;
+                }
+            }
+        }
     }
 }

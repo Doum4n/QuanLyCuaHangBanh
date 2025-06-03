@@ -350,8 +350,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1280, 474);
             Controls.Add(tabControl2);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "InvoiceView";
-            Text = "InvoiceView";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Hóa đơn";
             Load += InvoiceView_Load;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

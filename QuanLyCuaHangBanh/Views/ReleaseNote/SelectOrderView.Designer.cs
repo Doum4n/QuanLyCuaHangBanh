@@ -66,7 +66,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -132,7 +132,6 @@
             // ID
             // 
             ID.DataPropertyName = "ID";
-            ID.FillWeight = 14.771512F;
             ID.HeaderText = "ID";
             ID.MinimumWidth = 6;
             ID.Name = "ID";
@@ -196,8 +195,9 @@
             Controls.Add(dgv_OrderList);
             Controls.Add(toolStrip1);
             Controls.Add(panel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SelectOrderView";
-            Text = "SelectOrderView";
+            Text = "Chọn đơn hàng";
             Load += SelectOrderView_Load;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

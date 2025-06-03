@@ -84,16 +84,17 @@ namespace QuanLyCuaHangBanh.Services
                     switch (productDto.Status)
                     {
                         case Status.New:
+                            productDto.ID = 0;
                             var salesInvoiceDetail = productDto.ToSalesInvoiceDetail();
-                            salesInvoiceDetail.InvoiceID = salesInvoice.ID; // Ensure it's linked
+                            salesInvoiceDetail.ID = 0;
+                            salesInvoiceDetail.InvoiceID = salesInvoice.ID;
                             repositoryProvider.GetRepository<SalesInvoice_Detail>().Add(salesInvoiceDetail);
                             break;
                         case Status.Modified:
-                            productDto.InvoiceID = salesInvoice.ID; // Ensure it's linked
+                            productDto.InvoiceID = salesInvoice.ID;
                             repositoryProvider.GetRepository<SalesInvoice_Detail>().Update(productDto.ToSalesInvoiceDetail());
                             break;
                         case Status.Deleted:
-                            // Find the existing detail to delete
                             var existingDetail = await repositoryProvider.GetRepository<SalesInvoice_Detail>()
                                 .GetByValue(productDto.ID);
                             if (existingDetail != null)
@@ -140,7 +141,7 @@ namespace QuanLyCuaHangBanh.Services
             dataTable.Columns.Add("Mã hóa đơn", typeof(int));
             dataTable.Columns.Add("Mã khách hàng", typeof(int));
             dataTable.Columns.Add("Mã nhân viên lập", typeof(int));
-            dataTable.Columns.Add("Ngày lập", typeof(DateTime));
+            dataTable.Columns.Add("Ngày lập", typeof(string));
             dataTable.Columns.Add("Trạng thái", typeof(string));
             dataTable.Columns.Add("Phương thức thanh toán", typeof(string));
 
@@ -165,7 +166,7 @@ namespace QuanLyCuaHangBanh.Services
                         salesInvoice.ID,
                         salesInvoice.CustomerID,
                         salesInvoice.EmployeeID,
-                        salesInvoice.Date,
+                        salesInvoice.Date.ToString("dd/MM/yyyy"),
                         salesInvoice.Status,
                         salesInvoice.PaymentMethod
                     );
@@ -198,6 +199,7 @@ namespace QuanLyCuaHangBanh.Services
             {
                 CustomerID = Convert.ToInt32(row["Mã khách hàng"]),
                 EmployeeID = Convert.ToInt32(row["Mã nhân viên lập"]),
+                PaymentMethod = row["Phương thức thanh toán"].ToString(),
                 Date = DateTime.UtcNow,
                 Status = "Chờ xác nhận",
             };

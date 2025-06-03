@@ -40,6 +40,7 @@
             TotalAmount = new DataGridViewTextBoxColumn();
             TotalUnpaid = new DataGridViewTextBoxColumn();
             CreditPeriod = new DataGridViewTextBoxColumn();
+            PaymentMethod = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btn_PrintInvoice = new MaterialSkin.Controls.MaterialButton();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
@@ -92,7 +93,7 @@
             dgv_PurchaseInvoiceList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_PurchaseInvoiceList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_PurchaseInvoiceList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_PurchaseInvoiceList.Columns.AddRange(new DataGridViewColumn[] { ID, EmployeeName, CreatedDate, SupplierName, Status, Note, TotalAmount, TotalUnpaid, CreditPeriod });
+            dgv_PurchaseInvoiceList.Columns.AddRange(new DataGridViewColumn[] { ID, EmployeeName, CreatedDate, SupplierName, Status, Note, TotalAmount, TotalUnpaid, CreditPeriod, PaymentMethod });
             dgv_PurchaseInvoiceList.Cursor = Cursors.Hand;
             dgv_PurchaseInvoiceList.Dock = DockStyle.Fill;
             dgv_PurchaseInvoiceList.Location = new Point(3, 50);
@@ -168,6 +169,13 @@
             CreditPeriod.HeaderText = "Thời hạn tín dụng";
             CreditPeriod.MinimumWidth = 6;
             CreditPeriod.Name = "CreditPeriod";
+            // 
+            // PaymentMethod
+            // 
+            PaymentMethod.DataPropertyName = "PaymentMethod";
+            PaymentMethod.HeaderText = "Phương thức thanh toán";
+            PaymentMethod.MinimumWidth = 6;
+            PaymentMethod.Name = "PaymentMethod";
             // 
             // panel1
             // 
@@ -281,9 +289,10 @@
             // 
             // tsbtn_Search
             // 
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
-            tsbtn_Search.Size = new Size(74, 24);
+            tsbtn_Search.Size = new Size(94, 24);
             tsbtn_Search.Text = "Tìm kiếm";
             tsbtn_Search.Click += tsbtn_Search_Click;
             // 
@@ -294,17 +303,19 @@
             // 
             // tsbtn_Import
             // 
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
             tsbtn_Import.ImageTransparentColor = Color.Magenta;
             tsbtn_Import.Name = "tsbtn_Import";
-            tsbtn_Import.Size = new Size(58, 24);
+            tsbtn_Import.Size = new Size(78, 24);
             tsbtn_Import.Text = "Nhập...";
             tsbtn_Import.Click += tsbtn_Import_Click;
             // 
             // tsbnt_Export
             // 
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
             tsbnt_Export.ImageTransparentColor = Color.Magenta;
             tsbnt_Export.Name = "tsbnt_Export";
-            tsbnt_Export.Size = new Size(52, 24);
+            tsbnt_Export.Size = new Size(72, 24);
             tsbnt_Export.Text = "Xuất...";
             tsbnt_Export.Click += tsbnt_Export_Click;
             // 
@@ -350,5 +361,6 @@
         private DataGridViewTextBoxColumn TotalAmount;
         private DataGridViewTextBoxColumn TotalUnpaid;
         private DataGridViewTextBoxColumn CreditPeriod;
+        private DataGridViewTextBoxColumn PaymentMethod;
     }
 }

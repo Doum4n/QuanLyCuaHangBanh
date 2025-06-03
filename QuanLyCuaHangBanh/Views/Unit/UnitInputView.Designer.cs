@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnitInputView));
             label1 = new Label();
             tb_Name = new TextBox();
             label2 = new Label();
@@ -50,7 +51,7 @@
             tb_Name.Location = new Point(61, 74);
             tb_Name.Name = "tb_Name";
             tb_Name.Size = new Size(168, 20);
-            tb_Name.TabIndex = 1;
+            tb_Name.TabIndex = 0;
             // 
             // label2
             // 
@@ -67,7 +68,7 @@
             rtb_Description.Location = new Point(61, 163);
             rtb_Description.Name = "rtb_Description";
             rtb_Description.Size = new Size(474, 120);
-            rtb_Description.TabIndex = 3;
+            rtb_Description.TabIndex = 1;
             rtb_Description.Text = "";
             // 
             // btn_Save
@@ -101,7 +102,9 @@
             Controls.Add(label2);
             Controls.Add(tb_Name);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "UnitInputView";
+            Text = "Đơn vị tính";
             Load += UnitInputView_Load;
             ResumeLayout(false);
             PerformLayout();

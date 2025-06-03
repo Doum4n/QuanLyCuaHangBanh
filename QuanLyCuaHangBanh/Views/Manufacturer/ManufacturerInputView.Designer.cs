@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManufacturerInputView));
             btn_Save = new MaterialSkin.Controls.MaterialButton();
             rtb_Description = new RichTextBox();
             label2 = new Label();
@@ -62,7 +63,7 @@
             rtb_Description.Location = new Point(45, 156);
             rtb_Description.Name = "rtb_Description";
             rtb_Description.Size = new Size(474, 120);
-            rtb_Description.TabIndex = 8;
+            rtb_Description.TabIndex = 1;
             rtb_Description.Text = "";
             rtb_Description.KeyDown += rtb_Description_KeyDown;
             // 
@@ -81,7 +82,7 @@
             tb_Name.Location = new Point(45, 67);
             tb_Name.Name = "tb_Name";
             tb_Name.Size = new Size(168, 20);
-            tb_Name.TabIndex = 6;
+            tb_Name.TabIndex = 0;
             // 
             // label1
             // 
@@ -92,7 +93,7 @@
             label1.TabIndex = 5;
             label1.Text = "Tên hãng sản xuất";
             // 
-            // IManufacturerInputView
+            // ManufacturerInputView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -102,8 +103,9 @@
             Controls.Add(label2);
             Controls.Add(tb_Name);
             Controls.Add(label1);
-            Name = "IManufacturerInputView";
-            Text = "IManufacturerInputView";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "ManufacturerInputView";
+            Text = "Hãng sản xuất";
             Load += IManufacturerInputView_Load;
             ResumeLayout(false);
             PerformLayout();

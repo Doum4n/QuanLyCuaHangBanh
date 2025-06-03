@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrderView));
             groupBox1 = new GroupBox();
             dgv_OrderList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
@@ -36,7 +35,7 @@
             OrderDate = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
             PaymentMethod = new DataGridViewTextBoxColumn();
-            DeliverAddress = new DataGridViewTextBoxColumn();
+            DeliveryAddress = new DataGridViewTextBoxColumn();
             TotalAmount = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btn_Delete = new MaterialSkin.Controls.MaterialButton();
@@ -75,7 +74,7 @@
             dgv_OrderList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_OrderList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_OrderList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_OrderList.Columns.AddRange(new DataGridViewColumn[] { ID, CustomerName, OrderDate, Status, PaymentMethod, DeliverAddress, TotalAmount });
+            dgv_OrderList.Columns.AddRange(new DataGridViewColumn[] { ID, CustomerName, OrderDate, Status, PaymentMethod, DeliveryAddress, TotalAmount });
             dgv_OrderList.Cursor = Cursors.Hand;
             dgv_OrderList.Dock = DockStyle.Fill;
             dgv_OrderList.Location = new Point(3, 50);
@@ -125,12 +124,12 @@
             PaymentMethod.MinimumWidth = 6;
             PaymentMethod.Name = "PaymentMethod";
             // 
-            // DeliverAddress
+            // DeliveryAddress
             // 
-            DeliverAddress.DataPropertyName = "DeliverAddress";
-            DeliverAddress.HeaderText = "Địa chỉ giao hàng";
-            DeliverAddress.MinimumWidth = 6;
-            DeliverAddress.Name = "DeliverAddress";
+            DeliveryAddress.DataPropertyName = "DeliveryAddress";
+            DeliveryAddress.HeaderText = "Địa chỉ giao hàng";
+            DeliveryAddress.MinimumWidth = 6;
+            DeliveryAddress.Name = "DeliveryAddress";
             // 
             // TotalAmount
             // 
@@ -229,7 +228,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -243,7 +242,7 @@
             // 
             // tsbtn_Import
             // 
-            tsbtn_Import.Image = (Image)resources.GetObject("tsbtn_Import.Image");
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
             tsbtn_Import.ImageTransparentColor = Color.Magenta;
             tsbtn_Import.Name = "tsbtn_Import";
             tsbtn_Import.Size = new Size(78, 24);
@@ -252,7 +251,7 @@
             // 
             // tsbnt_Export
             // 
-            tsbnt_Export.Image = (Image)resources.GetObject("tsbnt_Export.Image");
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
             tsbnt_Export.ImageTransparentColor = Color.Magenta;
             tsbnt_Export.Name = "tsbnt_Export";
             tsbnt_Export.Size = new Size(72, 24);
@@ -295,7 +294,7 @@
         private DataGridViewTextBoxColumn OrderDate;
         private DataGridViewTextBoxColumn Status;
         private DataGridViewTextBoxColumn PaymentMethod;
-        private DataGridViewTextBoxColumn DeliverAddress;
+        private DataGridViewTextBoxColumn DeliveryAddress;
         private DataGridViewTextBoxColumn TotalAmount;
     }
 }

@@ -29,12 +29,11 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            groupBox2 = new GroupBox();
-            dtp_FromDate = new DateTimePicker();
-            label6 = new Label();
-            label5 = new Label();
-            dtp_ToDate = new DateTimePicker();
             groupBox1 = new GroupBox();
+            cb_Manufacterer = new CheckBox();
+            cb_Supplier = new CheckBox();
+            cb_Product = new CheckBox();
+            cb_Category = new CheckBox();
             cbb_Products = new ComboBox();
             label3 = new Label();
             cbb_Categories = new ComboBox();
@@ -48,76 +47,26 @@
             btn_Filter = new MaterialSkin.Controls.MaterialButton();
             reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
             panel1.SuspendLayout();
-            groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
-            panel1.Controls.Add(groupBox2);
             panel1.Controls.Add(groupBox1);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(855, 183);
+            panel1.Size = new Size(855, 122);
             panel1.TabIndex = 0;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(dtp_FromDate);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Controls.Add(label5);
-            groupBox2.Controls.Add(dtp_ToDate);
-            groupBox2.Location = new Point(0, 104);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(855, 79);
-            groupBox2.TabIndex = 13;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Ngày nhập";
-            // 
-            // dtp_FromDate
-            // 
-            dtp_FromDate.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dtp_FromDate.CustomFormat = "dd/MM/yyyy";
-            dtp_FromDate.Format = DateTimePickerFormat.Custom;
-            dtp_FromDate.Location = new Point(267, 38);
-            dtp_FromDate.Name = "dtp_FromDate";
-            dtp_FromDate.Size = new Size(151, 27);
-            dtp_FromDate.TabIndex = 8;
-            // 
-            // label6
-            // 
-            label6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            label6.AutoSize = true;
-            label6.Location = new Point(437, 15);
-            label6.Name = "label6";
-            label6.Size = new Size(72, 20);
-            label6.TabIndex = 11;
-            label6.Text = "Đến ngày";
-            // 
-            // label5
-            // 
-            label5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            label5.AutoSize = true;
-            label5.Location = new Point(267, 15);
-            label5.Name = "label5";
-            label5.Size = new Size(62, 20);
-            label5.TabIndex = 9;
-            label5.Text = "Từ ngày";
-            // 
-            // dtp_ToDate
-            // 
-            dtp_ToDate.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dtp_ToDate.CustomFormat = "dd/MM/yyyy";
-            dtp_ToDate.Format = DateTimePickerFormat.Custom;
-            dtp_ToDate.Location = new Point(437, 38);
-            dtp_ToDate.Name = "dtp_ToDate";
-            dtp_ToDate.Size = new Size(151, 27);
-            dtp_ToDate.TabIndex = 10;
             // 
             // groupBox1
             // 
+            groupBox1.Anchor = AnchorStyles.None;
+            groupBox1.Controls.Add(cb_Manufacterer);
+            groupBox1.Controls.Add(cb_Supplier);
+            groupBox1.Controls.Add(cb_Product);
+            groupBox1.Controls.Add(cb_Category);
             groupBox1.Controls.Add(cbb_Products);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(cbb_Categories);
@@ -133,11 +82,52 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin sản phẩm";
             // 
+            // cb_Manufacterer
+            // 
+            cb_Manufacterer.Anchor = AnchorStyles.Top;
+            cb_Manufacterer.AutoSize = true;
+            cb_Manufacterer.Location = new Point(639, 61);
+            cb_Manufacterer.Name = "cb_Manufacterer";
+            cb_Manufacterer.Size = new Size(18, 17);
+            cb_Manufacterer.TabIndex = 11;
+            cb_Manufacterer.UseVisualStyleBackColor = true;
+            // 
+            // cb_Supplier
+            // 
+            cb_Supplier.Anchor = AnchorStyles.Top;
+            cb_Supplier.AutoSize = true;
+            cb_Supplier.Location = new Point(435, 61);
+            cb_Supplier.Name = "cb_Supplier";
+            cb_Supplier.Size = new Size(18, 17);
+            cb_Supplier.TabIndex = 10;
+            cb_Supplier.UseVisualStyleBackColor = true;
+            // 
+            // cb_Product
+            // 
+            cb_Product.Anchor = AnchorStyles.Top;
+            cb_Product.AutoSize = true;
+            cb_Product.Location = new Point(234, 61);
+            cb_Product.Name = "cb_Product";
+            cb_Product.Size = new Size(18, 17);
+            cb_Product.TabIndex = 9;
+            cb_Product.UseVisualStyleBackColor = true;
+            cb_Product.CheckedChanged += checkBox2_CheckedChanged;
+            // 
+            // cb_Category
+            // 
+            cb_Category.Anchor = AnchorStyles.Top;
+            cb_Category.AutoSize = true;
+            cb_Category.Location = new Point(39, 61);
+            cb_Category.Name = "cb_Category";
+            cb_Category.Size = new Size(18, 17);
+            cb_Category.TabIndex = 8;
+            cb_Category.UseVisualStyleBackColor = true;
+            // 
             // cbb_Products
             // 
-            cbb_Products.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cbb_Products.Anchor = AnchorStyles.Top;
             cbb_Products.FormattingEnabled = true;
-            cbb_Products.Location = new Point(268, 50);
+            cbb_Products.Location = new Point(258, 55);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(151, 28);
             cbb_Products.TabIndex = 0;
@@ -145,19 +135,20 @@
             // 
             // label3
             // 
-            label3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(432, 27);
+            label3.Location = new Point(459, 32);
             label3.Name = "label3";
             label3.Size = new Size(100, 20);
             label3.TabIndex = 5;
             label3.Text = "Nhà cung cấp";
+            label3.Click += label3_Click;
             // 
             // cbb_Categories
             // 
-            cbb_Categories.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cbb_Categories.Anchor = AnchorStyles.Top;
             cbb_Categories.FormattingEnabled = true;
-            cbb_Categories.Location = new Point(105, 50);
+            cbb_Categories.Location = new Point(64, 55);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(151, 28);
             cbb_Categories.TabIndex = 1;
@@ -165,9 +156,9 @@
             // 
             // cbb_Manufacturers
             // 
-            cbb_Manufacturers.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cbb_Manufacturers.Anchor = AnchorStyles.Top;
             cbb_Manufacturers.FormattingEnabled = true;
-            cbb_Manufacturers.Location = new Point(598, 50);
+            cbb_Manufacturers.Location = new Point(663, 55);
             cbb_Manufacturers.Name = "cbb_Manufacturers";
             cbb_Manufacturers.Size = new Size(151, 28);
             cbb_Manufacturers.TabIndex = 6;
@@ -175,9 +166,9 @@
             // 
             // label1
             // 
-            label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(268, 27);
+            label1.Location = new Point(258, 32);
             label1.Name = "label1";
             label1.Size = new Size(100, 20);
             label1.TabIndex = 2;
@@ -185,9 +176,9 @@
             // 
             // cbb_Suppliers
             // 
-            cbb_Suppliers.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            cbb_Suppliers.Anchor = AnchorStyles.Top;
             cbb_Suppliers.FormattingEnabled = true;
-            cbb_Suppliers.Location = new Point(432, 50);
+            cbb_Suppliers.Location = new Point(459, 55);
             cbb_Suppliers.Name = "cbb_Suppliers";
             cbb_Suppliers.Size = new Size(151, 28);
             cbb_Suppliers.TabIndex = 4;
@@ -195,9 +186,9 @@
             // 
             // label2
             // 
-            label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(105, 27);
+            label2.Location = new Point(64, 32);
             label2.Name = "label2";
             label2.Size = new Size(105, 20);
             label2.TabIndex = 3;
@@ -205,9 +196,9 @@
             // 
             // label4
             // 
-            label4.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(598, 27);
+            label4.Location = new Point(663, 32);
             label4.Name = "label4";
             label4.Size = new Size(103, 20);
             label4.TabIndex = 7;
@@ -218,13 +209,14 @@
             panel2.Controls.Add(btn_ShowAll);
             panel2.Controls.Add(btn_Filter);
             panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 183);
+            panel2.Location = new Point(0, 122);
             panel2.Name = "panel2";
             panel2.Size = new Size(855, 53);
             panel2.TabIndex = 1;
             // 
             // btn_ShowAll
             // 
+            btn_ShowAll.Anchor = AnchorStyles.None;
             btn_ShowAll.AutoSize = false;
             btn_ShowAll.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn_ShowAll.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -246,6 +238,7 @@
             // 
             // btn_Filter
             // 
+            btn_Filter.Anchor = AnchorStyles.None;
             btn_Filter.AutoSize = false;
             btn_Filter.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn_Filter.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -268,10 +261,10 @@
             // reportViewer1
             // 
             reportViewer1.Dock = DockStyle.Fill;
-            reportViewer1.Location = new Point(0, 236);
+            reportViewer1.Location = new Point(0, 175);
             reportViewer1.Name = "ReportViewer";
             reportViewer1.ServerReport.BearerToken = null;
-            reportViewer1.Size = new Size(855, 214);
+            reportViewer1.Size = new Size(855, 275);
             reportViewer1.TabIndex = 0;
             // 
             // ReportInventoryView
@@ -286,8 +279,6 @@
             Text = "ReportInventoryView";
             Load += ReportInventoryView_Load;
             panel1.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -302,17 +293,16 @@
         private ComboBox cbb_Suppliers;
         private Label label2;
         private Label label1;
-        private GroupBox groupBox2;
         private GroupBox groupBox1;
         private ComboBox cbb_Manufacturers;
         private Label label4;
-        private DateTimePicker dtp_FromDate;
-        private Label label5;
-        private Label label6;
-        private DateTimePicker dtp_ToDate;
         private Panel panel2;
         private MaterialSkin.Controls.MaterialButton btn_ShowAll;
         private MaterialSkin.Controls.MaterialButton btn_Filter;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;
+        private CheckBox cb_Category;
+        private CheckBox cb_Product;
+        private CheckBox cb_Manufacterer;
+        private CheckBox cb_Supplier;
     }
 }

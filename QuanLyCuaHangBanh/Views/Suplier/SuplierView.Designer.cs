@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SuplierView));
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SuplierView));
             dgv_ProducerList = new DataGridView();
+            ID = new DataGridViewTextBoxColumn();
+            Name = new DataGridViewTextBoxColumn();
+            PhoneNumber = new DataGridViewTextBoxColumn();
+            Email = new DataGridViewTextBoxColumn();
+            Address = new DataGridViewTextBoxColumn();
+            Description = new DataGridViewTextBoxColumn();
+            Limit = new DataGridViewTextBoxColumn();
+            TotalAccountPayable = new DataGridViewTextBoxColumn();
             tsbnt_Export = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             tsbtn_Search = new ToolStripButton();
@@ -42,14 +50,6 @@
             btn_Add = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
             groupBox1 = new GroupBox();
-            ID = new DataGridViewTextBoxColumn();
-            Name = new DataGridViewTextBoxColumn();
-            PhoneNumber = new DataGridViewTextBoxColumn();
-            Email = new DataGridViewTextBoxColumn();
-            Address = new DataGridViewTextBoxColumn();
-            Description = new DataGridViewTextBoxColumn();
-            Limit = new DataGridViewTextBoxColumn();
-            TotalAccountPayable = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgv_ProducerList).BeginInit();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
@@ -73,9 +73,75 @@
             dgv_ProducerList.Size = new Size(794, 311);
             dgv_ProducerList.TabIndex = 2;
             // 
+            // ID
+            // 
+            ID.DataPropertyName = "ID";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 6;
+            ID.Name = "ID";
+            ID.ReadOnly = true;
+            // 
+            // Name
+            // 
+            Name.DataPropertyName = "Name";
+            Name.HeaderText = "Tên hãng";
+            Name.MinimumWidth = 6;
+            Name.Name = "Name";
+            Name.ReadOnly = true;
+            // 
+            // PhoneNumber
+            // 
+            PhoneNumber.DataPropertyName = "PhoneNumber";
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle1;
+            PhoneNumber.HeaderText = "Số điện thoại";
+            PhoneNumber.MinimumWidth = 6;
+            PhoneNumber.Name = "PhoneNumber";
+            PhoneNumber.ReadOnly = true;
+            // 
+            // Email
+            // 
+            Email.DataPropertyName = "Email";
+            Email.HeaderText = "Email";
+            Email.MinimumWidth = 6;
+            Email.Name = "Email";
+            Email.ReadOnly = true;
+            // 
+            // Address
+            // 
+            Address.DataPropertyName = "Address";
+            Address.HeaderText = "Địa chỉ";
+            Address.MinimumWidth = 6;
+            Address.Name = "Address";
+            Address.ReadOnly = true;
+            // 
+            // Description
+            // 
+            Description.DataPropertyName = "Description";
+            Description.HeaderText = "Mô tả";
+            Description.MinimumWidth = 6;
+            Description.Name = "Description";
+            Description.ReadOnly = true;
+            // 
+            // Limit
+            // 
+            Limit.DataPropertyName = "Limit";
+            Limit.HeaderText = "Hạn mức công nợ";
+            Limit.MinimumWidth = 6;
+            Limit.Name = "Limit";
+            Limit.ReadOnly = true;
+            // 
+            // TotalAccountPayable
+            // 
+            TotalAccountPayable.DataPropertyName = "TotalAccountPayable";
+            TotalAccountPayable.HeaderText = "Tổng công nợ phải trả";
+            TotalAccountPayable.MinimumWidth = 6;
+            TotalAccountPayable.Name = "TotalAccountPayable";
+            TotalAccountPayable.ReadOnly = true;
+            // 
             // tsbnt_Export
             // 
-            tsbnt_Export.Image = (Image)resources.GetObject("tsbnt_Export.Image");
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
             tsbnt_Export.ImageTransparentColor = Color.Magenta;
             tsbnt_Export.Name = "tsbnt_Export";
             tsbnt_Export.Size = new Size(72, 24);
@@ -88,7 +154,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -112,7 +178,7 @@
             // 
             // tsbtn_Import
             // 
-            tsbtn_Import.Image = (Image)resources.GetObject("tsbtn_Import.Image");
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
             tsbtn_Import.ImageTransparentColor = Color.Magenta;
             tsbtn_Import.Name = "tsbtn_Import";
             tsbtn_Import.Size = new Size(78, 24);
@@ -202,79 +268,14 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Danh sách nhà sản xuất";
             // 
-            // ID
-            // 
-            ID.DataPropertyName = "ID";
-            ID.HeaderText = "ID";
-            ID.MinimumWidth = 6;
-            ID.Name = "ID";
-            ID.ReadOnly = true;
-            // 
-            // Name
-            // 
-            Name.DataPropertyName = "Name";
-            Name.HeaderText = "Tên hãng";
-            Name.MinimumWidth = 6;
-            Name.Name = "Name";
-            Name.ReadOnly = true;
-            // 
-            // PhoneNumber
-            // 
-            PhoneNumber.DataPropertyName = "PhoneNumber";
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            PhoneNumber.DefaultCellStyle = dataGridViewCellStyle1;
-            PhoneNumber.HeaderText = "Số điện thoại";
-            PhoneNumber.MinimumWidth = 6;
-            PhoneNumber.Name = "PhoneNumber";
-            PhoneNumber.ReadOnly = true;
-            // 
-            // Email
-            // 
-            Email.DataPropertyName = "Email";
-            Email.HeaderText = "Email";
-            Email.MinimumWidth = 6;
-            Email.Name = "Email";
-            Email.ReadOnly = true;
-            // 
-            // Address
-            // 
-            Address.DataPropertyName = "Address";
-            Address.HeaderText = "Địa chỉ";
-            Address.MinimumWidth = 6;
-            Address.Name = "Address";
-            Address.ReadOnly = true;
-            // 
-            // Description
-            // 
-            Description.DataPropertyName = "Description";
-            Description.HeaderText = "Mô tả";
-            Description.MinimumWidth = 6;
-            Description.Name = "Description";
-            Description.ReadOnly = true;
-            // 
-            // Limit
-            // 
-            Limit.DataPropertyName = "Limit";
-            Limit.HeaderText = "Hạn mức công nợ";
-            Limit.MinimumWidth = 6;
-            Limit.Name = "Limit";
-            Limit.ReadOnly = true;
-            // 
-            // TotalAccountPayable
-            // 
-            TotalAccountPayable.DataPropertyName = "TotalAccountPayable";
-            TotalAccountPayable.HeaderText = "Tổng công nợ phải trả";
-            TotalAccountPayable.MinimumWidth = 6;
-            TotalAccountPayable.Name = "TotalAccountPayable";
-            TotalAccountPayable.ReadOnly = true;
-            // 
             // SuplierView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(groupBox1);
-            Text = "Nhà sản xuất";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Text = "Nhà cung cấp";
             ((System.ComponentModel.ISupportInitialize)dgv_ProducerList).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SalesInvoiceInputView));
             panel2 = new Panel();
             label7 = new Label();
             nmr_TotalPaymentRequired = new NumericUpDown();
@@ -112,7 +113,7 @@
             panel2.Controls.Add(label7);
             panel2.Controls.Add(nmr_TotalPaymentRequired);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(0, 830);
+            panel2.Location = new Point(0, 716);
             panel2.Name = "panel2";
             panel2.Size = new Size(1294, 50);
             panel2.TabIndex = 35;
@@ -149,7 +150,7 @@
             dgv_ProductList.ReadOnly = true;
             dgv_ProductList.RowHeadersWidth = 51;
             dgv_ProductList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductList.Size = new Size(1288, 305);
+            dgv_ProductList.Size = new Size(1288, 187);
             dgv_ProductList.TabIndex = 0;
             dgv_ProductList.RowPrePaint += dgv_ProductList_RowPrePaint;
             // 
@@ -224,9 +225,9 @@
             // 
             groupBox2.Controls.Add(dgv_ProductList);
             groupBox2.Dock = DockStyle.Fill;
-            groupBox2.Location = new Point(0, 499);
+            groupBox2.Location = new Point(0, 503);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1294, 331);
+            groupBox2.Size = new Size(1294, 213);
             groupBox2.TabIndex = 34;
             groupBox2.TabStop = false;
             groupBox2.Text = " Danh sách sản phẩm";
@@ -249,7 +250,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1294, 210);
+            groupBox1.Size = new Size(1294, 214);
             groupBox1.TabIndex = 33;
             groupBox1.TabStop = false;
             groupBox1.Text = "Hóa đơn";
@@ -260,7 +261,7 @@
             cbb_PaymentMethod.Location = new Point(335, 121);
             cbb_PaymentMethod.Name = "cbb_PaymentMethod";
             cbb_PaymentMethod.Size = new Size(250, 28);
-            cbb_PaymentMethod.TabIndex = 38;
+            cbb_PaymentMethod.TabIndex = 3;
             cbb_PaymentMethod.SelectedIndexChanged += cbb_PaymentMethod_SelectedIndexChanged;
             // 
             // materialLabel4
@@ -281,7 +282,7 @@
             cbb_Customers.Location = new Point(334, 54);
             cbb_Customers.Name = "cbb_Customers";
             cbb_Customers.Size = new Size(250, 28);
-            cbb_Customers.TabIndex = 36;
+            cbb_Customers.TabIndex = 1;
             cbb_Customers.SelectedIndexChanged += cbb_Customers_SelectedIndexChanged;
             // 
             // materialLabel3
@@ -313,7 +314,7 @@
             rbtn_GoodsReciveNote.Location = new Point(16, 56);
             rbtn_GoodsReciveNote.Name = "rbtn_GoodsReciveNote";
             rbtn_GoodsReciveNote.Size = new Size(103, 24);
-            rbtn_GoodsReciveNote.TabIndex = 34;
+            rbtn_GoodsReciveNote.TabIndex = 1;
             rbtn_GoodsReciveNote.TabStop = true;
             rbtn_GoodsReciveNote.Text = "Phiếu nhập";
             rbtn_GoodsReciveNote.UseVisualStyleBackColor = true;
@@ -324,7 +325,7 @@
             rbtn_Order.Location = new Point(16, 26);
             rbtn_Order.Name = "rbtn_Order";
             rbtn_Order.Size = new Size(95, 24);
-            rbtn_Order.TabIndex = 33;
+            rbtn_Order.TabIndex = 0;
             rbtn_Order.TabStop = true;
             rbtn_Order.Text = "Đơn hàng";
             rbtn_Order.UseVisualStyleBackColor = true;
@@ -336,7 +337,7 @@
             cbb_Status.Location = new Point(628, 54);
             cbb_Status.Name = "cbb_Status";
             cbb_Status.Size = new Size(250, 28);
-            cbb_Status.TabIndex = 32;
+            cbb_Status.TabIndex = 2;
             // 
             // materialLabel2
             // 
@@ -357,7 +358,7 @@
             dateTimePicker.Location = new Point(627, 122);
             dateTimePicker.Name = "dateTimePicker";
             dateTimePicker.Size = new Size(250, 27);
-            dateTimePicker.TabIndex = 30;
+            dateTimePicker.TabIndex = 4;
             // 
             // materialLabel1
             // 
@@ -376,8 +377,8 @@
             rtb_Note.BorderStyle = BorderStyle.None;
             rtb_Note.Location = new Point(916, 58);
             rtb_Note.Name = "rtb_Note";
-            rtb_Note.Size = new Size(289, 98);
-            rtb_Note.TabIndex = 27;
+            rtb_Note.Size = new Size(289, 91);
+            rtb_Note.TabIndex = 5;
             rtb_Note.Text = "";
             // 
             // label1
@@ -394,7 +395,7 @@
             CreatorName.Location = new Point(36, 55);
             CreatorName.Name = "CreatorName";
             CreatorName.Size = new Size(269, 27);
-            CreatorName.TabIndex = 24;
+            CreatorName.TabIndex = 0;
             // 
             // materialLabel5
             // 
@@ -429,17 +430,17 @@
             panel1.Controls.Add(label4);
             panel1.Controls.Add(textbox34);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 318);
+            panel1.Location = new Point(0, 322);
             panel1.Name = "panel1";
             panel1.Size = new Size(1294, 181);
-            panel1.TabIndex = 37;
+            panel1.TabIndex = 0;
             // 
             // btn_Cancel
             // 
             btn_Cancel.Location = new Point(1129, 106);
             btn_Cancel.Name = "btn_Cancel";
             btn_Cancel.Size = new Size(94, 29);
-            btn_Cancel.TabIndex = 29;
+            btn_Cancel.TabIndex = 10;
             btn_Cancel.Text = "Hủy";
             btn_Cancel.UseVisualStyleBackColor = true;
             btn_Cancel.Click += btn_Cancel_Click;
@@ -449,7 +450,7 @@
             btn_DeleteProduct.Location = new Point(1129, 56);
             btn_DeleteProduct.Name = "btn_DeleteProduct";
             btn_DeleteProduct.Size = new Size(94, 29);
-            btn_DeleteProduct.TabIndex = 28;
+            btn_DeleteProduct.TabIndex = 9;
             btn_DeleteProduct.Text = "Xóa";
             btn_DeleteProduct.UseVisualStyleBackColor = true;
             btn_DeleteProduct.Click += btn_DeleteProduct_Click;
@@ -459,7 +460,7 @@
             btn_UpdateProduct.Location = new Point(1006, 106);
             btn_UpdateProduct.Name = "btn_UpdateProduct";
             btn_UpdateProduct.Size = new Size(94, 29);
-            btn_UpdateProduct.TabIndex = 27;
+            btn_UpdateProduct.TabIndex = 8;
             btn_UpdateProduct.Text = "Sửa";
             btn_UpdateProduct.UseVisualStyleBackColor = true;
             btn_UpdateProduct.Click += btn_UpdateProduct_Click;
@@ -469,7 +470,7 @@
             btn_AddProduct.Location = new Point(1006, 56);
             btn_AddProduct.Name = "btn_AddProduct";
             btn_AddProduct.Size = new Size(94, 29);
-            btn_AddProduct.TabIndex = 26;
+            btn_AddProduct.TabIndex = 7;
             btn_AddProduct.Text = "Thêm";
             btn_AddProduct.UseVisualStyleBackColor = true;
             btn_AddProduct.Click += btn_AddProduct_Click;
@@ -489,26 +490,27 @@
             nmr_Price.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
             nmr_Price.Name = "nmr_Price";
             nmr_Price.Size = new Size(150, 27);
-            nmr_Price.TabIndex = 24;
+            nmr_Price.TabIndex = 5;
             nmr_Price.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // nmr_ConversionRate
             // 
+            nmr_ConversionRate.Enabled = false;
             nmr_ConversionRate.Location = new Point(307, 40);
             nmr_ConversionRate.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             nmr_ConversionRate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_ConversionRate.Name = "nmr_ConversionRate";
             nmr_ConversionRate.Size = new Size(150, 27);
-            nmr_ConversionRate.TabIndex = 21;
+            nmr_ConversionRate.TabIndex = 3;
             nmr_ConversionRate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // cbb_Products
             // 
             cbb_Products.FormattingEnabled = true;
-            cbb_Products.Location = new Point(47, 38);
+            cbb_Products.Location = new Point(47, 93);
             cbb_Products.Name = "cbb_Products";
             cbb_Products.Size = new Size(197, 28);
-            cbb_Products.TabIndex = 20;
+            cbb_Products.TabIndex = 1;
             cbb_Products.SelectedIndexChanged += cbb_Products_SelectedIndexChanged;
             // 
             // label9
@@ -526,7 +528,7 @@
             rtb_ProductNote.Location = new Point(517, 37);
             rtb_ProductNote.Name = "rtb_ProductNote";
             rtb_ProductNote.Size = new Size(387, 138);
-            rtb_ProductNote.TabIndex = 14;
+            rtb_ProductNote.TabIndex = 6;
             rtb_ProductNote.Text = "";
             // 
             // label8
@@ -545,7 +547,7 @@
             nmr_Quantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nmr_Quantity.Name = "nmr_Quantity";
             nmr_Quantity.Size = new Size(150, 27);
-            nmr_Quantity.TabIndex = 11;
+            nmr_Quantity.TabIndex = 4;
             nmr_Quantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label6
@@ -563,7 +565,7 @@
             cbb_Units.Location = new Point(47, 147);
             cbb_Units.Name = "cbb_Units";
             cbb_Units.Size = new Size(197, 28);
-            cbb_Units.TabIndex = 7;
+            cbb_Units.TabIndex = 2;
             cbb_Units.SelectedIndexChanged += cbb_Units_SelectedIndexChanged;
             // 
             // label5
@@ -578,15 +580,16 @@
             // cbb_Categories
             // 
             cbb_Categories.FormattingEnabled = true;
-            cbb_Categories.Location = new Point(47, 93);
+            cbb_Categories.Location = new Point(47, 40);
             cbb_Categories.Name = "cbb_Categories";
             cbb_Categories.Size = new Size(197, 28);
-            cbb_Categories.TabIndex = 5;
+            cbb_Categories.TabIndex = 0;
+            cbb_Categories.SelectedIndexChanged += cbb_Categories_SelectedIndexChanged;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(47, 71);
+            label4.Location = new Point(47, 18);
             label4.Name = "label4";
             label4.Size = new Size(101, 20);
             label4.TabIndex = 4;
@@ -595,7 +598,7 @@
             // textbox34
             // 
             textbox34.AutoSize = true;
-            textbox34.Location = new Point(47, 15);
+            textbox34.Location = new Point(47, 70);
             textbox34.Name = "textbox34";
             textbox34.Size = new Size(100, 20);
             textbox34.TabIndex = 2;
@@ -615,7 +618,7 @@
             btn_Save.Name = "btn_Save";
             btn_Save.NoAccentTextColor = Color.Empty;
             btn_Save.Size = new Size(132, 42);
-            btn_Save.TabIndex = 9;
+            btn_Save.TabIndex = 0;
             btn_Save.Text = "Lưu";
             btn_Save.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btn_Save.UseAccentColor = false;
@@ -626,9 +629,9 @@
             // 
             panel3.Controls.Add(btn_Save);
             panel3.Dock = DockStyle.Bottom;
-            panel3.Location = new Point(0, 880);
+            panel3.Location = new Point(0, 766);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1294, 75);
+            panel3.Size = new Size(1294, 91);
             panel3.TabIndex = 36;
             // 
             // pane_Payment
@@ -644,7 +647,7 @@
             pane_Payment.Controls.Add(materialLabel6);
             pane_Payment.Controls.Add(label10);
             pane_Payment.Dock = DockStyle.Top;
-            pane_Payment.Location = new Point(0, 210);
+            pane_Payment.Location = new Point(0, 214);
             pane_Payment.Name = "pane_Payment";
             pane_Payment.Size = new Size(1294, 108);
             pane_Payment.TabIndex = 38;
@@ -657,7 +660,7 @@
             dtp_PaymentDate.Location = new Point(1072, 46);
             dtp_PaymentDate.Name = "dtp_PaymentDate";
             dtp_PaymentDate.Size = new Size(175, 27);
-            dtp_PaymentDate.TabIndex = 61;
+            dtp_PaymentDate.TabIndex = 4;
             // 
             // materialLabel8
             // 
@@ -687,7 +690,7 @@
             nmr_TotalPaid.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_TotalPaid.Name = "nmr_TotalPaid";
             nmr_TotalPaid.Size = new Size(175, 27);
-            nmr_TotalPaid.TabIndex = 51;
+            nmr_TotalPaid.TabIndex = 0;
             nmr_TotalPaid.ThousandsSeparator = true;
             // 
             // dtp_DueDate
@@ -698,7 +701,7 @@
             dtp_DueDate.Location = new Point(825, 46);
             dtp_DueDate.Name = "dtp_DueDate";
             dtp_DueDate.Size = new Size(175, 27);
-            dtp_DueDate.TabIndex = 56;
+            dtp_DueDate.TabIndex = 3;
             // 
             // nmr_TotalAmountOwed
             // 
@@ -707,7 +710,7 @@
             nmr_TotalAmountOwed.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
             nmr_TotalAmountOwed.Name = "nmr_TotalAmountOwed";
             nmr_TotalAmountOwed.Size = new Size(175, 27);
-            nmr_TotalAmountOwed.TabIndex = 57;
+            nmr_TotalAmountOwed.TabIndex = 1;
             nmr_TotalAmountOwed.ThousandsSeparator = true;
             // 
             // materialLabel7
@@ -730,7 +733,7 @@
             dtp_TransactionDate.Location = new Point(571, 46);
             dtp_TransactionDate.Name = "dtp_TransactionDate";
             dtp_TransactionDate.Size = new Size(175, 27);
-            dtp_TransactionDate.TabIndex = 53;
+            dtp_TransactionDate.TabIndex = 2;
             // 
             // materialLabel6
             // 
@@ -757,15 +760,17 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1294, 955);
+            ClientSize = new Size(1294, 857);
             Controls.Add(groupBox2);
             Controls.Add(panel1);
             Controls.Add(pane_Payment);
             Controls.Add(groupBox1);
             Controls.Add(panel2);
             Controls.Add(panel3);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SalesInvoiceInputView";
-            Text = "InvoiceInputView";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Hóa đơn mua hàng";
             Load += InvoiceInputView_Load;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();

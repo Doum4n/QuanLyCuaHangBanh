@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReleaseNoteView));
             dgv_WarehouseNoteList = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
-            CreatorName = new DataGridViewTextBoxColumn();
+            CreatedBy = new DataGridViewTextBoxColumn();
             CreatedDate = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
             Note = new DataGridViewTextBoxColumn();
@@ -60,7 +60,7 @@
             dgv_WarehouseNoteList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_WarehouseNoteList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgv_WarehouseNoteList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv_WarehouseNoteList.Columns.AddRange(new DataGridViewColumn[] { ID, CreatorName, CreatedDate, Status, Note });
+            dgv_WarehouseNoteList.Columns.AddRange(new DataGridViewColumn[] { ID, CreatedBy, CreatedDate, Status, Note });
             dgv_WarehouseNoteList.Cursor = Cursors.Hand;
             dgv_WarehouseNoteList.Dock = DockStyle.Fill;
             dgv_WarehouseNoteList.Location = new Point(3, 50);
@@ -82,12 +82,12 @@
             ID.MinimumWidth = 6;
             ID.Name = "ID";
             // 
-            // CreatorName
+            // CreatedBy
             // 
-            CreatorName.DataPropertyName = "CreatorName";
-            CreatorName.HeaderText = "Người lập";
-            CreatorName.MinimumWidth = 6;
-            CreatorName.Name = "CreatorName";
+            CreatedBy.DataPropertyName = "CreatedBy";
+            CreatedBy.HeaderText = "Người lập";
+            CreatedBy.MinimumWidth = 6;
+            CreatedBy.Name = "CreatedBy";
             // 
             // CreatedDate
             // 
@@ -213,7 +213,7 @@
             // 
             // tsbtn_Search
             // 
-            tsbtn_Search.Image = (Image)resources.GetObject("tsbtn_Search.Image");
+            tsbtn_Search.Image = Properties.Resources.search_17730909;
             tsbtn_Search.ImageTransparentColor = Color.Magenta;
             tsbtn_Search.Name = "tsbtn_Search";
             tsbtn_Search.Size = new Size(94, 24);
@@ -227,7 +227,7 @@
             // 
             // tsbtn_Import
             // 
-            tsbtn_Import.Image = (Image)resources.GetObject("tsbtn_Import.Image");
+            tsbtn_Import.Image = Properties.Resources.download_10626408;
             tsbtn_Import.ImageTransparentColor = Color.Magenta;
             tsbtn_Import.Name = "tsbtn_Import";
             tsbtn_Import.Size = new Size(78, 24);
@@ -236,7 +236,7 @@
             // 
             // tsbnt_Export
             // 
-            tsbnt_Export.Image = (Image)resources.GetObject("tsbnt_Export.Image");
+            tsbnt_Export.Image = Properties.Resources.upload_10696783;
             tsbnt_Export.ImageTransparentColor = Color.Magenta;
             tsbnt_Export.Name = "tsbnt_Export";
             tsbnt_Export.Size = new Size(72, 24);
@@ -249,6 +249,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(923, 497);
             Controls.Add(groupBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ReleaseNoteView";
             Text = "Phiếu xuất";
             ((System.ComponentModel.ISupportInitialize)dgv_WarehouseNoteList).EndInit();
@@ -275,7 +276,7 @@
         private ToolStripButton tsbtn_Import;
         private ToolStripButton tsbnt_Export;
         private DataGridViewTextBoxColumn ID;
-        private DataGridViewTextBoxColumn CreatorName;
+        private DataGridViewTextBoxColumn CreatedBy;
         private DataGridViewTextBoxColumn CreatedDate;
         private DataGridViewTextBoxColumn Status;
         private DataGridViewTextBoxColumn Note;

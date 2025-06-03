@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductInputView));
             materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
@@ -153,7 +154,7 @@
             btn_Save.Depth = 0;
             btn_Save.HighEmphasis = true;
             btn_Save.Icon = null;
-            btn_Save.Location = new Point(502, 6);
+            btn_Save.Location = new Point(473, 10);
             btn_Save.Margin = new Padding(4, 6, 4, 6);
             btn_Save.MouseState = MaterialSkin.MouseState.HOVER;
             btn_Save.Name = "btn_Save";
@@ -374,7 +375,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1147, 128);
+            panel1.Size = new Size(1147, 133);
             panel1.TabIndex = 20;
             // 
             // btn_Cancel
@@ -468,9 +469,9 @@
             // 
             panel2.Controls.Add(btn_Save);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(0, 790);
+            panel2.Location = new Point(0, 605);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1161, 50);
+            panel2.Size = new Size(1161, 62);
             panel2.TabIndex = 21;
             // 
             // tabControl1
@@ -482,7 +483,7 @@
             tabControl1.Location = new Point(0, 249);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1161, 541);
+            tabControl1.Size = new Size(1161, 356);
             tabControl1.TabIndex = 1;
             tabControl1.TabIndexChanged += tabControl1_TabIndexChanged;
             // 
@@ -493,7 +494,7 @@
             tabPage1.Location = new Point(4, 29);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1153, 508);
+            tabPage1.Size = new Size(1153, 323);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Danh sách đơn vị tính";
             tabPage1.UseVisualStyleBackColor = true;
@@ -506,12 +507,12 @@
             dgv_ProductUnitList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_ProductUnitList.Columns.AddRange(new DataGridViewColumn[] { ID, UnitName, ConversionRate, UnitPrice, Quantity, IsChecked });
             dgv_ProductUnitList.Dock = DockStyle.Fill;
-            dgv_ProductUnitList.Location = new Point(3, 131);
+            dgv_ProductUnitList.Location = new Point(3, 136);
             dgv_ProductUnitList.Name = "dgv_ProductUnitList";
             dgv_ProductUnitList.ReadOnly = true;
             dgv_ProductUnitList.RowHeadersWidth = 51;
             dgv_ProductUnitList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ProductUnitList.Size = new Size(1147, 374);
+            dgv_ProductUnitList.Size = new Size(1147, 184);
             dgv_ProductUnitList.TabIndex = 0;
             dgv_ProductUnitList.CellContentClick += dgv_ProductUnitList_CellContentClick;
             dgv_ProductUnitList.RowPrePaint += dgv_ProductUnitList_RowPrePaint;
@@ -575,7 +576,7 @@
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1153, 508);
+            tabPage2.Size = new Size(1153, 323);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Danh sách nhập hàng";
             tabPage2.UseVisualStyleBackColor = true;
@@ -593,7 +594,7 @@
             dgv_ReceiptList.ReadOnly = true;
             dgv_ReceiptList.RowHeadersWidth = 51;
             dgv_ReceiptList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ReceiptList.Size = new Size(1147, 502);
+            dgv_ReceiptList.Size = new Size(1147, 317);
             dgv_ReceiptList.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -669,7 +670,7 @@
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(1153, 508);
+            tabPage3.Size = new Size(1153, 323);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Danh sách xuất hàng";
             tabPage3.UseVisualStyleBackColor = true;
@@ -687,7 +688,7 @@
             dgv_ReleaseList.ReadOnly = true;
             dgv_ReleaseList.RowHeadersWidth = 51;
             dgv_ReleaseList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_ReleaseList.Size = new Size(1147, 502);
+            dgv_ReleaseList.Size = new Size(1147, 317);
             dgv_ReleaseList.TabIndex = 2;
             // 
             // dataGridViewTextBoxColumn6
@@ -743,11 +744,13 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(1161, 840);
+            ClientSize = new Size(1161, 667);
             Controls.Add(tabControl1);
             Controls.Add(panel2);
             Controls.Add(groupBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ProductInputView";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Thêm sản phẩm";
             Load += ProductInputView_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();

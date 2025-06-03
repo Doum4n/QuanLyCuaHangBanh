@@ -40,7 +40,8 @@ namespace QuanLyCuaHangBanh
             // Xử lý ngoại lệ trên luồng UI
             Application.ThreadException += (sender, args) =>
             {
-                MessageBox.Show("Lỗi không mong muốn:\n" + args.Exception.Message, "Lỗi ứng dụng", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string errorMessage = $"Lỗi không mong muốn:\n{args.Exception.Message}\n\nVị trí lỗi:\n{args.Exception.StackTrace}";
+                MessageBox.Show(errorMessage, "Lỗi ứng dụng", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
 
             // Xử lý ngoại lệ không được bắt trên bất kỳ luồng nào

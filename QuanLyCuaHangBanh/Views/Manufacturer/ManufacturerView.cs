@@ -46,7 +46,7 @@ namespace QuanLyCuaHangBanh.Views.Manufacturer
 
         private void ManufacturerView_Load(object sender, EventArgs e)
         {
-
+            dgv_ManufacturerList.AutoGenerateColumns = false;
         }
 
         private void btn_Add_Click(object sender, EventArgs e)
@@ -82,13 +82,6 @@ namespace QuanLyCuaHangBanh.Views.Manufacturer
         public void SetBindingSource(BindingSource bindingSource)
         {
             dgv_ManufacturerList.DataSource = bindingSource;
-        }
-
-        public void RefreshData()
-        {
-            dgv_ManufacturerList.Refresh();
-            dgv_ManufacturerList.ClearSelection();
-            _selectedItem = null;
         }
 
         private void dgv_ManufacturerList_SelectionChanged(object sender, EventArgs e)

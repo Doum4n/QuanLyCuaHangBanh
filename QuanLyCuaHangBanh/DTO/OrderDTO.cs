@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace QuanLyCuaHangBanh.DTO
     public class OrderDTO : ISearchable
     {
         public int ID { get; set; }
+        [Browsable(false)]
         public int CustomerID { get; set; }
         public string CustomerName { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; }

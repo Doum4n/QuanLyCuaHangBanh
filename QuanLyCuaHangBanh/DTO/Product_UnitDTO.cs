@@ -51,7 +51,7 @@ namespace QuanLyCuaHangBanh.DTO
         {
             return new Product_Unit
             {
-                ID = 0,
+                ID = ID,
                 UnitID = UnitID,
                 ProductID = ProductID,
                 ConversionRate = ConversionRate,

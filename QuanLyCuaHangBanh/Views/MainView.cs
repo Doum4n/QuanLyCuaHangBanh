@@ -87,7 +87,7 @@ namespace QuanLyCuaHangBanh
         private void InitializeFormState()
         {
             tsslb_EmployeeName.Text = "Chưa đăng nhập";
-            // DisableAllMenuItems();
+             DisableAllMenuItems();
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace QuanLyCuaHangBanh
             if (loginView.ShowDialog() == DialogResult.OK)
             {
                 tsslb_EmployeeName.Text = $"{Session.Role}: {Session.EmployeeName}";
-                // applyPermissions();
+                 applyPermissions();
             }
             else
             {
@@ -574,7 +574,7 @@ namespace QuanLyCuaHangBanh
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi mở form {formName}: {ex.Message}", "Lỗi", 
+                    MessageBox.Show($"Lỗi khi mở form {formName}: {ex.Message}", "Lỗi",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     scope?.Dispose();
                 }
@@ -606,5 +606,19 @@ namespace QuanLyCuaHangBanh
             tsmi_Statistical.Enabled = true;
         }
         #endregion
+
+        private void tsmi_AccountsPayable_Click(object sender, EventArgs e)
+        {
+            ReportAccountsPayable reportAccountsPayable = new ReportAccountsPayable();
+            reportAccountsPayable.MdiParent = this;
+            reportAccountsPayable.Show();
+        }
+
+        private void tsmi_AccountsReceiable_Click(object sender, EventArgs e)
+        {
+            ReportAccountsReceivableView reportAccountsReceivable = new ReportAccountsReceivableView();
+            reportAccountsReceivable.MdiParent = this;
+            reportAccountsReceivable.Show();
+        }
     }
 }

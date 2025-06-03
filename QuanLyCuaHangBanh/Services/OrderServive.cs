@@ -46,6 +46,7 @@ namespace QuanLyCuaHangBanh.Services
         /// <param name="products">Danh sách sản phẩm trong đơn hàng</param>
         public void AddOrder(Order order, BindingList<ProductOrderDTO> products)
         {
+            order.ID = 0;
             _provider.GetRepository<Order>().Add(order);
 
             foreach (var product in products)
@@ -65,26 +66,21 @@ namespace QuanLyCuaHangBanh.Services
         public void UpdateOrder(Order order, BindingList<ProductOrderDTO> products)
         {
             _provider.GetRepository<Order>().Update(order);
-
-            // Xóa các chi tiết đơn hàng cũ
-            var existingDetails = _provider.GetRepository<Order_Detail>().GetAll().Result.Where(od => od.OrderId == order.ID).ToList();
-            foreach (var detail in existingDetails)
-            {
-                _provider.GetRepository<Order_Detail>().Delete(detail);
-            }
-            // Thêm lại các chi tiết đơn hàng (có thể bao gồm các mục mới, đã sửa hoặc còn lại)
             foreach (var product in products)
             {
                 switch (product.Status)
                 {
                     case DTO.Base.Status.New:
-                    case DTO.Base.Status.Modified:
-                    case DTO.Base.Status.None: // Nếu không thay đổi thì cũng thêm lại
+                        product.ID = 0;
                         product.OrderId = order.ID;
                         _provider.GetRepository<Order_Detail>().Add(product.ToOrderDetail());
                         break;
+                    case DTO.Base.Status.Modified:
+                        product.OrderId = order.ID;
+                        _provider.GetRepository<Order_Detail>().Update(product.ToOrderDetail());
+                        break;
                     case DTO.Base.Status.Deleted:
-                        // Đã xóa ở bước xóa toàn bộ chi tiết cũ, không cần làm gì thêm ở đây
+                        _provider.GetRepository<Order_Detail>().Delete(product.ToOrderDetail());
                         break;
                 }
             }

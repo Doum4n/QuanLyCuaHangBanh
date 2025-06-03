@@ -128,6 +128,7 @@ namespace QuanLyCuaHangBanh.Views
                 InitializeNewProduct();
             }
 
+            Utils.DataGridView.HideColumn(dgv_ProductUnitList, new string[] { "Status", "ID", "ProductID", "UnitID", "InventoryID" });
             // Thiết lập data bindings
             SetupDataBindings();
         }
@@ -283,7 +284,7 @@ namespace QuanLyCuaHangBanh.Views
                 CategoryID = (int?)cbb_Categories?.SelectedValue ?? 0,
                 ProducerID = (int?)cbb_Producers?.SelectedValue ?? 0,
                 ManufacturerID = (int?)cbb_Manufacturers?.SelectedValue,
-                Image = _productDto != null ? _productDto.ImagePath : (pictureBox?.ImageLocation ?? string.Empty)
+                Image = pictureBox?.ImageLocation
             };
 
             // Kiểm tra đơn vị cơ bản
@@ -445,7 +446,7 @@ namespace QuanLyCuaHangBanh.Views
                 }
                 else
                 {
-
+                    MessageBox.Show("Vui lòng chọn một đơn vị để chỉnh sửa.");
                     return;
                 }
             }
@@ -563,7 +564,7 @@ namespace QuanLyCuaHangBanh.Views
         private void dgv_ProductUnitList_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dgv_ProductUnitList.Rows.Count)
-            {   
+            {
                 var row = dgv_ProductUnitList.Rows[e.RowIndex];
                 if (row.DataBoundItem is Product_UnitDTO product_UnitDTO)
                 {

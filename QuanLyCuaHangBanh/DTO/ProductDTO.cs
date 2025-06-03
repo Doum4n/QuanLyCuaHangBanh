@@ -78,7 +78,8 @@ public class ProductDTO
 
     public bool MatchesSearch(string searchValue)
     {
-        return ProductName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+        return ProductId.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
+               ProductName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                ProducerName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                ManufacturerName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
                CategoryName.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||

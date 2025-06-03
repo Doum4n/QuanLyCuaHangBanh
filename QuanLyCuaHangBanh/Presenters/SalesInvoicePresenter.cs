@@ -84,7 +84,9 @@ namespace QuanLyCuaHangBanh.Presenters
                                     item.Product_Unit.ConversionRate,
                                     item.Quantity,
                                     item.Note,
-                                    item.Product_Unit.UnitPrice
+                                    item.Product_Unit.UnitPrice,
+                                    item.Order.CustomerID,
+                                    item.Order.PaymentMethod
                                 );
                                 inputView.AddProduct(product);
                             // }

@@ -47,12 +47,14 @@ namespace QuanLyCuaHangBanh.Reports
 
         private void RevenueStatisticsView_Load(object sender, EventArgs e)
         {
-
             var grouped = context.SalesInvoiceDetails
                 .Include(d => d.Invoice)
                 .ThenInclude(i => i.Employee)
                 .Include(d => d.Invoice)
                 .ThenInclude(i => ((SalesInvoice)i).Customer)
+                .Include(d => d.Invoice)
+                .ThenInclude(i => i.Accounts)
+                .AsNoTracking()
                 .ToList()
                 .GroupBy(d => new {
                     CustomerID = ((SalesInvoice)d.Invoice).CustomerID,
@@ -61,6 +63,9 @@ namespace QuanLyCuaHangBanh.Reports
                 .Select(g => {
                     var first = g.First();
                     var invoice = (SalesInvoice)first.Invoice;
+                    var totalReceivable = invoice.Accounts //TODO: Sửa lại
+                        .Where(a => a is AccountsReceivable)
+                        .Sum(a => a.Amount);
 
                     return new ReportSalesInvoiceItem1(
                         0,
@@ -68,7 +73,7 @@ namespace QuanLyCuaHangBanh.Reports
                         invoice.Employee?.Name ?? "",
                         g.Key.CustomerID,
                         g.Key.CustomerName,
-                        g.Sum(d => d.Quantity * d.UnitPrice),
+                        g.Sum(d => d.Quantity * d.UnitPrice) - totalReceivable,
                         invoice.Date
                     );
                 })
